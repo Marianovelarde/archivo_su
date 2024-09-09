@@ -8,6 +8,13 @@ const createDestinoRepositories = async (tipo_de_destino) => {
         return newDestino
 }
 
+const getAllDestinosRepository = async () => {
+    const getDestinos = await EntityDestino.findAll()
+    return getDestinos
+}
+
+
 module.exports = {
-    createDestinoRepositories
+    createDestinoRepositories,
+    getAllDestinosRepository
 }

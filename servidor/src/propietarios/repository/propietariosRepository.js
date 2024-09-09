@@ -10,7 +10,14 @@ const createPropietariosRepository = async (nombre,apellido,domicilio_postal, cu
 
 }
 
+const getAllPropietariosRepository = async () => {
+    const getPropietarios = await EntityPropietarios.findAll()
+
+    return getPropietarios
+};
+
 module.exports = {
-    createPropietariosRepository
+    createPropietariosRepository,
+    getAllPropietariosRepository
 }
 

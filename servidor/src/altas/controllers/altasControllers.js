@@ -1,4 +1,6 @@
-const {createAltaService} = require('../service/altaService')
+const {
+    createAltaService,
+    getAltasService} = require('../service/altaService')
 
 const createAltaControllers = async (req,res) => {
 
@@ -44,7 +46,15 @@ const createAltaControllers = async (req,res) => {
         return res.status(500).json({ error: 'Error al crear alta' });
     }
 }
-
+const getAltasControllers = async (req,res) => {
+    try {
+        const new_alta = await getAltasService()
+        return res.status(200).json({new_alta})
+    } catch (error) {
+        return res.status(500).json({ error: 'Error al obtener las altas' });
+    }
+}
 module.exports = {
-    createAltaControllers
+    createAltaControllers,
+    getAltasControllers
 }

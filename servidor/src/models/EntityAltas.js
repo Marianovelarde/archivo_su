@@ -63,6 +63,9 @@ module.exports = (sequelize) => {
     },
     matricula_profesional: {
         type: DataTypes.INTEGER
+    },
+    fecha_archivo: {
+        type: DataTypes.DATE()
     }    
     },
     {

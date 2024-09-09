@@ -1,5 +1,6 @@
 const {
-    createDestinoRepositories
+    createDestinoRepositories,
+    getAllDestinosRepository
 } = require('../repositories/destinoRepositories')
 
 const createDestinoService = async (tipo_de_destino) => {
@@ -11,6 +12,17 @@ const createDestinoService = async (tipo_de_destino) => {
     }
 };
 
+const getAllDestinosService = async () => {
+    try {
+        const getAllDestinos = await getAllDestinosRepository()
+        return getAllDestinos
+    } catch (error) {
+        console.error('Error en service: ', error)
+        throw new Error('Error en service', error)
+    }
+}
+
 module.exports = {
-    createDestinoService
+    createDestinoService,
+    getAllDestinosService
 }

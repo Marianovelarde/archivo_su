@@ -1,5 +1,6 @@
 const {
-    createPropietariosService
+    createPropietariosService,
+    getAllPropietariosService
 } = require('../service/propietariosService')
 
 const createPropietariosControllers = async (req,res) => {
@@ -20,8 +21,17 @@ const createPropietariosControllers = async (req,res) => {
         return res.status(500).json({error: 'Error al crear un propietario'})
     }
 
+};
+const getAllPropietariosControllers = async (req, res) => {
+    try {
+        const getPropietarios = await getAllPropietariosService()
+        return res.status(200).json({getPropietarios})
+    } catch (error) {
+        return res.status(500).json({error: 'Error al mostrar los propietarios'})
+    }
 }
 
 module.exports = {
-    createPropietariosControllers
+    createPropietariosControllers,
+    getAllPropietariosControllers
 }

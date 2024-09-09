@@ -1,11 +1,13 @@
 const express = require('express')
 
 const {
-    createDestinoControllers
+    createDestinoControllers,
+    getAllDestinoControllers
 } = require('../controllers/destinoControllers')
 
 const router = express.Router()
 
 router.post('/', createDestinoControllers)
+router.get('/', getAllDestinoControllers)
 
 module.exports = router

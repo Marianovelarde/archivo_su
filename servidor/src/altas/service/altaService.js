@@ -1,4 +1,6 @@
-const {createAltaRepository} = require('../repository/altasRepository')
+const {
+    createAltaRepository,
+    getAltasRepository} = require('../repository/altasRepository')
 
 
 const createAltaService = async (data) => {
@@ -9,6 +11,16 @@ try {
 }
 }
 
+const getAltasService = async () => {
+    try {
+        return await getAltasRepository()
+    } catch (error) {
+        console.error('Error en service: ', error)
+        throw new Error ('Error en service')
+    }
+}
+
 module.exports = {
-    createAltaService
+    createAltaService,
+    getAltasService
 }

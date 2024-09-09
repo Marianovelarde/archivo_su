@@ -1,4 +1,4 @@
-const {createPlanoRepository} = require('../repository/tipoPlanoRepository')
+const {createPlanoRepository, getAllPlanosRepository} = require('../repository/tipoPlanoRepository')
 
 const createPlanoService = async (tipo_plano) => {
     
@@ -10,7 +10,16 @@ const createPlanoService = async (tipo_plano) => {
         throw error
     }
 }
+const getAllPlanosService = async () => {
+    try {
+        const get_all_planos = await getAllPlanosRepository()
+        return get_all_planos
+    } catch (error) {
+        throw new Error ('Error en service: ', error)
+    }
+}
 
 module.exports = {
-    createPlanoService
+    createPlanoService,
+    getAllPlanosService
 }
