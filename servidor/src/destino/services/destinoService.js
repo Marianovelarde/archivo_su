@@ -1,6 +1,7 @@
 const {
     createDestinoRepositories,
-    getAllDestinosRepository
+    getAllDestinosRepository,
+    updateDestinoRepository
 } = require('../repositories/destinoRepositories')
 
 const createDestinoService = async (tipo_de_destino) => {
@@ -12,6 +13,14 @@ const createDestinoService = async (tipo_de_destino) => {
     }
 };
 
+const updateDestinoService = async (data, id_destino) => {
+    try {
+        const update_destino = await updateDestinoRepository(data, id_destino)
+        return update_destino
+    } catch (error) {
+        throw new Error ('Error en service')
+    }
+}
 const getAllDestinosService = async () => {
     try {
         const getAllDestinos = await getAllDestinosRepository()
@@ -24,5 +33,6 @@ const getAllDestinosService = async () => {
 
 module.exports = {
     createDestinoService,
+    updateDestinoService,
     getAllDestinosService
 }

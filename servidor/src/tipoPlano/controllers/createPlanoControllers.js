@@ -1,6 +1,7 @@
 const {
     createPlanoService,
-    getAllPlanosService
+    getAllPlanosService,
+    updatePlanoService
 } = require('../service/tipoPlanoServices')
 
 const createPlanoControllers = async (req,res) => {
@@ -18,6 +19,17 @@ const createPlanoControllers = async (req,res) => {
         return res.status(500).json({error: 'Error al crear un tipo dep plano'})
     }
 };
+const updatePlanoControllers = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const data = req.body
+        const update_plano = await updatePlanoService(data, id)
+        return res.status(200).json({message: 'Se ha modificado tipo de plano con éxito', update_plano})
+    } catch (error) {
+        console.error('error en controllers: ', error.message)
+        res.status(500).json({error: 'Error en controllers'})
+    }
+}
 
 const getAllPlanosControllers = async (req,res) => {
     try {
@@ -29,5 +41,6 @@ const getAllPlanosControllers = async (req,res) => {
 }
 module.exports = {
     createPlanoControllers,
+    updatePlanoControllers,
     getAllPlanosControllers
 }

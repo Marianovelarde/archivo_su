@@ -1,6 +1,7 @@
 const {
     createDestinoService,
-    getAllDestinosService
+    getAllDestinosService,
+    updateDestinoService
 } = require('../services/destinoService')
 
 
@@ -20,6 +21,17 @@ const createDestinoControllers = async (req, res) => {
     }
 };
 
+const updateDestinoControllers = async (req,res) => {
+    try {
+        const {id} = req.params
+        const data = req.body
+
+        const update_destino = await updateDestinoService(data,id)
+        return res.status(200).json({message: 'Destino modificado con éxito', update_destino})
+    } catch (error) {
+        console.error('error en controllers: ', error.message)
+    }
+}
 const getAllDestinoControllers = async (req,res) => {
     try {
         const getDestino = await getAllDestinosService()
@@ -31,5 +43,6 @@ const getAllDestinoControllers = async (req,res) => {
 
 module.exports = {
     createDestinoControllers,
+    updateDestinoControllers,
     getAllDestinoControllers
 }

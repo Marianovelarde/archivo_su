@@ -8,7 +8,20 @@ const createPropietariosRepository = async (nombre,apellido,domicilio_postal, cu
 
     return new_propietario
 
-}
+};
+
+const updatePropietariosRepository = async (data, id_propietarios) => {
+    console.log('repository data: ', data);
+    console.log('id en repository: ', id_propietarios);
+    
+    
+        const update_propietario = await EntityPropietarios.update(data, {
+            where: {
+                id_propietario: id_propietarios
+            }
+        })
+        return update_propietario
+};
 
 const getAllPropietariosRepository = async () => {
     const getPropietarios = await EntityPropietarios.findAll()
@@ -18,6 +31,7 @@ const getAllPropietariosRepository = async () => {
 
 module.exports = {
     createPropietariosRepository,
+    updatePropietariosRepository,
     getAllPropietariosRepository
 }
 

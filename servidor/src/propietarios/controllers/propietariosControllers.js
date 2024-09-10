@@ -1,6 +1,7 @@
 const {
     createPropietariosService,
-    getAllPropietariosService
+    getAllPropietariosService,
+    updatePropietariosService
 } = require('../service/propietariosService')
 
 const createPropietariosControllers = async (req,res) => {
@@ -22,6 +23,22 @@ const createPropietariosControllers = async (req,res) => {
     }
 
 };
+
+const updatePropietariosControllers = async (req,res) => {
+    try {
+        const {id} = req.params;
+        const data = req.body
+        console.log('id params: ', id);
+        console.log('body en controllers: ', data);
+        
+        
+        const update_propietario = await updatePropietariosService(data, id)
+        return res.status(200).json({message: 'Propietario modificado con éxito', update_propietario})
+    } catch (error) {
+        console.error('Error en controllers: ', error.message)
+        res.status(500).json({error: 'Error al procesar datos en controllers'})
+    }
+}
 const getAllPropietariosControllers = async (req, res) => {
     try {
         const getPropietarios = await getAllPropietariosService()
@@ -33,5 +50,6 @@ const getAllPropietariosControllers = async (req, res) => {
 
 module.exports = {
     createPropietariosControllers,
+    updatePropietariosControllers,
     getAllPropietariosControllers
 }

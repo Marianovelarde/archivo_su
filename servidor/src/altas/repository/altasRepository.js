@@ -5,6 +5,15 @@ const createAltaRepository = async (data) => {
     const alta =  EntityAltas.create(data)
 
     return alta
+};
+
+const updateAltaRepository = async (id_alta,data) => {
+    const update_alta = await EntityAltas.update(data, {
+        where: {
+            id_Altas: id_alta
+        }
+    })
+    return update_alta
 }
 
 const getAltasRepository = async () => {
@@ -29,5 +38,6 @@ const getAltasRepository = async () => {
 }
 module.exports = {
     createAltaRepository,
-    getAltasRepository
+    getAltasRepository,
+    updateAltaRepository
 }
