@@ -6,7 +6,27 @@ const createAltaRepository = async (data) => {
 
     return alta
 };
+//Altas:
+/*
+{
+  "fecha_de_aprob": "2024-09-08",
+  "num_de_exp": "EXP123456",
+  "num_de_ficha": 101,
+  "id_propietario": 1,
+  "ubicacion": "Ubicación ejemplo",
+  "distrito": 1,
+  "zona": 2,
+  "manzana": 3,
+  "parcela": 4,
+  "superficie_cubierta": 150.5,
+  "final_de_obra": "2024-09-08",
+  "id_destino": 2,
+  "id_tipo_plano": 2,
+  "direccion_tecnica": "Ingeniero Ejemplo",
+  "matricula_profesional": 987654
+}
 
+*/
 const updateAltaRepository = async (id_alta,data) => {
     const update_alta = await EntityAltas.update(data, {
         where: {
@@ -18,7 +38,7 @@ const updateAltaRepository = async (id_alta,data) => {
 
 const getAltasRepository = async () => {
     
-    const verAltas = await EntityAltas.findAll({
+    const get_Altas = await EntityAltas.findAll({
         include: [
             {
                 model: EntityPropietarios,
@@ -34,10 +54,23 @@ const getAltasRepository = async () => {
             }
         ]
     }) 
-    return verAltas
-}
+    return get_Altas
+};
+
+
+const deleteAltasRepository = async (id_Altas) => {
+
+    const delete_altas = await EntityAltas.destroy({
+        where: {
+            id_Altas: id_Altas
+        }
+    })
+    return delete_altas
+
+};
 module.exports = {
     createAltaRepository,
     getAltasRepository,
-    updateAltaRepository
+    updateAltaRepository,
+    deleteAltasRepository
 }

@@ -1,14 +1,14 @@
 const {
     createPropietariosService,
     getAllPropietariosService,
-    updatePropietariosService
+    updatePropietariosService,
+    deletePropietariosService
 } = require('../service/propietariosService')
 
 const createPropietariosControllers = async (req,res) => {
 
     try {
         const { nombre, apellido, domicilio_postal, cuil, email } = req.body;
-        console.log('Controller Data:', req.body);
         
         if (!nombre || !apellido || !domicilio_postal || !cuil || !email) {
             return res.status(400).json({ error: 'Todos los campos son requeridos' });
@@ -28,8 +28,7 @@ const updatePropietariosControllers = async (req,res) => {
     try {
         const {id} = req.params;
         const data = req.body
-        console.log('id params: ', id);
-        console.log('body en controllers: ', data);
+
         
         
         const update_propietario = await updatePropietariosService(data, id)
@@ -41,15 +40,29 @@ const updatePropietariosControllers = async (req,res) => {
 }
 const getAllPropietariosControllers = async (req, res) => {
     try {
-        const getPropietarios = await getAllPropietariosService()
-        return res.status(200).json({getPropietarios})
+        const get_propietarios = await getAllPropietariosService()
+        if(!get_propietarios.length) {
+            return res.status(200).send('no hay propietarios registrados')
+        }
+        return res.status(200).json({get_propietarios})
     } catch (error) {
         return res.status(500).json({error: 'Error al mostrar los propietarios'})
     }
-}
+};
+
+const deletePropietariosControllers = async (req,res) => {
+    try {
+        const {id} = req.params
+        const delete_propietarios = await deletePropietariosService(id)
+        return res.status(200).json({message: 'El propietario fue eliminado con éxito', delete_propietarios})
+    } catch (error) {
+        res.status(500).json({error: 'Error al intentar eliminar un propietario'})
+    }
+};
 
 module.exports = {
     createPropietariosControllers,
     updatePropietariosControllers,
-    getAllPropietariosControllers
+    getAllPropietariosControllers,
+    deletePropietariosControllers
 }

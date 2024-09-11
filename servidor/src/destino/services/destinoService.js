@@ -1,7 +1,8 @@
 const {
     createDestinoRepositories,
     getAllDestinosRepository,
-    updateDestinoRepository
+    updateDestinoRepository,
+    deleteDestinosRepository
 } = require('../repositories/destinoRepositories')
 
 const createDestinoService = async (tipo_de_destino) => {
@@ -23,16 +24,26 @@ const updateDestinoService = async (data, id_destino) => {
 }
 const getAllDestinosService = async () => {
     try {
-        const getAllDestinos = await getAllDestinosRepository()
-        return getAllDestinos
+        const get_destino = await getAllDestinosRepository()
+        return get_destino
     } catch (error) {
         console.error('Error en service: ', error)
         throw new Error('Error en service', error)
     }
 }
 
+const deleteDestinoService = async (id_destino) => {
+    try {
+        const delete_destino = await deleteDestinosRepository(id_destino)
+        return delete_destino
+    } catch (error) {
+        throw new Error('Error en service')
+    }
+}
+
 module.exports = {
     createDestinoService,
     updateDestinoService,
-    getAllDestinosService
+    getAllDestinosService,
+    deleteDestinoService
 }

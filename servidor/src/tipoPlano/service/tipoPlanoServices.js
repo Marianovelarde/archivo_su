@@ -1,4 +1,4 @@
-const {createPlanoRepository, getAllPlanosRepository, updatePlanoRepository} = require('../repository/tipoPlanoRepository')
+const {createPlanoRepository, getAllPlanosRepository, updatePlanoRepository, deletePlanosRepository} = require('../repository/tipoPlanoRepository')
 
 const createPlanoService = async (tipo_plano) => {
     
@@ -26,10 +26,19 @@ const getAllPlanosService = async () => {
     } catch (error) {
         throw new Error ('Error en service: ', error)
     }
-}
+};
+const deletePlanosService = async (id_tipo_plano) => {
+    try {
+        const delete_planos = await deletePlanosRepository(id_tipo_plano)
+        return delete_planos
+    } catch (error) {
+        throw new Error('Error en service: ', error.message)
+    }
+};
 
 module.exports = {
     createPlanoService,
     updatePlanoService,
-    getAllPlanosService
+    getAllPlanosService,
+    deletePlanosService
 }

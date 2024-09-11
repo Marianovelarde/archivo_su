@@ -1,20 +1,20 @@
 const {
     createDestinoService,
     getAllDestinosService,
-    updateDestinoService
+    updateDestinoService,
+    deleteDestinoService
 } = require('../services/destinoService')
 
 
 const createDestinoControllers = async (req, res) => {
     try {
         const { tipo_de_destino } = req.body;
-        console.log('Datos recibidos en la solicitud:', req.body);
         if (!tipo_de_destino) {
             return res.status(400).json({ error: 'tipo_de_destino es requerido' });
         }
 
-        const nuevoDestino = await createDestinoService(tipo_de_destino); 
-        return res.status(200).json(nuevoDestino);
+        const new_destino = await createDestinoService(tipo_de_destino); 
+        return res.status(200).json(new_destino);
     } catch (error) {
         console.error('Error en controlador:', error);
         return res.status(500).json({ error: 'Error al crear destino' });
@@ -34,15 +34,31 @@ const updateDestinoControllers = async (req,res) => {
 }
 const getAllDestinoControllers = async (req,res) => {
     try {
-        const getDestino = await getAllDestinosService()
-        return res.status(201).json({getDestino})
+        const get_destino = await getAllDestinosService()
+        if(!get_destino.length) {
+            return res.status(200).send('No hay tipo de destino registrado')
+        }
+        return res.status(201).json({get_destino})
     } catch (error) {
         return res.status(500).json({error: 'error al obtener la información sobre destinos'})
+    }
+};
+
+const deleteDestinoControllers = async (req, res) => {
+    try {
+        const {id} = req.params
+
+        const delete_destino = await deleteDestinoService(id)
+   
+        return res.status(200).json({message: 'El tipo de destino fue eliminado ', delete_destino})
+    } catch (error) {
+        res.status(500).json({message: 'No se pudo eliminar el tipo de destino'})
     }
 }
 
 module.exports = {
     createDestinoControllers,
     updateDestinoControllers,
-    getAllDestinoControllers
+    getAllDestinoControllers,
+    deleteDestinoControllers
 }

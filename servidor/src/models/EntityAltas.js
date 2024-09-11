@@ -1,5 +1,5 @@
 const {DataTypes} = require('sequelize');
-
+//cambiar id_Altas por id_altas
 module.exports = (sequelize) => {
     sequelize.define('entityAltas', {
         id_Altas: {
@@ -65,7 +65,7 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER
     },
     fecha_archivo: {
-        type: DataTypes.DATE()
+        type: DataTypes.DATE
     }    
     },
     {

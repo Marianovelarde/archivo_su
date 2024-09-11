@@ -18,10 +18,20 @@ const updatePlanoRepository = async (data, id_tipo_plano ) => {
 const getAllPlanosRepository = async () => {
     const get_all_planos = await EntityPlano.findAll()
     return get_all_planos
+};
+
+const deletePlanosRepository = async (id_tipo_plano) => {
+    const delete_planos = await EntityPlano.destroy({
+        where: {
+            id_tipo_plano
+        }
+    })
+    return delete_planos
 }
 
 module.exports = {
     createPlanoRepository,
     updatePlanoRepository,
-    getAllPlanosRepository
+    getAllPlanosRepository,
+    deletePlanosRepository
 }

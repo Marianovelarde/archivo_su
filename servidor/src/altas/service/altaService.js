@@ -1,7 +1,8 @@
 const {
     createAltaRepository,
     getAltasRepository,
-    updateAltaRepository} = require('../repository/altasRepository')
+    updateAltaRepository,
+    deleteAltasRepository} = require('../repository/altasRepository')
 
 
 const createAltaService = async (data) => {
@@ -13,8 +14,7 @@ try {
 }
 
 const updateAltasService = async (id_alta, data) => {
-    console.log('id_alta service: ', id_alta);
-    console.log('data en service: ', data);
+
     
     
     try {
@@ -34,10 +34,20 @@ const getAltasService = async () => {
         console.error('Error en service: ', error)
         throw new Error ('Error en service')
     }
+};
+
+const deleteAltasService = async (id_Altas) => {
+    try {
+        const delete_altas = await deleteAltasRepository(id_Altas)
+        return delete_altas
+    } catch (error) {
+        throw new Error('Error en service', error.message)
+    }
 }
 
 module.exports = {
     createAltaService,
+    deleteAltasService,
     getAltasService,
     updateAltasService
 }

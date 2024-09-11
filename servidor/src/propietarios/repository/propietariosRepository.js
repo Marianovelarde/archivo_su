@@ -9,29 +9,46 @@ const createPropietariosRepository = async (nombre,apellido,domicilio_postal, cu
     return new_propietario
 
 };
-
-const updatePropietariosRepository = async (data, id_propietarios) => {
-    console.log('repository data: ', data);
-    console.log('id en repository: ', id_propietarios);
-    
+/* 
+    Crear un nuevo propietario: 
+    {
+        "nombre": "mariano",
+        "apellido": "velarde",
+        "domicilio_postal": "Cabo san diego",
+        "cuil": 2303030303,
+        "email": "suelourbano@gmail.com"
+    }
+*/
+const updatePropietariosRepository = async (data, id_propietario) => {
+  
     
         const update_propietario = await EntityPropietarios.update(data, {
             where: {
-                id_propietario: id_propietarios
+                id_propietario: id_propietario
             }
         })
         return update_propietario
 };
 
 const getAllPropietariosRepository = async () => {
-    const getPropietarios = await EntityPropietarios.findAll()
+    const get_propietarios = await EntityPropietarios.findAll()
 
-    return getPropietarios
+    return get_propietarios
 };
+const deletePropietariosRepository = async (id_propietario) => {
+
+    const delete_propietarios = await EntityPropietarios.destroy({
+        where: {
+            id_propietario: id_propietario
+        }
+    })
+    return delete_propietarios
+}
 
 module.exports = {
     createPropietariosRepository,
     updatePropietariosRepository,
-    getAllPropietariosRepository
+    getAllPropietariosRepository,
+    deletePropietariosRepository
 }
 
