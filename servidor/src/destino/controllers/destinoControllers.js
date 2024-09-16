@@ -16,7 +16,7 @@ const createDestinoControllers = async (req, res) => {
         const new_destino = await createDestinoService(tipo_de_destino); 
         return res.status(200).json(new_destino);
     } catch (error) {
-        console.error('Error en controlador:', error);
+        console.error('Error en controllers:', error);
         return res.status(500).json({ error: 'Error al crear destino' });
     }
 };
