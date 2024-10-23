@@ -16,14 +16,9 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        tokenAuth: {
-            type: DataTypes.STRING(300),
-            allowNull: true,
-            defaultValue: null
-        },
         isAdmin: {
             type: DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: false,
         },
         isActived: {
             type: DataTypes.BOOLEAN,

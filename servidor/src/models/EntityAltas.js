@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
             allowNull: false
     },
     num_de_ficha: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     },
     id_propietario: {

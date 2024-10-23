@@ -1,12 +1,15 @@
-import { useState } from "react"
-import { Outlet, Navigate } from "react-router-dom"
-import {useAuth} from '../auth/AuthProvider'
+import { Outlet, Navigate } from "react-router-dom";
+import userStore from "../../store/store";
+import { useEffect } from "react";
+
 const ProtectedRoute = () => {
-    const auth = useAuth()
+  const isAuthenticated = userStore((state) => state.isAuthenticate); // Corregido: "isAuthenticated"
 
-  return auth.isAuthenticated ? <Outlet/> : <Navigate to='/'/>
-    
-  
+  useEffect(() => {
+    console.log("Verificando autenticación:", isAuthenticated);
+  }, [isAuthenticated]); // Solo se ejecutará cuando isAuthenticated cambie
+
+  // Si no está autenticado, redirige a "/login"
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />
 }
-
 export default ProtectedRoute

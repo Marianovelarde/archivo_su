@@ -1,24 +1,45 @@
 import Layout from "../layout/Layout"
-
+import { useState } from "react";
+// import { Navigate } from "react-router-dom";
+import Store from '../../store/store'
 const SignUp = () => {
+
+  const [usuario, setUsuario] = useState("");
+
+  const [contraseña, setcontraseña] = useState("")
+  
+
+  const { createUser, error} = Store()
+  // const auth = useAuth()
+
+const handleSubmit =  (e) => {
+  e.preventDefault()
+   createUser(usuario, contraseña)
+   console.log(createUser);
+   
+
+  alert('Usuario creado con éxito')
+}
+
+  // if(isAuthenticated) {
+  //   return <Navigate to='/dashboard'/>
+  // }
   return ( 
   <div>
 
-    <Layout> 
-    <form>
-      <h1>Signup</h1>
-      <label>Username</label>
-      <input type="text" />
+    <Layout>
+      <form onSubmit={handleSubmit}>
+        <h1>login</h1>
+    <label>Username</label>
+      <input type="text" value={usuario} onChange={(e) => setUsuario(e.target.value)}/>
 
-      <label>Name</label>
-      <input type="text" />
+      <label>contraseña</label>
+      <input type="contraseña" value={contraseña} onChange={(e) => setcontraseña(e.target.value)} />
+      <button type="submit">Create User</button>
 
-      <label>Password</label>
-      <input type="password" />
-      <button>Create User</button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
-    </Layout>
-    
+    </Layout>    
   </div>
   )
 }
