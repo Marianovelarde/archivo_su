@@ -1,10 +1,10 @@
 import { useGetAltasQuery } from '../../store/api/AltasApi'
 import { DataGrid } from '@mui/x-data-grid'
 import { Box, Typography } from '@mui/material'
-
+import {useNavigate} from 'react-router-dom'
 const AltasList = () => {
   const { data, isLoading, isError } = useGetAltasQuery()
-
+  const navigate = useNavigate()
   if (isLoading) return <div>Cargando...</div>
   if (isError) return <div>Error al cargar datos</div>
 
@@ -20,6 +20,7 @@ const AltasList = () => {
          rows={rows}
   getRowId={(row) => row.id_Altas}
   pageSizeOptions={[10, 20, 50]}
+  onRowClick={(params) => navigate(`/altas/${params.row.id_Altas}`)}
   initialState={{
     pagination: { paginationModel: { pageSize: 10, page: 0 } },
   }}

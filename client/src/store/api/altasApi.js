@@ -18,8 +18,11 @@ export const altasApi = createApi({
                 body
             }),
             invalidatesTags: ['Altas']
-        })
+        }),
+        getAltaById: builder.query({
+            query: (id) => `/altas/${id}`,
+          })
     })
 })
 
-export const { useGetAltasQuery, useCreateAltaMutation } = altasApi;
+export const { useGetAltasQuery, useCreateAltaMutation, useGetAltaByIdQuery } = altasApi;

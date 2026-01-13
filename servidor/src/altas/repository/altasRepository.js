@@ -56,7 +56,28 @@ const getAltasRepository = async () => {
     }) 
     return get_Altas
 };
-
+const getAltaByIdRepository = async (id_Altas) => {
+    const alta = await EntityAltas.findOne({
+      where: { id_Altas },
+      include: [
+        {
+          model: EntityPropietarios,
+          attributes: ['nombre', 'apellido']
+        },
+        {
+          model: EntityDestino,
+          attributes: ['tipo_de_destino']
+        },
+        {
+          model: EntityPlano,
+          attributes: ['tipo_plano']
+        }
+      ]
+    })
+  
+    return alta
+  }
+  
 
 const deleteAltasRepository = async (id_Altas) => {
 
@@ -72,5 +93,6 @@ module.exports = {
     createAltaRepository,
     getAltasRepository,
     updateAltaRepository,
-    deleteAltasRepository
+    deleteAltasRepository,
+    getAltaByIdRepository
 }

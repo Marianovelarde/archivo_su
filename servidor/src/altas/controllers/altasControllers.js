@@ -2,7 +2,8 @@ const {
     createAltaService,
     getAltasService,
     updateAltasService,
-    deleteAltasService} = require('../service/altaService')
+    deleteAltasService,
+getAltaByIdService} = require('../service/altaService')
 
 const createAltaControllers = async (req,res) => {
 
@@ -76,6 +77,17 @@ const getAltasControllers = async (req,res) => {
     }
 };
 
+const getAltaByIdController = async (req, res) => {
+    try {
+      const { id } = req.params
+      const alta = await getAltaByIdService(id)
+  
+      return res.status(200).json(alta)
+    } catch (error) {
+      return res.status(404).json({ error: error.message })
+    }
+  }
+
 const deleteAltasControllers = async (req,res) => {
     try {
         const {id} = req.params;
@@ -89,5 +101,6 @@ module.exports = {
     createAltaControllers,
     getAltasControllers,
     updateAltaControllers,
-    deleteAltasControllers
+    deleteAltasControllers,
+    getAltaByIdController
 }

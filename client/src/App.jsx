@@ -1,11 +1,13 @@
-import MainLayout from './components/layout/MainLayout'
+import { Routes, Route } from 'react-router-dom'
 import AltasList from './features/altas/AltasList'
+import AltaDetail from './features/altas/AltaDetail'
 
 function App() {
   return (
-    <MainLayout>
-      <AltasList />
-    </MainLayout>
+    <Routes>
+      <Route path="/" element={<AltasList />} />
+      <Route path="/altas/:id" element={<AltaDetail />} />
+    </Routes>
   )
 }
 

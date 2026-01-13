@@ -2,7 +2,8 @@ const {
     createAltaRepository,
     getAltasRepository,
     updateAltaRepository,
-    deleteAltasRepository} = require('../repository/altasRepository')
+    deleteAltasRepository,
+    getAltaByIdRepository} = require('../repository/altasRepository')
 
 
 const createAltaService = async (data) => {
@@ -35,7 +36,17 @@ const getAltasService = async () => {
         throw new Error ('Error en service')
     }
 };
-
+const getAltaByIdService = async (id_Altas) => {
+    try {
+      const alta = await getAltaByIdRepository(id_Altas)
+      if (!alta) {
+        throw new Error('Alta no encontrada')
+      }
+      return alta
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 const deleteAltasService = async (id_Altas) => {
     try {
         const delete_altas = await deleteAltasRepository(id_Altas)
@@ -49,5 +60,6 @@ module.exports = {
     createAltaService,
     deleteAltasService,
     getAltasService,
-    updateAltasService
+    updateAltasService,
+    getAltaByIdService
 }
