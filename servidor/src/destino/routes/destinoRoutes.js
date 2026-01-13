@@ -10,7 +10,7 @@ const { filterAndOrderControllers } = require('../filtersAndOrdersDest/filtersAn
 
 const router = express.Router()
 
-router.post('/', createDestinoControllers)
+router.post('/create', createDestinoControllers)
 router.get('/', getAllDestinoControllers)
 router.put('/:id', updateDestinoControllers)
 router.delete('/:id', deleteDestinoControllers)

@@ -10,8 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import { Card } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Store from '../../store/store';
 import CardMedia from '@mui/material/CardMedia'
@@ -22,7 +20,9 @@ import '@fontsource/roboto/700.css';
 import logoMuni from '../../assets/munilogo.png'
 
 const Nav = () => {
-  const { logout } = Store(); // Función de logout
+  const { user, logout } = Store()// Función de logout
+  
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -61,14 +61,15 @@ const Nav = () => {
         src={logoMuni}
         alt='logo muni'/>
       </Card>
-        <Typography variant="h7" sx={{marginRight: '700px', fontFamily: 'inter', letterSpacing: '1px', fontSize: '20px' }}>
-          Sistema de Registro de planos Aprobados.
+        <Typography variant="h7" sx={{marginRight: '670px', fontFamily: 'inter', letterSpacing: '1px', fontSize: '20px' }}>
+          Sistema de Registro de planos aprobados
          
         <Typography variant='p' sx={{fontSize: '10px',  display: 'flex', }}>Dirección de Suelo Urbano - Municipalidad de la Capital</Typography>
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <nav>
+            <Typography variant='p'>usuario: {user.user.usuario}  </Typography>
             <ul
               style={{
                 listStyle: 'none',
@@ -77,7 +78,7 @@ const Nav = () => {
                 gap: '1.5rem',
                 padding: '0px',
                 margin: 0,
-                marginTop: '50px',
+                marginTop: '30px',
               
               }}
             >

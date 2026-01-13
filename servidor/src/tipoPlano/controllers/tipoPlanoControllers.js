@@ -33,8 +33,10 @@ const updatePlanoControllers = async (req, res) => {
 }
 
 const getAllPlanosControllers = async (req,res) => {
+    
     try {
         const get_all_planos = await getAllPlanosService()
+        console.log(get_all_planos);
         if(!get_all_planos.length) {
             return res.status(200).send('No hay tipos de planos registrado')
         }

@@ -1,6 +1,6 @@
 import Nav from "../Nav/Nav";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import Store from "../../store/store";
 
 const AltaDeRegistro = () => {

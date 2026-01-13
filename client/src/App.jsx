@@ -1,16 +1,11 @@
-
-import './App.css'
+import MainLayout from './components/layout/MainLayout'
+import AltasList from './features/altas/AltasList'
 
 function App() {
-
-
   return (
-    <>
-      <div>
-   <h1>Hola</h1>
-      </div>
-     
-    </>
+    <MainLayout>
+      <AltasList />
+    </MainLayout>
   )
 }
 

@@ -10,7 +10,7 @@ const { filtersAndOrderControllers } = require('../../tipoPlano/filtersAndOrder/
 
 const router = express.Router()
 
-router.post('/', createPlanoControllers)
+router.post('/create', createPlanoControllers)
 router.get('/', getAllPlanosControllers)
 router.put('/:id', updatePlanoControllers)
 router.delete('/:id', deletePlanosControllers)
