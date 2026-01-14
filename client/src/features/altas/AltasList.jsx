@@ -1,6 +1,7 @@
 import { useGetAltasQuery } from '../../store/api/AltasApi'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { DataGrid } from '@mui/x-data-grid'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Button } from '@mui/material'
 import {useNavigate} from 'react-router-dom'
 const AltasList = () => {
   const { data, isLoading, isError } = useGetAltasQuery()
@@ -34,26 +35,53 @@ const AltasList = () => {
       backgroundColor: '#f1f7fd',
     },
   }}
-        columns={[
-          { field: 'num_de_ficha', headerName: 'Ficha', width: 100 },
-          { field: 'ubicacion', headerName: 'Ubicación', flex: 1 },
+    columns={[
+  { field: 'num_de_ficha', headerName: 'Ficha', width: 90 },
 
-          {
-            field: 'propietario',
-            headerName: 'Propietario',
-            width: 220,
-            valueGetter: (_, row) =>
-              `${row.entityPropietario?.nombre ?? ''} ${row.entityPropietario?.apellido ?? ''}`,
-          },
+  {
+    field: 'direccion',
+    headerName: 'Dirección',
+    flex: 1,
+    valueGetter: (_, row) =>
+      `${row.calle ?? ''} - ${row.barrio ?? ''}`,
+  },
 
-          {
-            field: 'destino',
-            headerName: 'Destino',
-            width: 180,
-            valueGetter: (_, row) =>
-              row.entityDestino?.tipo_de_destino ?? '',
-          },
+  {
+    field: 'propietario',
+    headerName: 'Propietario',
+    width: 220,
+    valueGetter: (_, row) =>
+      `${row.entityPropietario?.nombre ?? ''} ${row.entityPropietario?.apellido ?? ''}`,
+  },
 
+  {
+    field: 'distrito',
+    headerName: 'Dist.',
+    width: 80,
+  },
+  {
+    field: 'zona',
+    headerName: 'Zona',
+    width: 80,
+  },
+  {
+    field: 'manzana',
+    headerName: 'Mz.',
+    width: 80,
+  },
+  {
+    field: 'parcela',
+    headerName: 'Parc.',
+    width: 80,
+  },
+
+  {
+    field: 'destino',
+    headerName: 'Destino',
+    width: 160,
+    valueGetter: (_, row) =>
+      row.entityDestino?.tipo_de_destino ?? '',
+  },
           {
             field: 'plano',
             headerName: 'Tipo de plano',
@@ -62,14 +90,20 @@ const AltasList = () => {
               row.entityPlano?.tipo_plano ?? '',
           },
 
-          { field: 'distrito', headerName: 'Distrito', width: 100 },
-          { field: 'zona', headerName: 'Zona', width: 80 },
-          { field: 'manzana', headerName: 'Manzana', width: 100 },
-          { field: 'parcela', headerName: 'Parcela', width: 100 },
+         
         ]}
         autoHeight
         disableRowSelectionOnClick
       />
+        <Box sx={{ mt: 2 }}>
+          <Button
+            size="small"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)}
+          >
+            Volver
+          </Button>
+        </Box>
     </Box>
   )
 }

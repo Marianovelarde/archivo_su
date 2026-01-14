@@ -1,14 +1,15 @@
 import { Box, Container, Paper } from '@mui/material'
+import { Outlet } from 'react-router-dom'
 import Header from './Header'
 
-const MainLayout = ({ children }) => {
+const MainLayout = () => {
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
       <Header />
 
       <Container maxWidth="xl" sx={{ mt: 4 }}>
         <Paper sx={{ p: 3 }}>
-          {children}
+          <Outlet />
         </Paper>
       </Container>
     </Box>

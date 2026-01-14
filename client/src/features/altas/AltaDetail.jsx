@@ -74,27 +74,32 @@ const AltaDetail = () => {
         <Divider sx={{ my: 1 }} />
 
         {/* IDENTIFICACIÓN */}
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
-          Identificación
-        </Typography>
+<Grid container spacing={2}>
+  <Grid item xs={12} md={6}>
+    <Field
+      label="Propietario"
+      value={`${data.entityPropietario.nombre} ${data.entityPropietario.apellido}`}
+      highlight
+    />
+  </Grid>
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <Field
-              label="Propietario"
-              value={`${data.entityPropietario.nombre} ${data.entityPropietario.apellido}`}
-              highlight
-            />
-          </Grid>
+  <Grid item xs={12} md={6}>
+    <Field
+      label="Calle"
+      value={data.calle}
+      highlight
+    />
+  </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Field
-              label="Ubicación"
-              value={data.ubicacion}
-              highlight
-            />
-          </Grid>
-        </Grid>
+  <Grid item xs={12} md={6}>
+    <Field
+      label="Barrio"
+      value={data.barrio}
+      highlight
+    />
+  </Grid>
+</Grid>
+
 
         <Divider sx={{ my: 1 }} />
 
@@ -103,20 +108,20 @@ const AltaDetail = () => {
           Ubicación catastral
         </Typography>
 
-        <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <Field label="Distrito" value={data.distrito} highlight />
-          </Grid>
-          <Grid item xs={3}>
-            <Field label="Zona" value={data.zona} highlight />
-          </Grid>
-          <Grid item xs={3}>
-            <Field label="Manzana" value={data.manzana} highlight />
-          </Grid>
-          <Grid item xs={3}>
-            <Field label="Parcela" value={data.parcela} highlight />
-          </Grid>
-        </Grid>
+  <Grid container spacing={2}>
+  <Grid item xs={3}>
+    <Field label="Distrito" value={data.distrito} highlight />
+  </Grid>
+  <Grid item xs={3}>
+    <Field label="Zona" value={data.zona} highlight />
+  </Grid>
+  <Grid item xs={3}>
+    <Field label="Manzana" value={data.manzana} highlight />
+  </Grid>
+  <Grid item xs={3}>
+    <Field label="Parcela" value={data.parcela} highlight />
+  </Grid>
+</Grid>
 
         <Divider sx={{ my: 1 }} />
 

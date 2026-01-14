@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
             allowNull: false
         },
         cuil: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false
         },
         email: {

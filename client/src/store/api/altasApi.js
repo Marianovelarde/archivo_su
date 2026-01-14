@@ -13,7 +13,7 @@ export const altasApi = createApi({
         }),
         createAlta: builder.mutation({
             query: (body) => ({
-                url: '/altas',
+                url: '/altas/create',
                 method: 'POST',
                 body
             }),
