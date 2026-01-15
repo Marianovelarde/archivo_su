@@ -8,6 +8,7 @@ import {
 } from '@mui/material'
 import FolderIcon from '@mui/icons-material/Folder'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import SearchIcon from '@mui/icons-material/Search'
 import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
@@ -27,8 +28,8 @@ const Home = () => {
 
       {/* ACCESOS */}
       <Grid container spacing={3}>
-        {/* ALTAS */}
-        <Grid item xs={12} md={6}>
+        {/* VER ALTAS */}
+        <Grid item xs={12} md={4}>
           <Card elevation={2}>
             <CardActionArea onClick={() => navigate('/altas')}>
               <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -38,7 +39,7 @@ const Home = () => {
                     Ver Altas
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Consultar y filtrar altas registradas
+                    Listado general de altas
                   </Typography>
                 </Box>
               </CardContent>
@@ -47,18 +48,36 @@ const Home = () => {
         </Grid>
 
         {/* NUEVA ALTA */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={1}>
-           <CardActionArea onClick={() => navigate('/altas/nueva')}>
-
+        <Grid item xs={12} md={4}>
+          <Card elevation={2}>
+            <CardActionArea onClick={() => navigate('/altas/nueva')}>
               <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <AddCircleOutlineIcon sx={{ fontSize: 40 }} color="primary" />
                 <Box>
-                  <Typography variant="subtitle1" color="text.secondary">
+                  <Typography variant="subtitle1">
                     Nueva Alta
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Ingresar nueva alta de documentación técnica
+                    Ingresar nueva documentación
+                  </Typography>
+                </Box>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
+
+        {/* BUSCAR */}
+        <Grid item xs={12} md={4}>
+          <Card elevation={2}>
+            <CardActionArea onClick={() => navigate('/buscar')}>
+              <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <SearchIcon sx={{ fontSize: 40 }} color="primary" />
+                <Box>
+                  <Typography variant="subtitle1">
+                    Buscar
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Búsqueda avanzada por múltiples criterios
                   </Typography>
                 </Box>
               </CardContent>
