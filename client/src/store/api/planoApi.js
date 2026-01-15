@@ -13,7 +13,7 @@ export const planoApi = createApi({
     }),
     createPlano: builder.mutation({
       query: (body) => ({
-        url: '/planos',
+        url: '/planos/create',
         method: 'POST',
         body,
       }),

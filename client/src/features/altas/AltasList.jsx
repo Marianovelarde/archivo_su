@@ -37,7 +37,14 @@ const AltasList = () => {
   }}
     columns={[
   { field: 'num_de_ficha', headerName: 'Ficha', width: 90 },
-
+  
+  {
+    field: 'propietario',
+    headerName: 'Propietario',
+    width: 220,
+    valueGetter: (_, row) =>
+      `${row.entityPropietario?.nombre ?? ''} ${row.entityPropietario?.apellido ?? ''}`,
+  },
   {
     field: 'direccion',
     headerName: 'Dirección',
@@ -46,13 +53,6 @@ const AltasList = () => {
       `${row.calle ?? ''} - ${row.barrio ?? ''}`,
   },
 
-  {
-    field: 'propietario',
-    headerName: 'Propietario',
-    width: 220,
-    valueGetter: (_, row) =>
-      `${row.entityPropietario?.nombre ?? ''} ${row.entityPropietario?.apellido ?? ''}`,
-  },
 
   {
     field: 'distrito',
