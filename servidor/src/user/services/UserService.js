@@ -15,7 +15,7 @@ const getUserServices = async () => {
     }
 };
 
-const getUserByNameServices = async (usuario, contraseña) => {
+const getUserByNameServices = async (usuario, contraseña,) => {
     const user = await getUserByNameRepository(usuario)
     if(!user)  throw new Error('Usuario no registrado')
     
@@ -26,12 +26,12 @@ const getUserByNameServices = async (usuario, contraseña) => {
     return user;
 }
 
-const createUserServices = async(usuario, contraseña) => {
+const createUserServices = async(usuario, contraseña, isAdmin) => {
     
     const hashedPassword = await bcrypt.hash(contraseña, 10);
     console.log('hashed: ', hashedPassword);
     
-    return await createUserRepository(usuario, hashedPassword)
+    return await createUserRepository(usuario, hashedPassword, isAdmin)
 }
 
 

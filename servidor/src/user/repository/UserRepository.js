@@ -1,9 +1,9 @@
 const {EntityUser} = require('../../db')
 
 
-const createUserRepository = async  (usuario, contraseña) => {
+const createUserRepository = async  (usuario, contraseña, isAdmin) => {
 
-    const createUSer = await EntityUser.create({usuario,contraseña})
+    const createUSer = await EntityUser.create({usuario,contraseña, isAdmin})
 
     return createUSer
 } 

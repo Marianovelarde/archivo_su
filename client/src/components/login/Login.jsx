@@ -1,64 +1,138 @@
-import Inicio from "../layout/Layout";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Store from "../../store/store"; // Importamos el hook Zustand
-import { Typography } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Divider,
+  Avatar,
+} from '@mui/material'
+
+import { useState } from 'react'
+import { useLoginMutation } from '../../store/api/authApi'
+import { useDispatch } from 'react-redux'
+import { setCredentials } from '../../store/api/authSlice'
+import { useNavigate } from 'react-router-dom'
+import Logo from '../../assets/munilogo.png'
 
 const Login = () => {
-  const [usuario, setUsuario] = useState("");
-  const [contraseña, setContraseña] = useState("");
+  const [form, setForm] = useState({ usuario: '', contraseña: '' })
+  const [login, { isLoading }] = useLoginMutation()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const navigate = useNavigate();
-  const { isAuthenticate, login, error } = Store(); // Usamos Zustand para acceder al estado y acciones
-
-  // Si ya está autenticado, redirige al home
-  useEffect(() => {
-    if (isAuthenticate) {
-      navigate("/");
-    }
-  }, [isAuthenticate, navigate]);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    await login(usuario, contraseña);
-  };
+    e.preventDefault()
+
+    try {
+      const res = await login(form).unwrap()
+      dispatch(setCredentials(res.user))
+      navigate('/')
+    } catch (error) {
+      alert('Credenciales incorrectas')
+    }
+  }
 
   return (
-    <div>
-      <Typography variant="h1" sx={{fontSize: '30px', fontFamily: 'inter', fontWeight: 'bold', marginBottom: '100px'}}>Bienvenidos al sistema de registro de planos aprobados</Typography>
-      <div style={{ maxWidth: "400px",  margin: "auto", marginLeft: '450px', padding: "1rem", textAlign: 'center', 
-      backgroundColor: '#18278C', borderRadius: '10px', opacity: '90%' }}>
-        <Inicio/>
-        <h2 style={{color: 'black'}}>Ingresar al sistema</h2>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: (theme) =>
+          `linear-gradient(135deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        px: 2,
+      }}
+    >
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4,
+          width: '100%',
+          maxWidth: 380,
+          borderRadius: 2,
+        }}
+      >
         <form onSubmit={handleSubmit}>
-          <label style={{color: 'black'}}>Usuario</label>
-          <input
-            type="text"
-            value={usuario}
-            onChange={(e) => setUsuario(e.target.value)}
-            required
-            style={{ width: "100%", height: '30px', marginBottom: "10px", alignItems: 'center' }}
+          {/* LOGO */}
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Avatar
+              src={Logo}
+              alt="Municipalidad de Santiago del Estero"
+              sx={{
+                width: 90,
+                height: 90,
+                bgcolor: 'background.paper',
+                border: '3px solid',
+                borderColor: 'primary.main',
+              }}
+            />
+          </Box>
+
+          {/* TÍTULOS */}
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" align="center">
+              Municipalidad de Santiago del Estero
+            </Typography>
+            <Typography
+              variant="caption"
+              align="center"
+              display="block"
+              color="text.secondary"
+            >
+              Dirección de Suelo Urbano
+            </Typography>
+          </Box>
+
+          <Divider sx={{ mb: 3 }} />
+
+          <Typography variant="subtitle1" align="center" gutterBottom>
+            Acceso al sistema
+          </Typography>
+
+          {/* FORM */}
+          <TextField
+            label="Usuario"
+            name="usuario"
+            value={form.usuario}
+            onChange={handleChange}
+            fullWidth
+            size="small"
+            sx={{ mb: 2 }}
           />
 
-          <label style={{color: 'black'}}>Contraseña</label>
-          <input
+          <TextField
+            label="Contraseña"
             type="password"
-            value={contraseña}
-            onChange={(e) => setContraseña(e.target.value)}
-            required
-            style={{ width: "100%", height: '30px', marginBottom: "10px" }}
+            name="contraseña"
+            value={form.contraseña}
+            onChange={handleChange}
+            fullWidth
+            size="small"
+            sx={{ mb: 3 }}
           />
-          <Stack spacing={2} direction="row">
-              <Button variant="contained" type="submit" style={{ width: "40%", marginLeft: '135px' }}>Ingresar</Button>
-          </Stack>
 
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={isLoading}
+            sx={{
+              py: 1,
+              fontWeight: 600,
+            }}
+          >
+            Ingresar
+          </Button>
         </form>
-      </div>
-      </div>
-  );
-};
+      </Paper>
+    </Box>
+  )
+}
 
-export default Login;
+export default Login

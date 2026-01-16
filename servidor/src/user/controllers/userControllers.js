@@ -2,7 +2,7 @@ const {createUserServices, getUserServices, getUserByNameServices} = require('..
 
 const createUserControllers =  async (req,res) => {
 
-    const {usuario, contraseña} = req.body
+    const {usuario, contraseña, isAdmin} = req.body
     console.log(req.body)
     console.log('usuario: ', usuario, 'contraseña: ', contraseña);
     
@@ -10,7 +10,7 @@ const createUserControllers =  async (req,res) => {
       return res.status(400).json({ message: 'Usuario y contraseña son requeridos' });
     }
 
-    const createUser = await createUserServices(usuario, contraseña)
+    const createUser = await createUserServices(usuario, contraseña, isAdmin)
     try {
         if(createUser) return res.status(201).json({message: 'Usuario creado con exito', createUser})
     } catch (error) {
