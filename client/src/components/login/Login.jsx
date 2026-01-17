@@ -26,16 +26,23 @@ const Login = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+  e.preventDefault()
 
-    try {
-      const res = await login(form).unwrap()
-      dispatch(setCredentials(res.user))
-      navigate('/')
-    } catch (error) {
-      alert('Credenciales incorrectas')
-    }
+  try {
+    const res = await login(form).unwrap()
+
+    dispatch(
+      setCredentials({
+        user: res.user,
+      })
+    )
+
+    navigate('/')
+  } catch (error) {
+    alert('Credenciales incorrectas')
   }
+}
+
 
   return (
     <Box
