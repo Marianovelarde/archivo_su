@@ -31,11 +31,8 @@ const Login = () => {
   try {
     const res = await login(form).unwrap()
 
-    dispatch(
-      setCredentials({
-        user: res.user,
-      })
-    )
+   dispatch(setCredentials({ user: res.user }))
+
 
     navigate('/')
   } catch (error) {

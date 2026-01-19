@@ -1,21 +1,29 @@
 import { Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+const SESSION_TIMEOUT = 15 * 60 * 1000
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
-  const { isAuthenticated, user } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
 
-  // 1️⃣ No logueado
+  
+  const { isAuthenticated, user, lastActivity, logout } = useSelector(
+    (state) => state.auth
+  )
+
   if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+ }
+  if (Date.now() - lastActivity > SESSION_TIMEOUT) {
+    dispatch(logout())
     return <Navigate to="/login" replace />
   }
 
-  // 2️⃣ Ruta solo admin
   if (adminOnly && !user?.isAdmin) {
     return <Navigate to="/" replace />
   }
 
-  // 3️⃣ OK
   return children
 }
+
 
 export default ProtectedRoute
