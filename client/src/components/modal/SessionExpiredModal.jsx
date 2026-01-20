@@ -21,7 +21,7 @@ const SessionExpiredModal = ({ open }) => {
 
   return (
     <Dialog open={open}>
-      <DialogTitle>Sesión expirada</DialogTitle>
+      <DialogTitle sx={{textAlign: 'center'}}>Sesión expirada</DialogTitle>
 
       <DialogContent>
         <Typography>
@@ -30,7 +30,7 @@ const SessionExpiredModal = ({ open }) => {
       </DialogContent>
 
       <DialogActions>
-        <Button variant="contained" onClick={handleClose}>
+        <Button variant="contained" onClick={handleClose} sx={{alignItems: 'center', textAlign: 'center', right: '35px', bottom: '10px'}}>
           Volver a iniciar sesión
         </Button>
       </DialogActions>

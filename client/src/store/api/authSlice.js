@@ -1,5 +1,8 @@
 // store/api/authSlice.js
 import { createSlice } from '@reduxjs/toolkit'
+import { MAX_IDLE_TIME } from './authConfig'
+
+
 
 const authSlice = createSlice({
   name: 'auth',
@@ -12,8 +15,9 @@ const authSlice = createSlice({
 
   reducers: {
     setCredentials: (state, action) => {
-      const { user } = action.payload
 
+      const { user } = action.payload
+  console.log('[AUTH] setCredentials')
       state.user = user
       state.isAuthenticated = true
       state.lastActivity = Date.now()
@@ -28,20 +32,37 @@ const authSlice = createSlice({
       )
     },
 
-    restoreSession: (state, action) => {
-      const { user, lastActivity } = action.payload || {}
 
-      if (!user || typeof user.isAdmin !== 'boolean') {
-        state.user = null
-        state.isAuthenticated = false
-        return
-      }
+restoreSession: (state, action) => {
+  const { user, lastActivity } = action.payload
 
-      state.user = user
-      state.lastActivity = lastActivity
-      state.isAuthenticated = true
-      state.sessionExpired = false
-    },
+  if (!user || !lastActivity) {
+    console.log('[AUTH] restoreSession → payload inválido')
+    state.user = null
+    state.isAuthenticated = false
+    state.lastActivity = null
+    state.sessionExpired = false
+    return
+  }
+
+  if (Date.now() - lastActivity > MAX_IDLE_TIME) {
+    console.log('[AUTH] restoreSession → EXPIRADA')
+    state.user = null
+    state.isAuthenticated = false
+    state.lastActivity = null
+    state.sessionExpired = true
+    localStorage.removeItem('auth')
+    return
+  }
+
+  console.log('[AUTH] restoreSession → OK')
+  state.user = user
+  state.lastActivity = lastActivity
+  state.isAuthenticated = true
+  state.sessionExpired = false
+},
+
+
 
     updateActivity: (state) => {
       if (!state.isAuthenticated || !state.user) return
@@ -58,6 +79,8 @@ const authSlice = createSlice({
     },
 
     expireSession: (state) => {
+        console.log('[AUTH] expireSession')
+
       state.user = null
       state.isAuthenticated = false
       state.lastActivity = null
@@ -66,6 +89,7 @@ const authSlice = createSlice({
     },
 
     logout: (state) => {
+       console.log('[AUTH] logout')
       state.user = null
       state.isAuthenticated = false
       state.lastActivity = null

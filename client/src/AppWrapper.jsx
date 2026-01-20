@@ -5,37 +5,23 @@ import {
   expireSession,
 } from './store/api/authSlice'
 
-const INACTIVITY_LIMIT =  60 * 1000
+
 
 const AppWrapper = ({ children }) => {
   const dispatch = useDispatch()
-  const { lastActivity, isAuthenticated } = useSelector(
-    (state) => state.auth
-  )
 
-  // Restaurar sesión
-  useEffect(() => {
-    const stored = localStorage.getItem('auth')
-    if (!stored) return
+useEffect(() => {
+  const stored = localStorage.getItem('auth')
+  console.log('[APP WRAPPER] stored auth:', stored)
 
-    const parsed = JSON.parse(stored)
-    dispatch(restoreSession(parsed))
-  }, [])
+  if (!stored) return
 
-  // Verificar expiración
-  useEffect(() => {
-    if (!isAuthenticated || !lastActivity) return
+  dispatch(restoreSession(JSON.parse(stored)))
+}, [dispatch])
 
-    const interval = setInterval(() => {
-      if (Date.now() - lastActivity > INACTIVITY_LIMIT) {
-        dispatch(expireSession())
-      }
-    }, 5000) // chequeo cada 5s
-
-    return () => clearInterval(interval)
-  }, [lastActivity, isAuthenticated])
 
   return children
 }
 
 export default AppWrapper
+
