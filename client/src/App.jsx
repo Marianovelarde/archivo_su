@@ -52,6 +52,8 @@ function App() {
       }
     />
   </Route>
+  <Route path="/admin/usuarios" element={<div>Gestión de usuarios (WIP)</div>} />
+<Route path="/cambiar-contraseña" element={<div>Cambiar contraseña (WIP)</div>} />
 </Routes>
 
   )

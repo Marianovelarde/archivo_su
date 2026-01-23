@@ -1,17 +1,18 @@
 // store/api/authSlice.js
-import { createSlice } from '@reduxjs/toolkit'
 import { MAX_IDLE_TIME } from './authConfig'
+import { createSlice } from '@reduxjs/toolkit'
 
 
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    user: null,
-    isAuthenticated: false,
-    lastActivity: null,
-    sessionExpired: false,
-  },
+initialState: {
+  user: null,
+  isAuthenticated: false,
+  lastActivity: null,
+  sessionExpired: false,
+  isHydrated: false, // 👈 CLAVE
+},
 
   reducers: {
     setCredentials: (state, action) => {
@@ -34,34 +35,25 @@ const authSlice = createSlice({
 
 
 restoreSession: (state, action) => {
-  const { user, lastActivity } = action.payload
+  const { user } = action.payload || {}
 
-  if (!user || !lastActivity) {
-    console.log('[AUTH] restoreSession → payload inválido')
-    state.user = null
-    state.isAuthenticated = false
-    state.lastActivity = null
-    state.sessionExpired = false
-    return
-  }
+  if (!user) return
 
-  if (Date.now() - lastActivity > MAX_IDLE_TIME) {
-    console.log('[AUTH] restoreSession → EXPIRADA')
-    state.user = null
-    state.isAuthenticated = false
-    state.lastActivity = null
-    state.sessionExpired = true
-    localStorage.removeItem('auth')
-    return
-  }
-
-  console.log('[AUTH] restoreSession → OK')
   state.user = user
-  state.lastActivity = lastActivity
   state.isAuthenticated = true
   state.sessionExpired = false
-},
 
+  // 🔥 CLAVE: refresh = actividad
+  state.lastActivity = Date.now()
+
+  localStorage.setItem(
+    'auth',
+    JSON.stringify({
+      user,
+      lastActivity: state.lastActivity,
+    })
+  )
+},
 
 
     updateActivity: (state) => {

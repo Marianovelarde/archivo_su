@@ -6,28 +6,27 @@ import { MAX_IDLE_TIME } from '../../store/api/authConfig'
 
 const SessionManager = () => {
   const dispatch = useDispatch()
-  const sessionExpired = useSelector((state) => state.auth.sessionExpired)
+const { isAuthenticated,  sessionExpired } = useSelector(
+  (state) => state.auth
+)
 
-  const initialized = useRef(false)
+useEffect(() => {
+  if (!isAuthenticated) return
 
-  useEffect(() => {
-    if (initialized.current) return
-    initialized.current = true
+  const interval = setInterval(() => {
+    const stored = localStorage.getItem('auth')
+    if (!stored) return
 
-    const interval = setInterval(() => {
-      const stored = localStorage.getItem('auth')
-      if (!stored) return
+    const { lastActivity } = JSON.parse(stored)
 
-      const { lastActivity } = JSON.parse(stored)
-      if (!lastActivity) return
+    if (Date.now() - lastActivity > MAX_IDLE_TIME) {
+      dispatch(expireSession())
+    }
+  }, 5000)
 
-      if (Date.now() - lastActivity > MAX_IDLE_TIME) {
-        dispatch(expireSession())
-      }
-    }, 5000)
+  return () => clearInterval(interval)
+}, [isAuthenticated])
 
-    return () => clearInterval(interval)
-  }, [dispatch])
 
   return <SessionExpiredModal open={sessionExpired} />
 }

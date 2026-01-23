@@ -5,6 +5,7 @@ import Header from './Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateActivity } from '../../store/api/authSlice'
 import { useEffect } from 'react'
+import AppBreadcrumbs from '../navigation/AppBreadcrumbs'
 
 const MainLayout = () => {
   const dispatch = useDispatch()
@@ -31,6 +32,7 @@ const MainLayout = () => {
     <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
       <Header />
       <Container maxWidth="xl" sx={{ mt: 4 }}>
+        <AppBreadcrumbs />
         <Paper sx={{ p: 3 }}>
           <Outlet />
         </Paper>
