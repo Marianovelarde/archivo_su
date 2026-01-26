@@ -10,7 +10,8 @@ module.exports = (sequelize) => {
         },
         usuario: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         contraseña: {
             type: DataTypes.STRING,

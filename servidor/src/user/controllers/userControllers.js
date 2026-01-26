@@ -1,4 +1,4 @@
-const {createUserServices, getUserServices, getUserByNameServices} = require('../services/UserService')
+const {createUserServices, getUserServices, getUserByNameServices, updateUserServices} = require('../services/UserService')
 
 const createUserControllers =  async (req,res) => {
 
@@ -38,8 +38,26 @@ const loginControllers = async (req, res) => {
     }
 }
 
+const updateUserControllers = async (req, res) => {
+  try {
+    const { id } = req.params
+    const loggedUser = req.user 
+    const data = req.body
+
+    const updatedUser = await updateUserServices(id, data, loggedUser)
+
+    res.status(200).json({
+      message: 'Usuario actualizado correctamente',
+      updatedUser,
+    })
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
+}
+
 module.exports = {
     createUserControllers,
     getUSerControllers,
-    loginControllers
+    loginControllers,
+    updateUserControllers
 }
