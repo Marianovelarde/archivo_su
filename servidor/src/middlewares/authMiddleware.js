@@ -1,14 +1,24 @@
 const { EntityUser } = require('../db')
 
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET } = require('../config/jwt')
+
 const authMiddleware = async (req, res, next) => {
   try {
-    const userId = req.headers['x-user-id']
+    const authHeader = req.headers.authorization
 
-    if (!userId) {
+    if (!authHeader) {
       return res.status(401).json({ message: 'No autorizado' })
     }
 
-    const user = await EntityUser.findByPk(userId)
+    const token = authHeader.split(' ')[1]
+    if (!token) {
+      return res.status(401).json({ message: 'Token inválido' })
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET)
+
+    const user = await EntityUser.findByPk(decoded.id_user)
 
     if (!user || !user.isActived) {
       return res.status(401).json({ message: 'Usuario inválido' })
@@ -17,7 +27,7 @@ const authMiddleware = async (req, res, next) => {
     req.user = user
     next()
   } catch (error) {
-    res.status(500).json({ message: 'Error de autenticación' })
+    return res.status(401).json({ message: 'Token expirado o inválido' })
   }
 }
 

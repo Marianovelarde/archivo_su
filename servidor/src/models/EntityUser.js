@@ -24,7 +24,11 @@ module.exports = (sequelize) => {
         isActived: {
             type: DataTypes.BOOLEAN,
             defaultValue: true
-        }
+        },
+              mustChangePassword: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
         paranoid: true,

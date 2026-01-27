@@ -9,7 +9,9 @@ const entityAltas = require('./models/EntityAltas')
 const entityDestino = require('./models/EntityDestino')
 const entityPlano = require('./models/EntityPlano')
 const entityPropietarios = require('./models/EntityPropietarios')
-
+const entityDocument = require('./models/EntityDocument')
+const entityLoan = require('./models/EntityLoan')
+const entityUser = require('./models/EntityUser')
 
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/archivo_su`, {
     logging: false,
@@ -24,6 +26,9 @@ entityAltas(sequelize)
 entityDestino(sequelize)
 entityPlano(sequelize)
 entityPropietarios(sequelize)
+entityDocument(sequelize)
+entityLoan(sequelize)
+entityUser(sequelize)
 
 fs.readdirSync(path.join(__dirname, '/models'))
 .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
@@ -41,7 +46,10 @@ const {
     EntityAltas,
     EntityDestino,
     EntityPlano,
-    EntityPropietarios
+    EntityPropietarios,
+    EntityDocument,
+    EntityLoan,
+    EntityUser
 } = sequelize.models
 
 
@@ -49,23 +57,55 @@ const {
 //has many: relación de uno a muchos
 // belongsTo: relacion de uno a uno
 //belongsToMany: relacion de muchos a muchos
+
+//Altas - propietario 
 EntityPropietarios.hasMany(EntityAltas, {
     foreignKey: 'id_propietario'
 })
 EntityAltas.belongsTo(EntityPropietarios, {
     foreignKey: 'id_propietario'
 })
+//altas - destino
 EntityAltas.belongsTo(EntityDestino, {
     foreignKey: 'id_destino'
 })
 EntityDestino.hasMany(EntityAltas, {
     foreignKey: 'id_destino'
 })
+
+//altas - tipo de plano
 EntityAltas.belongsTo(EntityPlano, {
     foreignKey: 'id_tipo_plano'
 })
 EntityPlano.hasMany(EntityAltas, {
     foreignKey: 'id_tipo_plano'
+})
+
+// usuario - documentacion
+EntityUser.hasMany(EntityDocument, {
+  foreignKey: 'uploaded_by',
+})
+EntityDocument.belongsTo(EntityUser, {
+  foreignKey: 'uploaded_by',
+})
+
+// documentacion - prestamo
+EntityDocument.hasMany(EntityLoan, {
+  foreignKey: 'id_document',
+})
+
+EntityLoan.belongsTo(EntityDocument, {
+  foreignKey: 'id_document',
+})
+
+//usuario - prestamo
+
+EntityUser.hasMany(EntityLoan, {
+  foreignKey: 'created_by',
+})
+
+EntityLoan.belongsTo(EntityUser, {
+  foreignKey: 'created_by',
 })
 
 module.exports = {

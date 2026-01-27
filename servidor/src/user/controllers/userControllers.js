@@ -1,4 +1,11 @@
-const {createUserServices, getUserServices, getUserByNameServices, updateUserServices} = require('../services/UserService')
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET, JWT_EXPIRES_IN } = require('../../config/jwt')
+
+const {createUserServices,
+     getUserServices, 
+     getUserByNameServices, 
+     updateUserServices
+    } = require('../services/UserService')
 
 const createUserControllers =  async (req,res) => {
 
@@ -29,13 +36,32 @@ const getUSerControllers = async (req,res) => {
 };
 
 const loginControllers = async (req, res) => {
-    try {
-        const {usuario, contraseña} = req.body
-        const user = await getUserByNameServices(usuario, contraseña)
-        res.status(200).json({message: 'Login exitoso', user})
-    } catch (error) {
-        res.status(401).json({error: error.message})
-    }
+  try {
+    const { usuario, contraseña } = req.body
+    const user = await getUserByNameServices(usuario, contraseña)
+
+    const token = jwt.sign(
+      {
+        id_user: user.id_user,
+        isAdmin: user.isAdmin,
+      },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN }
+    )
+
+    res.status(200).json({
+      message: 'Login exitoso',
+      token,
+      user: {
+        id_user: user.id_user,
+        usuario: user.usuario,
+        isAdmin: user.isAdmin,
+        isActived: user.isActived,
+      },
+    })
+  } catch (error) {
+    res.status(401).json({ error: error.message })
+  }
 }
 
 const updateUserControllers = async (req, res) => {
