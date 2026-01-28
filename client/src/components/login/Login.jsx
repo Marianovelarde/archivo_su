@@ -31,8 +31,13 @@ const Login = () => {
   try {
     const res = await login(form).unwrap()
 
-   dispatch(setCredentials({ user: res.user }))
-
+    dispatch(
+    setCredentials({
+      user: res.user,
+      token: res.token,
+    })
+  )
+console.log("¿Qué trae el servidor?", res) // <--- MIRA ESTO EN LA CONSOLA
 
     navigate('/')
   } catch (error) {

@@ -8,8 +8,8 @@ import MainLayout from './components/layout/MainLayout'
 import Home from './pages/Home'
 import Login from './components/login/Login'
 import ProtectedRoute from './routes/ProtectedRoute'
-
-
+import ChangePassword from './features/user/ChangePassword'
+import AdminPanel from './components/dashboard/AdminPanel'
 function App() {
   return (
    <Routes>
@@ -52,8 +52,14 @@ function App() {
       }
     />
   </Route>
-  <Route path="/admin/usuarios" element={<div>Gestión de usuarios (WIP) </div>} />
-<Route path="/cambiar-contraseña" element={<div>Cambiar contraseña (WIP)</div>} />
+  <Route path="/admin/panel" element={<ProtectedRoute adminOnly>
+    <AdminPanel />
+  </ProtectedRoute>} />
+<Route path="/cambiar-contraseña"  element={
+    <ProtectedRoute>
+      <ChangePassword />
+    </ProtectedRoute>
+  } />
 </Routes>
 
   )

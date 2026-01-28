@@ -129,7 +129,7 @@ const Header = () => {
                 <MenuItem
                   onClick={() => {
                     handleMenuClose()
-                    navigate('/admin/usuarios')
+                    navigate('/admin/panel')
                   }}
                 >
                   Gestionar usuarios

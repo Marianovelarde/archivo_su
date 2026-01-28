@@ -3,73 +3,62 @@ import { MAX_IDLE_TIME } from './authConfig'
 import { createSlice } from '@reduxjs/toolkit'
 
 
-
+const persistedAuth = JSON.parse(localStorage.getItem('auth'))
+const initialState = {
+  user: persistedAuth?.user || null,
+  token: persistedAuth?.token || null, 
+  isAuthenticated: !!persistedAuth?.token,
+  lastActivity: persistedAuth?.lastActivity || null,
+  sessionExpired: false,
+  isHydrated: false,
+}
 const authSlice = createSlice({
   name: 'auth',
-initialState: {
-  user: null,
-  isAuthenticated: false,
-  lastActivity: null,
-  sessionExpired: false,
-  isHydrated: false, // 👈 CLAVE
-},
-
+initialState,
   reducers: {
-    setCredentials: (state, action) => {
-
-      const { user } = action.payload
-  console.log('[AUTH] setCredentials')
-      state.user = user
-      state.isAuthenticated = true
-      state.lastActivity = Date.now()
-      state.sessionExpired = false
-
-      localStorage.setItem(
-        'auth',
-        JSON.stringify({
-          user,
-          lastActivity: state.lastActivity,
-        })
-      )
-    },
-
-
-restoreSession: (state, action) => {
-  const { user } = action.payload || {}
-
-  if (!user) return
-
+setCredentials: (state, action) => {
+  const { user, token } = action.payload
   state.user = user
+  state.token = token
   state.isAuthenticated = true
-  state.sessionExpired = false
-
-  // 🔥 CLAVE: refresh = actividad
   state.lastActivity = Date.now()
-
+  state.sessionExpired = false
+console.log('[AUTH] setCredentials', user, token)
   localStorage.setItem(
     'auth',
     JSON.stringify({
-      user,
-      lastActivity: state.lastActivity,
+     user: state.user,
+    token: state.token,
+    lastActivity: state.lastActivity,
     })
   )
 },
+restoreSession: (state, action) => {
+  const { user, token } = action.payload || {}
+  if (!user || !token) return
+
+  state.user = user
+  state.token = token
+  state.isAuthenticated = true
+  state.lastActivity = Date.now()
+  state.sessionExpired = false
+},
 
 
-    updateActivity: (state) => {
-      if (!state.isAuthenticated || !state.user) return
+   updateActivity: (state) => {
+  if (!state.isAuthenticated || !state.user) return
+  state.lastActivity = Date.now()
 
-      state.lastActivity = Date.now()
-
-      localStorage.setItem(
-        'auth',
-        JSON.stringify({
-          user: state.user,
-          lastActivity: state.lastActivity,
-        })
-      )
-    },
-
+  // Mantenemos los datos anteriores y solo actualizamos la actividad
+  const currentAuth = JSON.parse(localStorage.getItem('auth') || '{}')
+  localStorage.setItem(
+    'auth',
+    JSON.stringify({ 
+      ...currentAuth, // <--- ESTO mantiene el token que ya estaba
+      lastActivity: state.lastActivity 
+    })
+  )
+},
     expireSession: (state) => {
         console.log('[AUTH] expireSession')
 
@@ -79,15 +68,13 @@ restoreSession: (state, action) => {
       state.sessionExpired = true
       localStorage.removeItem('auth')
     },
-
-    logout: (state) => {
-       console.log('[AUTH] logout')
-      state.user = null
-      state.isAuthenticated = false
-      state.lastActivity = null
-      state.sessionExpired = false
-      localStorage.removeItem('auth')
-    },
+logout: (state) => {
+  state.user = null
+  state.token = null
+  state.isAuthenticated = false
+  state.lastActivity = null
+  localStorage.removeItem('auth')
+},
   },
 })
 

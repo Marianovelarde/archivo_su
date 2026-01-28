@@ -13,10 +13,19 @@ const AltasList = () => {
 
   return (
     <Box sx={{ height: 600, width: '100%' }}>
+      
       <Typography variant="h6" gutterBottom>
         Altas registradas
       </Typography>
-
+  <Box sx={{ mt: 2 }}>
+          <Button
+            size="small"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)}
+          >
+            Volver
+          </Button>
+        </Box>
       <DataGrid
          rows={rows}
   getRowId={(row) => row.id_Altas}
@@ -95,15 +104,7 @@ const AltasList = () => {
         autoHeight
         disableRowSelectionOnClick
       />
-        <Box sx={{ mt: 2 }}>
-          <Button
-            size="small"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate(-1)}
-          >
-            Volver
-          </Button>
-        </Box>
+      
     </Box>
   )
 }
