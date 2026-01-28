@@ -26,7 +26,7 @@ entityAltas(sequelize)
 entityDestino(sequelize)
 entityPlano(sequelize)
 entityPropietarios(sequelize)
-entityDocument(sequelize)
+entityDocument(sequelize) 
 entityLoan(sequelize)
 entityUser(sequelize)
 

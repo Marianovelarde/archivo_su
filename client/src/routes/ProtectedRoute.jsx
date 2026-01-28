@@ -1,12 +1,12 @@
 import { Navigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 const SESSION_TIMEOUT = 15 * 60 * 1000
-
+import { logout } from '../store/api/authSlice'
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const dispatch = useDispatch()
 
   
-  const { isAuthenticated, user, lastActivity, logout } = useSelector(
+  const { isAuthenticated, user, lastActivity } = useSelector(
     (state) => state.auth
   )
 

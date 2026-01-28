@@ -19,7 +19,8 @@ prepareHeaders: (headers, { getState }) => {
   return headers
 }
 
-  }),
+  }), 
+  tagTypes: ['Users'],
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
@@ -28,7 +29,33 @@ prepareHeaders: (headers, { getState }) => {
         body: credentials,
       }),
     }),
+    // ===== ADMIN =====
 
+    // LISTAR USUARIOS
+    getUsers: builder.query({
+      query: () => '/',
+      providesTags: ['Users'],
+    }),
+
+    // CAMBIAR ROL
+    updateUserRole: builder.mutation({
+      query: ({ id_user, isAdmin }) => ({
+        url: `/${id_user}`,
+        method: 'PUT',
+        body: { isAdmin },
+      }),
+      invalidatesTags: ['Users'],
+    }),
+
+    // ACTIVAR / DESACTIVAR
+    toggleUserActive: builder.mutation({
+      query: ({ id_user, isActived }) => ({
+        url: `/${id_user}`,
+        method: 'PUT',
+        body: { isActived },
+      }),
+      invalidatesTags: ['Users'],
+    }),
     // Cambiar de contraseña
     updatePassword: builder.mutation({
       query: ({ id_user, contraseña }) => ({
@@ -43,4 +70,7 @@ prepareHeaders: (headers, { getState }) => {
 export const {
   useLoginMutation,
   useUpdatePasswordMutation,
+  useGetUsersQuery,
+  useUpdateUserRoleMutation,
+  useToggleUserActiveMutation
 } = authApi

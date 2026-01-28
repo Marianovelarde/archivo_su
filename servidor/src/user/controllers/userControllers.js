@@ -38,8 +38,24 @@ const getUSerControllers = async (req,res) => {
 const loginControllers = async (req, res) => {
   try {
     const { usuario, contraseña } = req.body
+
+    // 1️⃣ Buscar usuario + validar contraseña
     const user = await getUserByNameServices(usuario, contraseña)
 
+    if (!user) {
+      return res.status(401).json({
+        message: 'Credenciales incorrectas',
+      })
+    }
+
+    // 2️⃣ Verificar si está activo
+    if (!user.isActived) {
+      return res.status(403).json({
+        message: 'Usuario desactivado',
+      })
+    }
+
+    // 3️⃣ Generar token SOLO si está todo OK
     const token = jwt.sign(
       {
         id_user: user.id_user,
@@ -49,6 +65,7 @@ const loginControllers = async (req, res) => {
       { expiresIn: JWT_EXPIRES_IN }
     )
 
+    // 4️⃣ Respuesta
     res.status(200).json({
       message: 'Login exitoso',
       token,
@@ -60,9 +77,13 @@ const loginControllers = async (req, res) => {
       },
     })
   } catch (error) {
-    res.status(401).json({ error: error.message })
+    console.error('[LOGIN ERROR]', error)
+    res.status(500).json({
+      message: 'Error interno del servidor',
+    })
   }
 }
+
 
 const updateUserControllers = async (req, res) => {
   try {

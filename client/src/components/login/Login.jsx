@@ -25,23 +25,22 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault()
 
   try {
     const res = await login(form).unwrap()
 
     dispatch(
-    setCredentials({
-      user: res.user,
-      token: res.token,
-    })
-  )
-console.log("¿Qué trae el servidor?", res) // <--- MIRA ESTO EN LA CONSOLA
+      setCredentials({
+        user: res.user,
+        token: res.token,
+      })
+    )
 
     navigate('/')
   } catch (error) {
-    alert('Credenciales incorrectas')
+    alert(error?.data?.message || 'Error al iniciar sesión')
   }
 }
 
