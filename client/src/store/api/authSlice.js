@@ -69,10 +69,11 @@ restoreSession: (state, action) => {
       localStorage.removeItem('auth')
     },
 logout: (state) => {
-  state.user = null
+  state.user = null 
   state.token = null
   state.isAuthenticated = false
   state.lastActivity = null
+   state.sessionExpired = false
   localStorage.removeItem('auth')
 },
   },

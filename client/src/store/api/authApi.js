@@ -19,6 +19,7 @@ prepareHeaders: (headers, { getState }) => {
   return headers
 }
 
+
   }), 
   tagTypes: ['Users'],
   endpoints: (builder) => ({
@@ -29,6 +30,15 @@ prepareHeaders: (headers, { getState }) => {
         body: credentials,
       }),
     }),
+
+    createUser: builder.mutation({
+  query: (body) => ({
+    url: '/signup',
+    method: 'POST',
+    body,
+  }),
+  invalidatesTags: ['Users'],
+}),
     // ===== ADMIN =====
 
     // LISTAR USUARIOS
@@ -72,5 +82,6 @@ export const {
   useUpdatePasswordMutation,
   useGetUsersQuery,
   useUpdateUserRoleMutation,
-  useToggleUserActiveMutation
+  useToggleUserActiveMutation,
+    useCreateUserMutation, 
 } = authApi

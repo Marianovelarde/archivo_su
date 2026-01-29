@@ -5,53 +5,118 @@ import { Box, Typography, Select, MenuItem, Switch,Button,
   DialogContent,
   DialogActions,
   TextField } from '@mui/material'
-
+import { useNavigate } from 'react-router-dom'
   import { useState } from 'react'
 import {
   useGetUsersQuery,
   useUpdateUserRoleMutation,
   useToggleUserActiveMutation,
-  useUpdatePasswordMutation
+  useUpdatePasswordMutation,
+  useCreateUserMutation 
 } from '../../store/api/authApi'
 
+
+import { Snackbar, Alert } from '@mui/material'
+
 const UserList = () => {
+
+
+
   const { data, isLoading, error } = useGetUsersQuery()
   const [updateRole] = useUpdateUserRoleMutation()
   const [toggleActive] = useToggleUserActiveMutation()
   const [changePassword] = useUpdatePasswordMutation()
-
-
   const [open, setOpen] = useState(false)
-const [selectedUser, setSelectedUser] = useState(null)
-const [newPassword, setNewPassword] = useState('')
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [newPassword, setNewPassword] = useState('')
+  const [loadingRoleId, setLoadingRoleId] = useState(null)
+  const [loadingStatusId, setLoadingStatusId] = useState(null)
+  const [changingPassword, setChangingPassword] = useState(false)
+  const [createOpen, setCreateOpen] = useState(false)
+  const [createUser, { isLoading: creating }] = useCreateUserMutation()
 
 
-  if (isLoading) return <div>Cargando...</div>
+  const [snackbar, setSnackbar] = useState({
+  open: false,
+  message: '',
+  severity: 'success',
+})
+
+
+
+
+const [form, setForm] = useState({
+  usuario: '',
+  contraseña: '',
+  isAdmin: false,
+  isActived: true,
+})
+
+
+const handleCreateUser = async () => {
+  try {
+    await createUser(form).unwrap()
+
+    showSnackbar('Usuario creado con éxito', 'success')
+
+    setCreateOpen(false)
+    setForm({
+      usuario: '',
+      contraseña: '',
+      isAdmin: false,
+      isActived: true,
+    })
+  } catch (error) {
+    showSnackbar(
+      error?.data?.message || 'Error al crear usuario',
+      'error'
+    )
+  }
+}
+
+
+const showSnackbar = (message, severity = 'success') => {
+  setSnackbar({ open: true, message, severity })
+}
+
+if (isLoading) return <div>Cargando...</div>
 
 console.log('USERS DATA:', data)
   const rows = data ?? []
+
+
 const handleChangePassword = async () => {
   try {
+    setChangingPassword(true)
+
     await changePassword({
       id_user: selectedUser.id_user,
       contraseña: newPassword,
     }).unwrap()
 
-    alert('Contraseña cambiada con éxito ✅')
-
+    showSnackbar('Contraseña actualizada correctamente')
     setOpen(false)
     setNewPassword('')
     setSelectedUser(null)
-  } catch (error) {
-    console.error(error)
-    alert('Error al cambiar la contraseña ❌')
+  } catch (err) {
+    showSnackbar('Error al cambiar la contraseña', 'error')
+  } finally {
+    setChangingPassword(false)
   }
 }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Typography variant="h6" gutterBottom>
         Usuarios del sistema
       </Typography>
+<Button
+  variant="contained"
+  sx={{ mb: 2 }}
+  onClick={() => setCreateOpen(true)}
+>
+  Crear nuevo usuario
+</Button>
 
       <DataGrid
         rows={rows}
@@ -81,19 +146,30 @@ columns={[
     headerName: 'Rol',
     width: 180,
     renderCell: (params) => (
-      <Select
-        size="small"
-        value={params.value ? 'admin' : 'user'}
-        onChange={(e) =>
-          updateRole({
-            id_user: params.row.id_user,
-            isAdmin: e.target.value === 'admin',
-          })
-        }
-      >
-        <MenuItem value="admin">Admin</MenuItem>
-        <MenuItem value="user">Usuario</MenuItem>
-      </Select>
+    <Select
+    size="small"
+    value={params.value ? 'admin' : 'user'}
+    disabled={loadingRoleId === params.row.id_user}
+    onChange={async (e) => {
+      try {
+        setLoadingRoleId(params.row.id_user)
+
+        await updateRole({
+          id_user: params.row.id_user,
+          isAdmin: e.target.value === 'admin',
+        }).unwrap()
+
+        showSnackbar('Rol actualizado correctamente')
+      } catch (err) {
+        showSnackbar('Error al cambiar el rol', 'error')
+      } finally {
+        setLoadingRoleId(null)
+      }
+    }}
+  >
+    <MenuItem value="admin">Admin</MenuItem>
+    <MenuItem value="user">Usuario</MenuItem>
+  </Select>
     ),
   },
 
@@ -101,17 +177,32 @@ columns={[
     field: 'isActived',
     headerName: 'Activo',
     width: 120,
-    renderCell: (params) => (
-      <Switch
-        checked={Boolean(params.value)}
-        onChange={(e) =>
-          toggleActive({
-            id_user: params.row.id_user,
-            isActived: e.target.checked,
-          })
-        }
-      />
-    ),
+   renderCell: (params) => (
+  <Switch
+    checked={Boolean(params.value)}
+    disabled={loadingStatusId === params.row.id_user}
+    onChange={async (e) => {
+      try {
+        setLoadingStatusId(params.row.id_user)
+
+        await toggleActive({
+          id_user: params.row.id_user,
+          isActived: e.target.checked,
+        }).unwrap()
+
+        showSnackbar(
+          e.target.checked
+            ? 'Usuario activado'
+            : 'Usuario desactivado'
+        )
+      } catch (err) {
+        showSnackbar('Error al actualizar estado', 'error')
+      } finally {
+        setLoadingStatusId(null)
+      }
+    }}
+  />
+),
   },
   {
   field: 'password',
@@ -153,16 +244,106 @@ columns={[
 
   <DialogActions>
     <Button onClick={() => setOpen(false)}>Cancelar</Button>
+   <Button
+  variant="contained"
+  onClick={handleChangePassword}
+  disabled={!newPassword || changingPassword}
+>
+  {changingPassword ? 'Guardando...' : 'Guardar'}
+</Button>
+  </DialogActions>
+</Dialog>
+<Dialog
+  open={createOpen}
+  onClose={() => setCreateOpen(false)}
+  maxWidth="xs"
+  fullWidth
+>
+  <DialogTitle>Crear nuevo usuario</DialogTitle>
+
+  <DialogContent>
+    <TextField
+      label="Usuario"
+      fullWidth
+      sx={{ mb: 2 }}
+      value={form.usuario}
+      onChange={(e) =>
+        setForm({ ...form, usuario: e.target.value })
+      }
+    />
+
+    <TextField
+      label="Contraseña"
+      type="password"
+      fullWidth
+      sx={{ mb: 2 }}
+      value={form.contraseña}
+      onChange={(e) =>
+        setForm({ ...form, contraseña: e.target.value })
+      }
+    />
+
+    <Select
+      fullWidth
+      value={form.isAdmin ? 'admin' : 'user'}
+      onChange={(e) =>
+        setForm({
+          ...form,
+          isAdmin: e.target.value === 'admin',
+        })
+      }
+      sx={{ mb: 2 }}
+    >
+      <MenuItem value="admin">Admin</MenuItem>
+      <MenuItem value="user">Usuario</MenuItem>
+    </Select>
+
+    <Box display="flex" alignItems="center" gap={1}>
+      <Typography>Activo</Typography>
+      <Switch
+        checked={form.isActived}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            isActived: e.target.checked,
+          })
+        }
+      />
+    </Box>
+  </DialogContent>
+
+  <DialogActions>
+    <Button onClick={() => setCreateOpen(false)}>
+      Cancelar
+    </Button>
+
     <Button
       variant="contained"
-      onClick={handleChangePassword}
-      disabled={!newPassword}
+      onClick={handleCreateUser}
+      disabled={
+        !form.usuario ||
+        !form.contraseña ||
+        creating
+      }
     >
-      Guardar
+      {creating ? 'Creando...' : 'Crear'}
     </Button>
   </DialogActions>
 </Dialog>
-
+<Snackbar
+  open={snackbar.open}
+  autoHideDuration={3000}
+  onClose={() => setSnackbar({ ...snackbar, open: false })}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+>
+  <Alert
+    onClose={() => setSnackbar({ ...snackbar, open: false })}
+    severity={snackbar.severity}
+    variant="filled"
+  >
+    {snackbar.message}
+  </Alert>
+</Snackbar>
     </Box>
   )
 }

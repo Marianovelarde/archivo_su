@@ -7,22 +7,38 @@ const {createUserServices,
      updateUserServices
     } = require('../services/UserService')
 
-const createUserControllers =  async (req,res) => {
+const createUserControllers = async (req, res) => {
+  try {
+    const { usuario, contraseña } = req.body
+    console.log('usuario:', usuario, 'contraseña:', contraseña)
 
-    const {usuario, contraseña, isAdmin} = req.body
-    console.log(req.body)
-    console.log('usuario: ', usuario, 'contraseña: ', contraseña);
-    
-      if (!usuario || !contraseña) {
-      return res.status(400).json({ message: 'Usuario y contraseña son requeridos' });
+    if (!usuario || !contraseña) {
+      return res.status(400).json({
+        message: 'Usuario y contraseña son requeridos',
+      })
     }
 
-    const createUser = await createUserServices(usuario, contraseña, isAdmin)
-    try {
-        if(createUser) return res.status(201).json({message: 'Usuario creado con exito', createUser})
-    } catch (error) {
-        return res.status(500).json({message: 'Error al crear un usuario'})
+    const createUser = await createUserServices(usuario, contraseña)
+
+    return res.status(201).json({
+      message: 'Usuario creado correctamente',
+      createUser,
+    })
+
+  } catch (error) {
+    // 👇 AHORA SÍ lo atrapás
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(400).json({
+        message: 'El usuario ya existe',
+      })
     }
+
+    console.error(error)
+
+    return res.status(500).json({
+      message: 'Error interno del servidor',
+    })
+  }
 }
 
 const getUSerControllers = async (req,res) => {
