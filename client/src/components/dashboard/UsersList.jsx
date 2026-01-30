@@ -5,6 +5,8 @@ import { Box, Typography, Select, MenuItem, Switch,Button,
   DialogContent,
   DialogActions,
   TextField } from '@mui/material'
+  import { useSelector } from 'react-redux'
+
 import { useNavigate } from 'react-router-dom'
   import { useState } from 'react'
 import {
@@ -34,7 +36,11 @@ const UserList = () => {
   const [changingPassword, setChangingPassword] = useState(false)
   const [createOpen, setCreateOpen] = useState(false)
   const [createUser, { isLoading: creating }] = useCreateUserMutation()
+const [confirmOpen, setConfirmOpen] = useState(false)
+const [userToToggle, setUserToToggle] = useState(null)
+const currentUser = useSelector(state => state.auth.user)
 
+ 
 
   const [snackbar, setSnackbar] = useState({
   open: false,
@@ -103,6 +109,23 @@ const handleChangePassword = async () => {
   } finally {
     setChangingPassword(false)
   }
+}
+const handleToggleUser = async (id_user, isActived) => {
+  try {
+    setLoadingStatusId(id_user)
+
+    await toggleActive({ id_user, isActived }).unwrap()
+
+    showSnackbar(
+      isActived ? 'Usuario activado' : 'Usuario desactivado'
+    )
+  } catch (err) {
+    showSnackbar('Error al actualizar estado', 'error')
+  } finally {
+    setLoadingStatusId(null)
+  }
+
+
 }
 
   return (
@@ -173,37 +196,43 @@ columns={[
     ),
   },
 
-  {
-    field: 'isActived',
-    headerName: 'Activo',
-    width: 120,
-   renderCell: (params) => (
-  <Switch
-    checked={Boolean(params.value)}
-    disabled={loadingStatusId === params.row.id_user}
-    onChange={async (e) => {
-      try {
-        setLoadingStatusId(params.row.id_user)
+{
+  field: 'isActived',
+  headerName: 'Activo',
+  width: 120,
+  renderCell: (params) => {
+    const isSelf = params.row.id_user === currentUser?.id_user
 
-        await toggleActive({
-          id_user: params.row.id_user,
-          isActived: e.target.checked,
-        }).unwrap()
+    return (
+      <Switch
+        checked={Boolean(params.value)}
+        disabled={
+          isSelf || loadingStatusId === params.row.id_user
+        }
+        onChange={(e) => {
+          if (isSelf) {
+            showSnackbar(
+              'No podés desactivar tu propio usuario',
+              'warning'
+            )
+            return
+          }
 
-        showSnackbar(
-          e.target.checked
-            ? 'Usuario activado'
-            : 'Usuario desactivado'
-        )
-      } catch (err) {
-        showSnackbar('Error al actualizar estado', 'error')
-      } finally {
-        setLoadingStatusId(null)
-      }
-    }}
-  />
-),
+          const newStatus = e.target.checked
+
+          if (!newStatus) {
+            setUserToToggle(params.row)
+            setConfirmOpen(true)
+            return
+          }
+
+          handleToggleUser(params.row.id_user, true)
+        }}
+      />
+    )
   },
+},
+
   {
   field: 'password',
   headerName: 'Contraseña',
@@ -225,6 +254,7 @@ columns={[
 ]}
 
       />
+      
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
   <DialogTitle>Cambiar contraseña</DialogTitle>
 
@@ -251,6 +281,37 @@ columns={[
 >
   {changingPassword ? 'Guardando...' : 'Guardar'}
 </Button>
+  </DialogActions>
+</Dialog>
+<Dialog
+  open={confirmOpen}
+  onClose={() => setConfirmOpen(false)}
+>
+  <DialogTitle>Confirmar desactivación</DialogTitle>
+
+  <DialogContent>
+    <Typography>
+      ¿Seguro que deseas desactivar al usuario{' '}
+      <strong>{userToToggle?.usuario}</strong>?
+    </Typography>
+  </DialogContent>
+
+  <DialogActions>
+    <Button onClick={() => setConfirmOpen(false)}>
+      Cancelar
+    </Button>
+
+    <Button
+      variant="contained"
+      color="error"
+      onClick={() => {
+        handleToggleUser(userToToggle.id_user, false)
+        setConfirmOpen(false)
+        setUserToToggle(null)
+      }}
+    >
+      Desactivar
+    </Button>
   </DialogActions>
 </Dialog>
 <Dialog

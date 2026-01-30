@@ -132,7 +132,7 @@ const Header = () => {
                     navigate('/admin/panel')
                   }}
                 >
-                  Gestionar usuarios
+                  Panel de admin
                 </MenuItem>
               )}
 

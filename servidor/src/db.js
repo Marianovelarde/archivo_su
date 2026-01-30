@@ -12,7 +12,7 @@ const entityPropietarios = require('./models/EntityPropietarios')
 const entityDocument = require('./models/EntityDocument')
 const entityLoan = require('./models/EntityLoan')
 const entityUser = require('./models/EntityUser')
-
+const entityAuditLogs = require('./models/EntityAuditLogs')
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/archivo_su`, {
     logging: false,
     native: false
@@ -29,7 +29,7 @@ entityPropietarios(sequelize)
 entityDocument(sequelize) 
 entityLoan(sequelize)
 entityUser(sequelize)
-
+entityAuditLogs(sequelize)
 fs.readdirSync(path.join(__dirname, '/models'))
 .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
 .forEach((file) => {
@@ -49,7 +49,8 @@ const {
     EntityPropietarios,
     EntityDocument,
     EntityLoan,
-    EntityUser
+    EntityUser,
+    EntityAuditLogs
 } = sequelize.models
 
 
