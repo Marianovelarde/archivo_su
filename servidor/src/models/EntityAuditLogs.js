@@ -1,7 +1,7 @@
 const {DataTypes} = require('sequelize');
 
 module.exports = (sequelize) => {
- sequelize.define('entityAuditLog', {
+ sequelize.define('entityAuditLogs', {
     action: {
       type: DataTypes.STRING,
       allowNull: false,

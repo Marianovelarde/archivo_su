@@ -5,6 +5,7 @@ import { propietariosApi } from './api/propietariosApi'
 import { destinoApi } from './api/destinoApi'
 import { planoApi } from './api/planoApi'
 import { authApi } from './api/authApi'
+// import { auditApi } from './api/auditApi'
 import authReducer from './api/authSlice'
 
 export const store = configureStore({
@@ -22,6 +23,7 @@ export const store = configureStore({
       propietariosApi.middleware,
       destinoApi.middleware,
       planoApi.middleware,
-      authApi.middleware
+      authApi.middleware,
+      // auditApi.middleware
     ),
 })
