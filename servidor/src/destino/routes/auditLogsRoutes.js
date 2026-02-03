@@ -1,10 +1,10 @@
 const express = require('express')
 
 const {
-getAllAuditLogsControllers} = require('../../auditLog/controllers/auditLogsControllers')
+getAllAuditLogsControllers, testAuditLog} = require('../../auditLog/controllers/auditLogsControllers')
 
 const router = express.Router()
 
-
+router.post('/create', testAuditLog)
 router.get('/', getAllAuditLogsControllers)
 module.exports = router

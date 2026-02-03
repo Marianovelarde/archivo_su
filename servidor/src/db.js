@@ -106,8 +106,8 @@ EntityLoan.belongsTo(EntityUser, {
   foreignKey: 'created_by',
 })
 
-// EntityUser.hasMany(EntityAuditLogs, { foreignKey: 'id_user' })
-// EntityAuditLogs.belongsTo(EntityUser, { foreignKey: 'id_user' })
+EntityUser.hasMany(EntityAuditLogs, { foreignKey: 'id_user' })
+EntityAuditLogs.belongsTo(EntityUser, { foreignKey: 'id_user' })
 
 module.exports = {
     ...sequelize.models,

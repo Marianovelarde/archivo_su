@@ -10,7 +10,7 @@ import Login from './components/login/Login'
 import ProtectedRoute from './routes/ProtectedRoute'
 import ChangePassword from './features/user/ChangePassword'
 import AdminPanel from './components/dashboard/AdminPanel'
-// import AuditLogList from './components/dashboard/AuditLogList'
+import AuditLogList from './components/dashboard/AuditLogList'
 function App() {
   return (
    <Routes>
@@ -62,9 +62,9 @@ function App() {
     </ProtectedRoute>
     
   } />
-    {/* <Route path="/audit" element={<ProtectedRoute adminOnly>
+    <Route path="/audit" element={<ProtectedRoute adminOnly>
     <AuditLogList />
-  </ProtectedRoute>} /> */}
+  </ProtectedRoute>} />
 </Routes>
 
   )

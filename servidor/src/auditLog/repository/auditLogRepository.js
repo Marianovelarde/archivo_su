@@ -1,19 +1,24 @@
-const {EntityAuditLog} = require('../../db')
+const { EntityAuditLogs, EntityUser } = require('../../db')
+
 
 
 const createAuditLogRepository = async (auditData) => {
 
-    const create = await EntityAuditLog.create(auditData)
+    const create = await EntityAuditLogs.create(auditData)
 
     return create
 }
 
 const getAllAuditLogRepository = async () => {
-    const getAll = await EntityAuditLog.findAll({
-        order: [['createAt', 'DESC']]
-    })
-    return getAll
+  return await EntityAuditLogs.findAll({
+    include: {
+      model: EntityUser,
+      attributes: ['usuario'],
+    },
+    order: [['createdAt', 'DESC']],
+  })
 }
+
 
 
 module.exports = {

@@ -5,7 +5,7 @@ import { propietariosApi } from './api/propietariosApi'
 import { destinoApi } from './api/destinoApi'
 import { planoApi } from './api/planoApi'
 import { authApi } from './api/authApi'
-// import { auditApi } from './api/auditApi'
+import { auditApi } from './api/auditApi'
 import authReducer from './api/authSlice'
 
 export const store = configureStore({
@@ -15,6 +15,7 @@ export const store = configureStore({
     [destinoApi.reducerPath]: destinoApi.reducer,
     [planoApi.reducerPath]: planoApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
+    [auditApi.reducerPath]: auditApi.reducer,
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -24,6 +25,6 @@ export const store = configureStore({
       destinoApi.middleware,
       planoApi.middleware,
       authApi.middleware,
-      // auditApi.middleware
+      auditApi.middleware
     ),
 })
