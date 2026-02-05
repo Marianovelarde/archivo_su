@@ -12,20 +12,31 @@ const getAllAuditLogsControllers = async (req,res) => {
         res.status(500).json({message: 'Error  al obtener auditoria'})
     }
 }
-const testAuditLog = async (req, res) => {
-  const log = await  EntityAuditLogs.create({
-  action: 'TEST',
-  entity: 'SYSTEM',
-  description: 'Registro de prueba',
-  performed_by: 1,   // usuario que ejecuta
-  target_user: 1,    // usuario afectado
-})
+const { createAuditLogService } = require('../../auditLog/services/auditLogService')
 
+const createUserController = async (req, res) => {
+  try {
 
-  res.json(log)
+    const adminId = req.user.id   // del JWT
+
+    const newUser = await createUserService(req.body)
+
+    await createAuditLogService({
+      action: 'CREATE',
+      entity: 'USER',
+      performedBy: adminId,
+      targetUser: newUser.id,
+      description: 'Usuario creado',
+    })
+
+    res.status(201).json(newUser)
+
+  } catch (error) {
+    res.status(500).json({ message: 'Error al crear usuario' })
+  }
 }
 
 module.exports = {
     getAllAuditLogsControllers,
-    testAuditLog
+    createUserController
 }

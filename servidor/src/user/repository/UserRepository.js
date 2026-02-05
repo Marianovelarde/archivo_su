@@ -28,6 +28,27 @@ const updateUserRepository = async (id_user, data) => {
   await user.update(data)
   return user
 }
+const deactivateUserRepository = async (id) => {
+  const user = await EntityUser.findByPk(id)
+
+  if (!user) throw new Error('Usuario no encontrado')
+
+  user.active = false
+  await user.save()
+
+  return user
+}
+
+const changeUserRoleRepository = async (id, role) => {
+  const user = await EntityUser.findByPk(id)
+
+  if (!user) throw new Error('Usuario no encontrado')
+
+  user.role = role
+  await user.save()
+
+  return user
+}
 
 
 module.exports = {
@@ -35,5 +56,7 @@ module.exports = {
     getUserRepository,
     getUserByNameRepository,
     getUserByIdRepository,
-    updateUserRepository
+    updateUserRepository,
+    deactivateUserRepository,
+    changeUserRoleRepository
 }

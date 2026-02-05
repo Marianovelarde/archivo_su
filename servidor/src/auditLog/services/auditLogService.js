@@ -1,32 +1,38 @@
-const {createAuditLogRepository, getAllAuditLogRepository} = require('../repository/auditLogRepository')
+const {
+  createAuditLogRepository,
+  getAllAuditLogRepository
+} = require('../repository/auditLogRepository')
 
-
-
-const createAuditLogService = async( action,
+const createAuditLogService = async ({
+  action,
+  entity,
   performedBy,
-  targetUser,
-  details = '') => {
+  targetUser = null,
+  description = '',
+}) => {
 
-    const create = await createAuditLogRepository( 
-        action,
-        performedBy,
-        targetUser,
-        details)
+  if (!action || !entity || !performedBy) {
+    throw new Error('Datos incompletos para auditoría')
+  }
 
-        if(create ) {
-            throw new Error('Error en service')
-        }
-        return create
+  const auditData = {
+    action,
+    entity,
+    performed_by: performedBy,
+    target_user: targetUser,
+    description,
+  }
+
+  const log = await createAuditLogRepository(auditData)
+
+  return log
 }
 
 const getAllAuditLogService = async () => {
-
-    const getAll = getAllAuditLogRepository()
-
-    return getAll
+  return await getAllAuditLogRepository()
 }
 
 module.exports = {
-    createAuditLogService,
-    getAllAuditLogService
+  createAuditLogService,
+  getAllAuditLogService
 }

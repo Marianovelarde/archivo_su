@@ -1,6 +1,6 @@
 const express = require('express')
 
-const {createUserControllers, getUSerControllers, loginControllers, updateUserControllers} = require('../../user/controllers/userControllers')
+const {createUserControllers, getUSerControllers, loginControllers, updateUserControllers, deactivateUserController, changeUserRoleController} = require('../../user/controllers/userControllers')
 const authMiddleware  = require('../../middlewares/authMiddleware')
 const requireSelfOrAdmin = require('../../middlewares/requireSelfOrAdmin')
 const requireAdmin = require('../../middlewares/requireAdmin')
@@ -10,4 +10,6 @@ router.get('/', authMiddleware, requireAdmin, getUSerControllers)
 router.post('/login', loginControllers)
 router.post('/signup', authMiddleware, requireAdmin, createUserControllers)
 router.put('/:id', authMiddleware, requireSelfOrAdmin, updateUserControllers)
+router.put('/:id/deactivate', deactivateUserController)
+router.put('/:id/role', changeUserRoleController)
 module.exports = router

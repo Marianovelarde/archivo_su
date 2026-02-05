@@ -4,9 +4,61 @@ const { JWT_SECRET, JWT_EXPIRES_IN } = require('../../config/jwt')
 const {createUserServices,
      getUserServices, 
      getUserByNameServices, 
-     updateUserServices
+     updateUserServices,
+     deactivateUserService,
+     changeUserRoleService
     } = require('../services/UserService')
 
+
+
+    const { createAuditLogService } = require('../../auditLog/services/auditLogService')
+
+const deactivateUserController = async (req, res) => {
+  try {
+    const adminId = req.user.id
+    const { id } = req.params
+
+    const user = await deactivateUserService(id)
+
+    await createAuditLogService({
+      action: 'DEACTIVATE',
+      entity: 'USER',
+      performedBy: adminId,
+      targetUser: id,
+      description: 'Usuario desactivado',
+    })
+
+    res.json(user)
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Error al desactivar usuario' })
+  }
+}
+
+const changeUserRoleController = async (req, res) => {
+  try {
+    const adminId = req.user.id
+    const { id } = req.params
+    const { role } = req.body
+
+    const user = await changeUserRoleService(id, role)
+
+    await createAuditLogService({
+      action: 'ROLE_CHANGE',
+      entity: 'USER',
+      performedBy: adminId,
+      targetUser: id,
+      description: `Rol cambiado a ${role}`,
+    })
+
+    res.json(user)
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Error al cambiar rol' })
+  }
+}
 const createUserControllers = async (req, res) => {
   try {
     const { usuario, contraseña } = req.body
@@ -122,5 +174,7 @@ module.exports = {
     createUserControllers,
     getUSerControllers,
     loginControllers,
-    updateUserControllers
+    updateUserControllers,
+    deactivateUserController,
+    changeUserRoleController
 }

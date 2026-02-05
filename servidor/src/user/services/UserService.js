@@ -1,5 +1,6 @@
 const {createUserRepository, getUserRepository, getUserByNameRepository, updateUserRepository,
-  getUserByIdRepository,} = require('../repository/UserRepository')
+  getUserByIdRepository,
+changeUserRoleRepository, deactivateUserRepository} = require('../repository/UserRepository')
 const bcrypt = require('bcrypt');
 
 
@@ -51,10 +52,19 @@ const updateUserServices = async (id_user, data) => {
 
   return await updateUserRepository(id_user, updateData)
 }
+const deactivateUserService = async (id) => {
+  return await deactivateUserRepository(id)
+}
+
+const changeUserRoleService = async (id, role) => {
+  return await changeUserRoleRepository(id, role)
+}
 
 module.exports = {
     createUserServices,
     getUserServices,
     getUserByNameServices,
-    updateUserServices
+    updateUserServices,
+    deactivateUserService,
+    changeUserRoleService
 }
