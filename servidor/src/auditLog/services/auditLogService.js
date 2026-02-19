@@ -11,22 +11,20 @@ const createAuditLogService = async ({
   description = '',
 }) => {
 
-  if (!action || !entity || !performedBy) {
+  if (!action || !performedBy) {
     throw new Error('Datos incompletos para auditoría')
   }
 
   const auditData = {
     action,
-    entity,
     performed_by: performedBy,
     target_user: targetUser,
-    description,
+    details: description,
   }
 
-  const log = await createAuditLogRepository(auditData)
-
-  return log
+  return await createAuditLogRepository(auditData)
 }
+
 
 const getAllAuditLogService = async () => {
   return await getAllAuditLogRepository()

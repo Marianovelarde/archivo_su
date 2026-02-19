@@ -11,6 +11,7 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import ChangePassword from './features/user/ChangePassword'
 import AdminPanel from './components/dashboard/AdminPanel'
 import AuditLogList from './components/dashboard/AuditLogList'
+import BuscarAltas from './pages/BuscarAltas'
 function App() {
   return (
    <Routes>
@@ -34,7 +35,7 @@ function App() {
         </ProtectedRoute>
       }
     />
-
+<Route path="/buscar" element={<BuscarAltas />} />
     <Route
       path="/altas/nueva"
       element={
