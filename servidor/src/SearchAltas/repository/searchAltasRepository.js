@@ -1,5 +1,10 @@
 const { Op } = require('sequelize')
-const { EntityAltas, EntityPropietarios, EntityDestino, EntityPlano } = require('../../db')
+const {
+  EntityAltas,
+  EntityPropietarios,
+  EntityDestino,
+  EntityPlano
+} = require('../../db')
 
 const searchAltasRepository = async (filters) => {
 
@@ -8,49 +13,81 @@ const searchAltasRepository = async (filters) => {
   const whereDestino = {}
   const wherePlano = {}
 
-  // 🔎 ALTAS
-  if (filters.num_de_exp) {
-    whereAltas.num_de_exp = { [Op.iLike]: `%${filters.num_de_exp}%` }
+  const hasValue = (value) =>
+    value !== undefined &&
+    value !== null &&
+    value.toString().trim() !== ''
+
+  // 🔎 CONSTRUIR EXPEDIENTE
+  if (hasValue(filters.exp_num) && hasValue(filters.exp_letra)) {
+    const expediente = `${filters.exp_num.trim()}-${filters.exp_letra.trim().toUpperCase()}`
+    whereAltas.num_de_exp = expediente
   }
 
-  if (filters.num_de_ficha) {
-    whereAltas.num_de_ficha = { [Op.iLike]: `%${filters.num_de_ficha}%` }
+  // 🔎 CONSTRUIR FICHA
+  if (hasValue(filters.ficha_num) && hasValue(filters.ficha_letra)) {
+    const ficha = `${filters.ficha_num.trim()}-${filters.ficha_letra.trim().toUpperCase()}`
+    whereAltas.num_de_ficha = ficha
   }
 
-  if (filters.barrio) {
-    whereAltas.barrio = { [Op.iLike]: `%${filters.barrio}%` }
+  // 🔎 UBICACION
+  if (hasValue(filters.barrio)) {
+    whereAltas.barrio = { [Op.iLike]: `%${filters.barrio.trim()}%` }
   }
 
-  if (filters.calle) {
-    whereAltas.calle = { [Op.iLike]: `%${filters.calle}%` }
+  if (hasValue(filters.calle)) {
+    whereAltas.calle = { [Op.iLike]: `%${filters.calle.trim()}%` }
   }
 
-  if (filters.distrito) whereAltas.distrito = filters.distrito
-  if (filters.zona) whereAltas.zona = filters.zona
-  if (filters.manzana) whereAltas.manzana = filters.manzana
-  if (filters.parcela) whereAltas.parcela = filters.parcela
+  // 🔎 PADRON COMPLETO
+  if (
+    hasValue(filters.distrito) &&
+    hasValue(filters.zona) &&
+    hasValue(filters.manzana) &&
+    hasValue(filters.parcela)
+  ) {
+    whereAltas.distrito = filters.distrito
+    whereAltas.zona = filters.zona
+    whereAltas.manzana = filters.manzana
+    whereAltas.parcela = filters.parcela
+  }
 
   // 🔎 PROPIETARIO
-  if (filters.nombre) {
-    wherePropietario.nombre = { [Op.iLike]: `%${filters.nombre}%` }
+  if (hasValue(filters.nombre)) {
+    wherePropietario.nombre = {
+      [Op.iLike]: `%${filters.nombre.trim()}%`
+    }
   }
 
-  if (filters.apellido) {
-    wherePropietario.apellido = { [Op.iLike]: `%${filters.apellido}%` }
-  }
-
-  if (filters.cuil) {
-    wherePropietario.cuil = { [Op.iLike]: `%${filters.cuil}%` }
+  if (hasValue(filters.apellido)) {
+    wherePropietario.apellido = {
+      [Op.iLike]: `%${filters.apellido.trim()}%`
+    }
   }
 
   // 🔎 DESTINO
-  if (filters.tipo_destino) {
-    whereDestino.tipo_de_destino = { [Op.iLike]: `%${filters.tipo_destino}%` }
+  if (hasValue(filters.tipo_destino)) {
+    whereDestino.tipo_de_destino = {
+      [Op.iLike]: `%${filters.tipo_destino.trim()}%`
+    }
   }
 
   // 🔎 PLANO
-  if (filters.tipo_plano) {
-    wherePlano.tipo_plano = { [Op.iLike]: `%${filters.tipo_plano}%` }
+  if (hasValue(filters.tipo_plano)) {
+    wherePlano.tipo_plano = {
+      [Op.iLike]: `%${filters.tipo_plano.trim()}%`
+    }
+  }
+
+  // 🚨 VALIDAR QUE HAYA ALGÚN FILTRO REAL
+  const hasFilters =
+    Object.keys(whereAltas).length > 0 ||
+    Object.keys(wherePropietario).length > 0 ||
+    Object.keys(whereDestino).length > 0 ||
+    Object.keys(wherePlano).length > 0
+
+  if (!hasFilters) {
+    throw new Error('Debe ingresar un criterio válido de búsqueda')
   }
 
   return await EntityAltas.findAll({

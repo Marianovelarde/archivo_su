@@ -26,12 +26,19 @@ export const altasApi = createApi({
     }),
 
     // 🔎 NUEVO SEARCH
-  searchAltas: builder.query({
-  query: (filters) => ({
-    url: '/search',
-    params: filters
-  }),
-})
+searchAltas: builder.query({
+  query: (filters) => {
+    const queryParams = new URLSearchParams(filters).toString()
+    return `/search?${queryParams}`
+  }
+}),
+getDestinos: builder.query({
+  query: () => '/destino'
+}),
+
+getPlanos: builder.query({
+  query: () => '/planos'
+}),
   })
 })
 
@@ -40,5 +47,7 @@ export const {
   useCreateAltaMutation,
   useGetAltaByIdQuery,
   useSearchAltasQuery,   // 👈 nuevo hook
-  useLazySearchAltasQuery   
+  useLazySearchAltasQuery,
+   useGetDestinosQuery,
+    useGetPlanosQuery   
 } = altasApi;
