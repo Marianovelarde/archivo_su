@@ -54,7 +54,7 @@ console.log('metrics:', data);
           <Paper
             sx={{ p: 3, cursor: 'pointer' }}
             onClick={() =>
-              navigate('/admin/metrics/apellidos', {
+              navigate('/metrics', {
                 state: data?.altasPorApellido
               })
             }
