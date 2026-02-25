@@ -12,6 +12,7 @@ import ChangePassword from './features/user/ChangePassword'
 import AdminPanel from './components/dashboard/AdminPanel'
 import AuditLogList from './components/dashboard/AuditLogList'
 import BuscarAltas from './pages/BuscarAltas'
+import MetricsDetail from './components/dashboard/MetricsDetails'
 function App() {
   return (
    <Routes>
@@ -66,6 +67,8 @@ function App() {
     <Route path="/audit" element={<ProtectedRoute adminOnly>
     <AuditLogList />
   </ProtectedRoute>} />
+  <Route path="/metrics/" element={<MetricsDetail />} />
+<Route path="/metrics" element={<MetricsDetail />} />
 </Routes>
 
   )

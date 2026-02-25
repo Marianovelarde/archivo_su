@@ -3,7 +3,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserList from './UsersList'
-
+import AdminMetrics from './adminMetrics'
 const AdminPanel = () => {
   const [section, setSection] = useState('users')
   const navigate = useNavigate()
@@ -45,11 +45,19 @@ const AdminPanel = () => {
         >
           Auditoría
         </Button>
+         <Button
+          fullWidth
+          variant={section === 'metrics' ? 'contained' : 'text'}
+          onClick={() => setSection('metrics')}
+        >
+          Métricas
+        </Button>
       </Box>
 
       <Box sx={{ flex: 1, p: 3 }}>
         {section === 'users' && <UserList />}
         {section === 'audit' && <Typography>Auditoría</Typography>}
+        {section === 'metrics' && <AdminMetrics />} {/* 👈 NUEVA SECCIÓN */}
       </Box>
     </Box>
   )

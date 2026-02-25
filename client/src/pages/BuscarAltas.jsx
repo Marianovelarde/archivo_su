@@ -117,7 +117,7 @@ const handleClear = () => {
               <TextField label="Nombre" name="nombre" value={filters.nombre || ''} fullWidth onChange={handleChange}/>
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Apellido" name="apellido" fullWidth onChange={handleChange}/>
+              <TextField label="Apellido" name="apellido" fullWidth value={filters.apellido || ''} onChange={handleChange}/>
             </Grid>
           </Grid>
         )}

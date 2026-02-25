@@ -7,7 +7,7 @@ const altasRoutes = require('../routes/altasRoutes')
 const userRoutes = require('../routes/userRoutes')
 const auditLogsRoutes = require('../routes/auditLogsRoutes')
 const searchAltasRoutes = require('../routes/searchAltasRoutes')
-
+const metricsRoutes = require('../routes/metricsRoutes')
 const router = express.Router()
 
 router.use('/user', userRoutes)
@@ -17,4 +17,5 @@ router.use('/propietarios', propietariosRoutes)
 router.use('/altas', altasRoutes)
 router.use('/audit', auditLogsRoutes)
 router.use('/search', searchAltasRoutes)
+router.use('/metrics', metricsRoutes)
 module.exports = router
