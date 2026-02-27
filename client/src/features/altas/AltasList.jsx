@@ -51,8 +51,8 @@ const AltasList = () => {
     field: 'propietario',
     headerName: 'Propietario',
     width: 220,
-    valueGetter: (_, row) =>
-      `${row.entityPropietario?.nombre ?? ''} ${row.entityPropietario?.apellido ?? ''}`,
+valueGetter: (_, row) =>
+  `${row.propietario?.nombre ?? ''} ${row.propietario?.apellido ?? ''}`,
   },
   {
     field: 'direccion',

@@ -78,7 +78,7 @@ const AltaDetail = () => {
   <Grid item xs={12} md={6}>
     <Field
       label="Propietario"
-      value={`${data.propietario?.nombre} ${data.propietario?.apellido}`}
+      value={`${data.propietario.nombre} ${data.propietario.apellido}`}
       highlight
     />
   </Grid>

@@ -5,17 +5,37 @@ import {
   Card,
   CardContent,
   CardActionArea,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from '@mui/material'
 import FolderIcon from '@mui/icons-material/Folder'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import SearchIcon from '@mui/icons-material/Search'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { useState } from 'react'
 
 const Home = () => {
   const navigate = useNavigate()
+  const { user } = useSelector((state) => state.auth)
+
+  const [openModal, setOpenModal] = useState(false)
+
+  const handleNuevaAlta = () => {
+    if (user?.rol !== 'admin') {
+      setOpenModal(true)
+      return
+    }
+
+    navigate('/altas/nueva')
+  }
 
   return (
     <Box>
+
       {/* TÍTULO */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h5" gutterBottom>
@@ -28,6 +48,7 @@ const Home = () => {
 
       {/* ACCESOS */}
       <Grid container spacing={3}>
+
         {/* VER ALTAS */}
         <Grid item xs={12} md={4}>
           <Card elevation={2}>
@@ -47,10 +68,10 @@ const Home = () => {
           </Card>
         </Grid>
 
-        {/* NUEVA ALTA */}
+        {/* NUEVA ALTA (PROTEGIDA) */}
         <Grid item xs={12} md={4}>
           <Card elevation={2}>
-            <CardActionArea onClick={() => navigate('/altas/nueva')}>
+            <CardActionArea onClick={handleNuevaAlta}>
               <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <AddCircleOutlineIcon sx={{ fontSize: 40 }} color="primary" />
                 <Box>
@@ -84,7 +105,24 @@ const Home = () => {
             </CardActionArea>
           </Card>
         </Grid>
+
       </Grid>
+
+      {/* MODAL ACCESO DENEGADO */}
+      <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+        <DialogTitle>Acceso denegado</DialogTitle>
+        <DialogContent>
+          <Typography>
+            El usuario <strong>{user?.usuario}</strong> no puede acceder a esta función.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenModal(false)} variant="contained">
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Box>
   )
 }
