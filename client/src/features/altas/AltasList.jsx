@@ -10,6 +10,7 @@ const AltasList = () => {
   if (isError) return <div>Error al cargar datos</div>
 
   const rows = data?.new_alta ?? []
+console.log('rows', rows);
 
   return (
     <Box sx={{ height: 600, width: '100%' }}>
@@ -52,7 +53,7 @@ const AltasList = () => {
     headerName: 'Propietario',
     width: 220,
 valueGetter: (_, row) =>
-  `${row.propietario?.nombre ?? ''} ${row.propietario?.apellido ?? ''}`,
+  `${row.entityPropietario?.nombre ?? ''} ${row.entityPropietario?.apellido ?? ''}`,
   },
   {
     field: 'direccion',

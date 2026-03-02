@@ -271,9 +271,13 @@ const handleClear = () => {
                 Ubicación: {alta.calle} - {alta.barrio}
               </Typography>
 
-              <Typography sx={{fontWeight: "bold"}}>
-                Fecha aprobación: {alta.fecha_de_aprob}
-              </Typography>
+             <Typography sx={{fontWeight: "bold"}}>
+            Fecha aprobación: {
+            alta.fecha_de_aprob
+                ? new Date(alta.fecha_de_aprob).toLocaleDateString('es-AR')
+                  : '—'
+              }
+             </Typography>
 
             </CardContent>
           </CardActionArea>
