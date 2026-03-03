@@ -24,10 +24,18 @@ const MetricsDetail = () => {
   const { pathname } = useLocation()
   const { data, isLoading } = useGetMetricsQuery()
   const navigate = useNavigate()
+  const { state } = useLocation()
+const type = state?.type
+
+const isBarrio = type === 'barrio'
+
   if (isLoading) return <CircularProgress />
 
-  const isBarrio = pathname.includes('barrios')
 
+  
+
+console.log(isBarrio);
+console.log('pathname:', pathname)
   const detailData = isBarrio
     ? data?.altasPorBarrio
     : data?.altasPorApellido
@@ -79,7 +87,7 @@ const MetricsDetail = () => {
             }}
           >
             <Typography>
-              {item.barrio || item.apellido}
+              {isBarrio ? item.barrio : item.apellido}
             </Typography>
             <Typography fontWeight="bold">
               {item.cantidad}

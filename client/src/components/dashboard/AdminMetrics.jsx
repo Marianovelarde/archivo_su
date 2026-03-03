@@ -35,9 +35,7 @@ console.log('metrics:', data);
           <Paper
             sx={{ p: 3, cursor: 'pointer' }}
             onClick={() =>
-              navigate('/metrics', {
-                state: data?.altasPorBarrio
-              })
+             navigate('/metrics', { state: { type: 'barrio' } })
             }
           >
             <Typography variant="subtitle1">
@@ -54,9 +52,7 @@ console.log('metrics:', data);
           <Paper
             sx={{ p: 3, cursor: 'pointer' }}
             onClick={() =>
-              navigate('/metrics', {
-                state: data?.altasPorApellido
-              })
+            navigate('/metrics', { state: { type: 'apellido' } })
             }
           >
             <Typography variant="subtitle1">
