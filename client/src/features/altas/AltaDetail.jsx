@@ -40,7 +40,6 @@ const AltaDetail = () => {
 
   const { data, isLoading, isError } = useGetAltaByIdQuery(id)
 
-console.log(data);
 
   if (isLoading) return <Typography>Cargando...</Typography>
   if (isError) return <Typography>Error al cargar detalle</Typography>

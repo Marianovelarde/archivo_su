@@ -188,15 +188,7 @@ const handleSubmit = async () => {
             fullWidth
           />
         </Grid>
-<Grid item xs={12} md={3}>
-  <TextField
-    label="Permiso de obra"
-    name="permiso_de_obra"
-    value={form.permiso_de_obra || ''}
-    onChange={handleChange}
-    fullWidth
-  />
-</Grid>
+
         <Grid item xs={12} sm={3}>
           <TextField
             label="Matrícula profesional"
@@ -206,7 +198,15 @@ const handleSubmit = async () => {
             fullWidth
           />
         </Grid>
-
+<Grid item xs={12} md={3}>
+  <TextField
+    label="Permiso de obra"
+    name="permiso_de_obra"
+    value={form.permiso_de_obra || ''}
+    onChange={handleChange}
+    fullWidth
+  />
+</Grid>
         <Grid item xs={12} sm={3}>
           <TextField
             label="Superficie cubierta (m²)"
