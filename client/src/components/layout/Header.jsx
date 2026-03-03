@@ -20,6 +20,7 @@ const Header = () => {
   const navigate = useNavigate()
 
   const { user, isAuthenticated } = useSelector((state) => state.auth)
+console.log(isAuthenticated);
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -69,8 +70,8 @@ const Header = () => {
                 <Avatar
                   sx={{
                     bgcolor: 'secondary.main',
-                    width: 34,
-                    height: 34,
+                    width: 40,
+                    height: 40,
                     fontSize: 14,
                     fontWeight: 600,
                   }}
@@ -102,11 +103,11 @@ const Header = () => {
             >
               {/* INFO USUARIO */}
               <Box sx={{ px: 2, py: 1 }}>
-                <Typography variant="caption" color="text.secondary">
-                  Usuario
+                <Typography variant="h6" color="text.secondary">
+                  Usuario activo
                 </Typography>
                 <Typography
-                  variant="body2"
+                  variant="body1"
                   sx={{ fontWeight: 600 }}
                 >
                   {user.usuario}

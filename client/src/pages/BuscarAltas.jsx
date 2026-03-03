@@ -256,7 +256,7 @@ const handleClear = () => {
             <CardContent>
 
               <Typography sx={{fontWeight: "bold", fontSize: "1.5rem"}}>
-                Propietario: {alta.entityPropietario?.nombre} {alta.entityPropietario?.apellido}
+                Propietario: {alta.propietario?.nombre} {alta.propietario?.apellido}
               </Typography>
               <Typography>
                 Destino: {alta.entityDestino?.tipo_de_destino}

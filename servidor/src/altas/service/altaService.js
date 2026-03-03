@@ -20,6 +20,8 @@ const updateAltasService = async (id_alta, data) => {
     
     try {
         const update_alta = await updateAltaRepository(id_alta,data)
+        console.log(update_alta);
+        
         return update_alta
     } catch (error) {
 

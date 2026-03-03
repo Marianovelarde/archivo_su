@@ -58,7 +58,8 @@ const updateAltaControllers = async (req,res) => {
     try {
             const {id} = req.params;
             const data = req.body        
-
+        console.log(data);
+        
             const update_altas = await updateAltasService(id, data)
             return res.status(200).json({message: 'Alta modificada con éxito', update_altas})
     } catch (error) {

@@ -42,7 +42,8 @@ const getAltasRepository = async () => {
         include: [
             {
                 model: EntityPropietarios,
-                attributes: ['nombre', 'apellido'] 
+                as: 'propietario' ,
+                attributes: ['nombre', 'apellido'],
             },
             {
                 model: EntityDestino,
@@ -62,7 +63,8 @@ const getAltaByIdRepository = async (id_Altas) => {
       include: [
         {
           model: EntityPropietarios,
-          attributes: ['nombre', 'apellido']
+          as: 'propietario',
+          attributes: ['nombre', 'apellido'],
         },
         {
           model: EntityDestino,

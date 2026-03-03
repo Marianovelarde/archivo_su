@@ -61,7 +61,8 @@ EntityPropietarios.hasMany(EntityAltas, {
     foreignKey: 'id_propietario'
 })
 EntityAltas.belongsTo(EntityPropietarios, {
-    foreignKey: 'id_propietario'
+  foreignKey: 'id_propietario',
+  as: 'propietario'
 })
 //altas - destino
 EntityAltas.belongsTo(EntityDestino, {

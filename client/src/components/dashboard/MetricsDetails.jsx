@@ -5,11 +5,10 @@ import {
   CircularProgress,
   Button
 } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useGetMetricsQuery } from '../../store/api/adminApi'
-
+import { useNavigate } from 'react-router-dom'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
   BarChart,
   Bar,
@@ -22,11 +21,9 @@ import {
 
 const MetricsDetail = () => {
 
-
-  const navigate = useNavigate()
   const { pathname } = useLocation()
   const { data, isLoading } = useGetMetricsQuery()
-
+  const navigate = useNavigate()
   if (isLoading) return <CircularProgress />
 
   const isBarrio = pathname.includes('barrios')
@@ -60,7 +57,11 @@ const MetricsDetail = () => {
             />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="cantidad" />
+            <Bar 
+  dataKey="cantidad" 
+  fill="#4FC3F7" 
+  radius={[6, 6, 0, 0]} 
+/>
           </BarChart>
         </ResponsiveContainer>
       </Paper>
@@ -86,13 +87,15 @@ const MetricsDetail = () => {
           </Box>
         ))}
       </Paper>
-        <Button
-          size="small"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
-        >
-          Volver
-        </Button>
+    <Box sx={{ mt: 2 }}>
+          <Button
+            size="small"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)}
+          >
+            Volver
+          </Button>
+        </Box>
     </Box>
   )
 }

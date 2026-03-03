@@ -39,6 +39,14 @@ getDestinos: builder.query({
 getPlanos: builder.query({
   query: () => '/planos'
 }),
+updateAlta: builder.mutation({
+  query: ({ id, body }) => ({
+    url: `/altas/editar/${id}`,
+    method: 'PUT',
+    body
+  }),
+  invalidatesTags: ['Altas']
+}),
   })
 })
 
@@ -49,5 +57,6 @@ export const {
   useSearchAltasQuery,   // 👈 nuevo hook
   useLazySearchAltasQuery,
    useGetDestinosQuery,
-    useGetPlanosQuery   
+    useGetPlanosQuery,
+    useUpdateAltaMutation,   
 } = altasApi;

@@ -10,19 +10,23 @@ import {
   Chip,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-
+import { useSelector } from 'react-redux'
 const Field = ({ label, value, highlight = false }) => (
   <Box>
     <Typography
-      variant="caption"
-      color={highlight ? 'primary' : 'text.secondary'}
-      sx={{ fontWeight: highlight ? 600 : 400 }}
+      variant="subtitle2"
+      sx={{
+        fontWeight: highlight ? 450 : 500,
+        fontSize: highlight ? '20px' : '13px',
+        color: highlight ? 'primary.main' : 'text.secondary'
+      }}
     >
       {label}
     </Typography>
+
     <Typography
-      variant={highlight ? 'body1' : 'body2'}
-      sx={{ fontWeight: highlight ? 600 : 500 }}
+      variant={highlight ? 'h6' : 'body1'}
+      sx={{ fontWeight: highlight ? 1000 : 800 }}
     >
       {value || '—'}
     </Typography>
@@ -32,7 +36,11 @@ const Field = ({ label, value, highlight = false }) => (
 const AltaDetail = () => {
   const { id } = useParams()
   const navigate = useNavigate()
+   const { user } = useSelector((state) => state.auth)
+   console.log('user', user);
+   
   const { data, isLoading, isError } = useGetAltaByIdQuery(id)
+console.log('data:', data);
 
   if (isLoading) return <Typography>Cargando...</Typography>
   if (isError) return <Typography>Error al cargar detalle</Typography>
@@ -43,10 +51,10 @@ const AltaDetail = () => {
         {/* HEADER */}
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
-            <Typography variant="h6">
+            <Typography variant="h4">
               Ficha Nº {data.num_de_ficha}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" color="text.secondary" sx={{ ml: 0.5, fontSize: '18px' }}>
               Expediente {data.num_de_exp}
             </Typography>
           </Grid>
@@ -58,15 +66,18 @@ const AltaDetail = () => {
             sx={{ textAlign: { xs: 'left', md: 'right' } }}
           >
             <Chip
-              size="small"
+              size="medium"
               label={data.entityDestino.tipo_de_destino}
               color="primary"
+              sx={{height: '50px', fontSize: '14px'}}
+              
             />
             <Chip
-              size="small"
+              size="medium"
               label={data.entityPlano.tipo_plano}
-              sx={{ ml: 1 }}
+              sx={{ ml: 3, height: '50px', marginLeft: '8px', fontSize: '14px' }}
               variant="outlined"
+             
             />
           </Grid>
         </Grid>
@@ -75,10 +86,10 @@ const AltaDetail = () => {
 
         {/* IDENTIFICACIÓN */}
 <Grid container spacing={2}>
-  <Grid item xs={12} md={6}>
+  <Grid item xs={12} md={6} >
     <Field
       label="Propietario"
-      value={`${data.entityPropietario?.nombre ?? ''} ${data.entityPropietario?.apellido ?? ''}`}
+      value={`${data.propietario.nombre ?? ''} ${data.propietario.apellido ?? ''}`}
       highlight
     />
   </Grid>
@@ -104,7 +115,7 @@ const AltaDetail = () => {
         <Divider sx={{ my: 1 }} />
 
         {/* UBICACIÓN CATASTRAL */}
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
           Ubicación catastral
         </Typography>
 
@@ -126,7 +137,7 @@ const AltaDetail = () => {
         <Divider sx={{ my: 1 }} />
 
         {/* DATOS TÉCNICOS */}
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
           Datos técnicos
         </Typography>
 
@@ -156,7 +167,7 @@ const AltaDetail = () => {
         <Divider sx={{ my: 1 }} />
 
         {/* FECHAS */}
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontSize: '25px'}}>
           Fechas administrativas
         </Typography>
 
@@ -196,7 +207,16 @@ const AltaDetail = () => {
           >
             Volver
           </Button>
-        </Box>
+        {user && user.isAdmin && (
+          <Button
+          variant="contained"
+          sx={{ ml: 2 }}
+          onClick={() => navigate(`/altas/editar/${id}`)}
+          >
+    Editar
+  </Button>
+)}
+</Box>
       </Paper>
     </Box>
   )

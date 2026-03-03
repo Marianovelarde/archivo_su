@@ -24,14 +24,14 @@ const Home = () => {
 
   const [openModal, setOpenModal] = useState(false)
 
-  const handleNuevaAlta = () => {
-    if (user?.rol !== 'admin') {
-      setOpenModal(true)
-      return
-    }
-
-    navigate('/altas/nueva')
+const handleNuevaAlta = () => {
+  if (!user || !user.isAdmin) {
+    setOpenModal(true)
+    return
   }
+
+  navigate('/altas/nueva')
+}
 
   return (
     <Box>

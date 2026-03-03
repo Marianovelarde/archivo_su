@@ -15,12 +15,12 @@ console.log('rows', rows);
   return (
     <Box sx={{ height: 600, width: '100%' }}>
       
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h4" gutterBottom>
         Altas registradas
       </Typography>
   <Box sx={{ mt: 2 }}>
           <Button
-            size="small"
+            size="medium"
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate(-1)}
           >
@@ -44,17 +44,19 @@ console.log('rows', rows);
     '& .MuiDataGrid-row:hover': {
       backgroundColor: '#f1f7fd',
     },
+    fontSize: '20px',
   }}
     columns={[
   { field: 'num_de_ficha', headerName: 'Ficha', width: 90 },
   
-  {
-    field: 'propietario',
-    headerName: 'Propietario',
-    width: 220,
-valueGetter: (_, row) =>
-  `${row.entityPropietario?.nombre ?? ''} ${row.entityPropietario?.apellido ?? ''}`,
-  },
+{
+  field: 'propietario',
+  headerName: 'Propietario',
+  width: 220,
+  fontWeight: 'bold',
+  valueGetter: (params, row) =>
+    `${row.propietario?.apellido ?? ''} ${row.propietario?.nombre ?? ''}`,
+},
   {
     field: 'direccion',
     headerName: 'Dirección',

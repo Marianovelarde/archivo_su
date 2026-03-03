@@ -12,7 +12,7 @@ const router = express.Router()
 router.post('/', createAltaControllers)
 router.get('/', getAltasControllers)
 router.get('/:id', getAltaByIdController)
-router.put('/:id', updateAltaControllers)
+router.put('/editar/:id', updateAltaControllers)
 router.delete('/:id', deleteAltasControllers)
 router.get('/filters', filterAndOrderControllers)
 

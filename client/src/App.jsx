@@ -3,16 +3,21 @@ import { Routes, Route } from 'react-router-dom'
 import AltasList from './features/altas/AltasList'
 import AltaDetail from './features/altas/AltaDetail'
 import AltaCreate from './features/altas/AltaCreate'
+import AltaEdit from './features/altas/AltaEdit'
 
 import MainLayout from './components/layout/MainLayout'
+
 import Home from './pages/Home'
 import Login from './components/login/Login'
+import BuscarAltas from './pages/BuscarAltas'
+
 import ProtectedRoute from './routes/ProtectedRoute'
 import ChangePassword from './features/user/ChangePassword'
+
 import AdminPanel from './components/dashboard/AdminPanel'
 import AuditLogList from './components/dashboard/AuditLogList'
-import BuscarAltas from './pages/BuscarAltas'
 import MetricsDetail from './components/dashboard/MetricsDetails'
+
 function App() {
   return (
    <Routes>
@@ -54,6 +59,12 @@ function App() {
         </ProtectedRoute>
       }
     />
+  </Route>
+  <Route path='altas/editar/:id'
+  element={ <ProtectedRoute>
+    <AltaEdit/>
+  </ProtectedRoute>}>
+
   </Route>
   <Route path="/admin/panel" element={<ProtectedRoute adminOnly>
     <AdminPanel />

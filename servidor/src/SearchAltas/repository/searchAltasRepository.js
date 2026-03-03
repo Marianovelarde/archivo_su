@@ -95,6 +95,8 @@ const searchAltasRepository = async (filters) => {
     include: [
       {
         model: EntityPropietarios,
+        as: 'propietario',
+        attributes: ['nombre', 'apellido'],
         where: wherePropietario,
         required: Object.keys(wherePropietario).length > 0
       },

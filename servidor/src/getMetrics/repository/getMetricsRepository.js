@@ -1,12 +1,11 @@
-const {EntityAltas, EntityPropietarios} = require('../../db')
-const {fn, col} = require('sequelize')
+const { EntityAltas, EntityPropietarios } = require('../../db')
+const { fn, col } = require('sequelize')
 
 const getMetricsRepository = async () => {
-    
-    // Obtener el total de altas
-    const totalAltas = await EntityAltas.count()
-    // altas por barrio
-    const altasPorBarrio = await EntityAltas.findAll({
+
+  const totalAltas = await EntityAltas.count()
+
+  const altasPorBarrio = await EntityAltas.findAll({
     attributes: [
       'barrio',
       [fn('COUNT', col('id_Altas')), 'cantidad']
@@ -14,30 +13,26 @@ const getMetricsRepository = async () => {
     group: ['barrio'],
     order: [[fn('COUNT', col('id_Altas')), 'DESC']]
   })
-  // altas por apellido
+
 const altasPorApellido = await EntityAltas.findAll({
   attributes: [
-    [fn('COUNT', col('EntityAltas.id_Altas')), 'cantidad']
+    [fn('COUNT', col('id_Altas')), 'cantidad'],
+    [col('propietario.apellido'), 'apellido']
   ],
   include: [{
     model: EntityPropietarios,
-    attributes: ['apellido']
+    as: 'propietario',
+    attributes: []
   }],
-  group: ['EntityPropietario.apellido'],
+  group: [col('propietario.apellido')],
+  raw: true
 })
 
-//altas por superficie
-const altasPorSuperficie = await EntityAltas.findAll({
-    attributes: [
-      'superficie',
-      [fn('COUNT', col('id_Altas')), 'cantidad']
-    ],
-    group: ['superficie'],
-    order: [[fn('COUNT', col('id_Altas')), 'DESC']]
-  })
+  return {
+    totalAltas,
+    altasPorBarrio,
+    altasPorApellido
+  }
 }
-
-
-
 
 module.exports = { getMetricsRepository }
