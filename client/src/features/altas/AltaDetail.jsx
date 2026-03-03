@@ -37,10 +37,9 @@ const AltaDetail = () => {
   const { id } = useParams()
   const navigate = useNavigate()
    const { user } = useSelector((state) => state.auth)
-   console.log('user', user);
-   
+
   const { data, isLoading, isError } = useGetAltaByIdQuery(id)
-console.log('data:', data);
+
 
   if (isLoading) return <Typography>Cargando...</Typography>
   if (isError) return <Typography>Error al cargar detalle</Typography>
@@ -170,7 +169,12 @@ console.log('data:', data);
         <Typography variant="subtitle2" sx={{ mb: 1, fontSize: '25px'}}>
           Fechas administrativas
         </Typography>
-
+    <Grid item xs={4}>
+            <Field
+              label="permiso de obra"
+              value={data.permiso_de_obra}
+            />
+          </Grid>
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <Field
@@ -197,7 +201,24 @@ console.log('data:', data);
             />
           </Grid>
         </Grid>
+<Divider sx={{ my: 1 }} />
 
+<Typography variant="h6" sx={{ mb: 1 }}>
+  Observaciones
+</Typography>
+
+<Box
+  sx={{
+    backgroundColor: '#fafafa',
+    p: 2,
+    borderRadius: 2,
+    border: '1px solid #e0e0e0'
+  }}
+>
+  <Typography variant="body1">
+    {data.observaciones || '—'}
+  </Typography>
+</Box>
         {/* FOOTER */}
         <Box sx={{ mt: 2 }}>
           <Button

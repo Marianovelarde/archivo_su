@@ -6,7 +6,6 @@ const AdminMetrics = () => {
 
   const navigate = useNavigate()
   const { data, isLoading } = useGetMetricsQuery()
-console.log('metrics:', data);
 
   if (isLoading) return <CircularProgress />
 

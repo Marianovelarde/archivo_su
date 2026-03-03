@@ -21,7 +21,6 @@ import {
 
 const MetricsDetail = () => {
 
-  const { pathname } = useLocation()
   const { data, isLoading } = useGetMetricsQuery()
   const navigate = useNavigate()
   const { state } = useLocation()
@@ -35,7 +34,6 @@ const isBarrio = type === 'barrio'
   
 
 console.log(isBarrio);
-console.log('pathname:', pathname)
   const detailData = isBarrio
     ? data?.altasPorBarrio
     : data?.altasPorApellido
@@ -67,7 +65,7 @@ console.log('pathname:', pathname)
             <Tooltip />
             <Bar 
   dataKey="cantidad" 
-  fill="#4FC3F7" 
+  fill="#4cbdf1" 
   radius={[6, 6, 0, 0]} 
 />
           </BarChart>

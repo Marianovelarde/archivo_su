@@ -33,7 +33,7 @@ const BuscarAltas = () => {
 
  const [searchAltas, { isLoading }] = useLazySearchAltasQuery()
 const { data: destinos = [] } = useGetDestinosQuery()
-console.log(destinos);
+
 
 const { data: planos = [] } = useGetPlanosQuery()
 const [openModal, setOpenModal] = useState(false)

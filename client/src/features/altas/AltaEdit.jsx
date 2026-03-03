@@ -221,13 +221,23 @@ const formatToISODate = (date) => {
                     name="direccion_tecnica" 
                     value={form.direccion_tecnica || ''} 
                     onChange={handleChange} fullWidth />
-                </Grid> <Grid item xs={12} md={4}> 
+                </Grid> 
+                <Grid item xs={12} md={4}> 
                     <TextField 
                     label="Matrícula profesional" 
                     name="matricula_profesional" 
                     value={form.matricula_profesional || ''}
                      onChange={handleChange} fullWidth />
                      </Grid> 
+                     <Grid item xs={12} md={3}>
+                    <TextField
+                      label="Permiso de obra"
+                        name="permiso_de_obra"
+                        value={form.permiso_de_obra || ''}
+                        fullWidth
+                        onChange={handleChange}
+  />
+</Grid>
                      {/* =================== FECHAS =================== */} 
                      <Grid item xs={12} mt={2}> 
                         <Divider /> 
@@ -257,6 +267,28 @@ const formatToISODate = (date) => {
                         value={form.fecha_archivo || ''} 
                         onChange={handleChange} fullWidth /> 
                     </Grid> 
+                    {/* =================== OBSERVACIONES =================== */}
+<Grid item xs={12} mt={2}>
+  <Divider />
+</Grid>
+
+<Grid item xs={12}>
+  <Typography variant="h6" fontWeight={600}>
+    Observaciones
+  </Typography>
+</Grid>
+
+<Grid item xs={12}>
+  <TextField
+    label="Observaciones"
+    name="observaciones"
+    value={form.observaciones || ''}
+    onChange={handleChange}
+    fullWidth
+    multiline
+    rows={4}
+  />
+</Grid>
                         {/* =================== BOTONES =================== */} 
                     
                     <Grid item xs={12} mt={4}> 

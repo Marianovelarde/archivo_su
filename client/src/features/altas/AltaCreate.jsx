@@ -38,6 +38,8 @@ const [altaCreadaId, setAltaCreadaId] = useState(null)
     direccion_tecnica: '',
     matricula_profesional: '',
     fecha_archivo: '',
+    observaciones: '',
+    permiso_de_obra: ''
   })
 
   const [propietario, setPropietario] = useState(null)
@@ -186,7 +188,15 @@ const handleSubmit = async () => {
             fullWidth
           />
         </Grid>
-
+<Grid item xs={12} md={3}>
+  <TextField
+    label="Permiso de obra"
+    name="permiso_de_obra"
+    value={form.permiso_de_obra || ''}
+    onChange={handleChange}
+    fullWidth
+  />
+</Grid>
         <Grid item xs={12} sm={3}>
           <TextField
             label="Matrícula profesional"
@@ -231,7 +241,15 @@ const handleSubmit = async () => {
             fullWidth
           />
         </Grid>
-
+<TextField
+  label="Observaciones"
+  name="observaciones"
+  value={form.observaciones || ''}
+  onChange={handleChange}
+  fullWidth
+  multiline
+  rows={3}
+/>
         {/* BOTÓN */}
         <Grid item xs={12}>
           <Button
@@ -244,6 +262,7 @@ const handleSubmit = async () => {
           </Button>
         </Grid>
       </Grid>
+
  <AltaSuccessModal
   open={successOpen}
   onClose={() => setSuccessOpen(false)}
