@@ -20,7 +20,6 @@ const Header = () => {
   const navigate = useNavigate()
 
   const { user, isAuthenticated } = useSelector((state) => state.auth)
-console.log(isAuthenticated);
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)

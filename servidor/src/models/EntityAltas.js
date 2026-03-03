@@ -11,6 +11,14 @@ module.exports = (sequelize) => {
     fecha_de_aprob: {
         type: DataTypes.DATE(),
     },
+    observaciones: {
+type: DataTypes.TEXT,
+allowNull: true
+    },
+    permiso_de_obra: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     num_de_exp: {
             type: DataTypes.STRING,
             allowNull: false

@@ -25,7 +25,9 @@ const createAltaControllers = async (req,res) => {
             id_tipo_plano,
             direccion_tecnica,
             matricula_profesional,
-            fecha_archivo
+            fecha_archivo,
+            observaciones,
+            permiso_de_obra
         } = req.body
 
         const new_alta = await createAltaService({
@@ -45,7 +47,9 @@ const createAltaControllers = async (req,res) => {
             id_tipo_plano,
             direccion_tecnica,
             matricula_profesional,
-            fecha_archivo
+            fecha_archivo,
+            observaciones,
+            permiso_de_obra
         })
         return res.status(201).json(new_alta)
     } catch (error) {

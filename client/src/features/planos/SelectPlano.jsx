@@ -12,7 +12,6 @@ import CreatePlanoModal from './CreatePlanoModal'
 const SelectPlano = ({ value, onChange }) => {
   const { data = [], isLoading } = useGetPlanosQuery()
   const [open, setOpen] = useState(false)
-  console.log(data);
   
    const options = data?.get_all_planos?? []
 
