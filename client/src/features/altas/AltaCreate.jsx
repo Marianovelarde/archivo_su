@@ -5,12 +5,21 @@ import {
   Button,
   Typography,
   Divider,
+    Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  List,
+  ListItem,
+  ListItemText
+  
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import { useState } from 'react'
 import { useCreateAltaMutation } from '../../store/api/AltasApi'
 
+import AltaErrorModal from './AltaErrorModal'
 import AltaSuccessModal from './AltasSuccessModal'
 import SelectPropietario from '../propietarios/SelectPropietario'
 import SelectDestino from '../destino/SelectDestino'
@@ -22,6 +31,8 @@ const AltaCreate = () => {
   const [createAlta, { isLoading }] = useCreateAltaMutation()
 const [successOpen, setSuccessOpen] = useState(false)
 const [altaCreadaId, setAltaCreadaId] = useState(null)
+const [errorOpen, setErrorOpen] = useState(false)
+const [missingFields, setMissingFields] = useState([])
 
   const [form, setForm] = useState({
     fecha_de_aprob: '',
@@ -51,6 +62,20 @@ const [altaCreadaId, setAltaCreadaId] = useState(null)
   }
 
 const handleSubmit = async () => {
+  const faltantes = []
+
+  if (!propietario?.nombre) faltantes.push('Nombre del propietario')
+  if (!propietario?.apellido) faltantes.push('Apellido del propietario')
+  if (!form.calle) faltantes.push('Calle')
+  if (!form.barrio) faltantes.push('Barrio')
+  if (!form.matricula_profesional) faltantes.push('Matrícula profesional')
+
+  if (faltantes.length > 0) {
+    setMissingFields(faltantes)
+    setErrorOpen(true)
+    return
+  }
+
   if (!propietario || !destino || !plano) return
 
   const payload = {
@@ -65,8 +90,6 @@ const handleSubmit = async () => {
 
   try {
     const result = await createAlta(payload).unwrap()
-
-    // 👇 este id viene del backend
     setAltaCreadaId(result.id_Altas)
     setSuccessOpen(true)
   } catch (error) {
@@ -268,7 +291,11 @@ const handleSubmit = async () => {
   onClose={() => setSuccessOpen(false)}
   altaId={altaCreadaId}
 />
-
+<AltaErrorModal
+  open={errorOpen}
+  onClose={() => setErrorOpen(false)}
+  missingFields={missingFields}
+/>
     </Box>
   )
 }
