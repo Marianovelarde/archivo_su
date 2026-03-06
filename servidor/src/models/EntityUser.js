@@ -21,6 +21,14 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        role: {
+            type: DataTypes.ENUM(
+                'super_admin',
+                'editor',
+                'visor',
+                'consulta'
+            )
+        },
         isActived: {
             type: DataTypes.BOOLEAN,
             defaultValue: true
@@ -32,6 +40,9 @@ module.exports = (sequelize) => {
     },
     {
         paranoid: true,
+        createdBy: 'createdUser_by',
+        updatedBy: 'modifiedUser_by',
+        deletedBy: 'deletedUser_by',
         createdAt: 'createdUser_at',
         updatedAt: 'modifiedUser_at',
         deletedAt: 'deletedUser_at'

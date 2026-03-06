@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
+import {useState} from 'react'
 import { useGetAltaByIdQuery } from '../../store/api/altasApi'
 import {
   Box,
@@ -8,6 +9,10 @@ import {
   Paper,
   Button,
   Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useSelector } from 'react-redux'
@@ -39,7 +44,8 @@ const AltaDetail = () => {
    const { user } = useSelector((state) => state.auth)
 
   const { data, isLoading, isError } = useGetAltaByIdQuery(id)
-
+const [openPropietario, setOpenPropietario] = useState(false)
+console.log(data);
 
   if (isLoading) return <Typography>Cargando...</Typography>
   if (isError) return <Typography>Error al cargar detalle</Typography>
@@ -50,12 +56,21 @@ const AltaDetail = () => {
         {/* HEADER */}
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
-            <Typography variant="h4">
-              Ficha Nº {data.num_de_ficha}
-            </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ ml: 0.5, fontSize: '18px' }}>
-              Expediente {data.num_de_exp}
-            </Typography>
+          {user?.isAdmin && (
+  <>
+    <Typography variant="h4">
+      Ficha Nº {data.num_de_ficha}
+    </Typography>
+
+    <Typography
+      variant="caption"
+      color="text.secondary"
+      sx={{ ml: 0.5, fontSize: '18px' }}
+    >
+      Expediente {data.num_de_exp}
+    </Typography>
+  </>
+)}
           </Grid>
 
           <Grid
@@ -85,13 +100,23 @@ const AltaDetail = () => {
 
         {/* IDENTIFICACIÓN */}
 <Grid container spacing={2}>
-  <Grid item xs={12} md={6} >
-    <Field
-      label="Propietario"
-      value={`${data.propietario.nombre ?? ''} ${data.propietario.apellido ?? ''}`}
-      highlight
-    />
-  </Grid>
+<Grid item xs={12} md={6}>
+
+  <Field
+    label="Propietario"
+    value={`${data.propietario.apellido ?? ''} ${data.propietario.nombre ?? ''}`}
+    highlight
+  />
+
+  <Button
+    size="small"
+    sx={{ mt: 1 }}
+    onClick={() => setOpenPropietario(true)}
+  >
+    Ver detalles
+  </Button>
+
+</Grid>
 
   <Grid item xs={12} md={6}>
     <Field
@@ -238,6 +263,54 @@ const AltaDetail = () => {
   </Button>
 )}
 </Box>
+<Dialog
+  open={openPropietario}
+  onClose={() => setOpenPropietario(false)}
+  maxWidth="sm"
+  fullWidth
+>
+
+  <DialogTitle>
+    Datos del propietario
+  </DialogTitle>
+
+  <DialogContent>
+
+    <Grid container spacing={2} sx={{ mt: 1 }}>
+
+      <Grid item xs={6}>
+        <Field label="Nombre" value={data.propietario.nombre} />
+      </Grid>
+
+      <Grid item xs={6}>
+        <Field label="Apellido" value={data.propietario.apellido} />
+      </Grid>
+
+      <Grid item xs={12}>
+        <Field label="Domicilio postal" value={data.propietario.domicilio_postal} />
+      </Grid>
+
+      <Grid item xs={6}>
+        <Field label="CUIL" value={data.propietario.cuil} />
+      </Grid>
+
+      <Grid item xs={6}>
+        <Field label="Email" value={data.propietario.email} />
+      </Grid>
+
+    </Grid>
+
+  </DialogContent>
+
+  <DialogActions>
+
+    <Button onClick={() => setOpenPropietario(false)}>
+      Cerrar
+    </Button>
+
+  </DialogActions>
+
+</Dialog>
       </Paper>
     </Box>
   )

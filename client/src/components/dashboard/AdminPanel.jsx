@@ -2,14 +2,22 @@ import { Box, Button, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import UserList from './UsersList'
 import AdminMetrics from './adminMetrics'
+import DestinoAdmin from './DestinoAdmin'
+import PropietariosAdmin from './PropietariosAdmin'
+
 const AdminPanel = () => {
+
   const [section, setSection] = useState('users')
   const navigate = useNavigate()
 
   return (
+
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+
+      {/* SIDEBAR */}
       <Box
         sx={{
           width: 240,
@@ -20,6 +28,7 @@ const AdminPanel = () => {
           gap: 1,
         }}
       >
+
         <Button
           size="small"
           startIcon={<ArrowBackIcon />}
@@ -28,7 +37,9 @@ const AdminPanel = () => {
           Volver
         </Button>
 
-        <Typography variant="h6">Panel Admin</Typography>
+        <Typography variant="h6">
+          Panel Admin
+        </Typography>
 
         <Button
           fullWidth
@@ -45,21 +56,51 @@ const AdminPanel = () => {
         >
           Auditoría
         </Button>
-         <Button
+
+        <Button
           fullWidth
           variant={section === 'metrics' ? 'contained' : 'text'}
           onClick={() => setSection('metrics')}
         >
           Métricas
         </Button>
+
+        <Button
+          fullWidth
+          variant={section === 'destinos' ? 'contained' : 'text'}
+          onClick={() => setSection('destinos')}
+        >
+          Destinos
+        </Button>
+        <Button
+         fullWidth
+        variant={section === 'propietarios' ? 'contained' : 'text'}
+        onClick={() => setSection('propietarios')}
+        >
+        Propietarios
+</Button>
       </Box>
 
+
+      {/* CONTENIDO */}
       <Box sx={{ flex: 1, p: 3 }}>
+
         {section === 'users' && <UserList />}
-        {section === 'audit' && <Typography>Auditoría</Typography>}
-        {section === 'metrics' && <AdminMetrics />} {/* 👈 NUEVA SECCIÓN */}
+
+        {section === 'audit' && (
+          <Typography>
+            Auditoría
+          </Typography>
+        )}
+        {section === 'propietarios' && <PropietariosAdmin />}
+        {section === 'metrics' && <AdminMetrics />}
+
+        {section === 'destinos' && <DestinoAdmin />}
+
       </Box>
+
     </Box>
+
   )
 }
 

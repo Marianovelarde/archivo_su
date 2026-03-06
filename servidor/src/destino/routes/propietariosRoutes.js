@@ -12,7 +12,7 @@ const router = express.Router()
 
 router.post('/', createPropietariosControllers)
 router.get('/', getAllPropietariosControllers)
-router.put('/:id', updatePropietariosControllers)
+router.put('/edit/:id', updatePropietariosControllers)
 router.delete('/:id', deletePropietariosControllers)
 router.get('/filters', filterAndOrderControllers)
 

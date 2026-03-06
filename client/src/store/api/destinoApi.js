@@ -19,10 +19,19 @@ export const destinoApi = createApi({
       }),
       invalidatesTags: ['Destino'],
     }),
+    editDestino: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `/destino/edit/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Destino'],
+    }),
   }),
 })
 
 export const {
   useGetDestinosQuery,
   useCreateDestinoMutation,
+  useEditDestinoMutation
 } = destinoApi

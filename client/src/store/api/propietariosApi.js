@@ -19,10 +19,20 @@ export const propietariosApi = createApi({
       }),
       invalidatesTags: ['Propietarios'],
     }),
+    editPropietario: builder.mutation({
+  query: ({ id, body }) => ({
+    url: `/propietarios/edit/${id}`,
+    method: 'PUT',
+    body,
   }),
+  invalidatesTags: ['Propietarios'],
+}),
+  }),
+  
 })
 
 export const {
   useGetPropietariosQuery,
   useCreatePropietarioMutation,
+  useEditPropietarioMutation
 } = propietariosApi

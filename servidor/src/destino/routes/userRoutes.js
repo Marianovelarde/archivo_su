@@ -9,7 +9,7 @@ const router = express.Router()
 router.get('/', authMiddleware, requireAdmin, getUSerControllers)
 router.post('/login', loginControllers)
 router.post('/signup', authMiddleware, requireAdmin, createUserControllers)
-router.put('/:id', authMiddleware, requireSelfOrAdmin, updateUserControllers)
+router.put('/edit/:id', authMiddleware, requireSelfOrAdmin, updateUserControllers)
 router.put('/:id/deactivate', deactivateUserController)
 router.put('/:id/role', changeUserRoleController)
 module.exports = router

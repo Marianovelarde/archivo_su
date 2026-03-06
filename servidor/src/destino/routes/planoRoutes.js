@@ -12,7 +12,7 @@ const router = express.Router()
 
 router.post('/create', createPlanoControllers)
 router.get('/', getAllPlanosControllers)
-router.put('/:id', updatePlanoControllers)
+router.put('/edit/:id', updatePlanoControllers)
 router.delete('/:id', deletePlanosControllers)
 router.get('/filters', filtersAndOrderControllers)
 module.exports = router

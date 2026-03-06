@@ -64,7 +64,7 @@ const getAltaByIdRepository = async (id_Altas) => {
         {
           model: EntityPropietarios,
           as: 'propietario',
-          attributes: ['nombre', 'apellido'],
+          attributes: ['nombre', 'apellido', 'domicilio_postal', 'cuil', 'email'],
         },
         {
           model: EntityDestino,
