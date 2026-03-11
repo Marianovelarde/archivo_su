@@ -12,6 +12,7 @@ import {
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 
 const AltaErrorModal = ({ open, onClose, missingFields }) => {
+  
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

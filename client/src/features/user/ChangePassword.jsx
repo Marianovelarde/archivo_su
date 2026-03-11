@@ -17,7 +17,6 @@ import SuccessModal from '../../components/modal/SuccessModal'
 const ChangePassword = () => {
   const user = useSelector((state) => state.auth.user)
 const auth = useSelector((state) => state.auth)
-console.log('[AUTH STATE]', auth)
 
 const navigate = useNavigate()
   const [password, setPassword] = useState('')

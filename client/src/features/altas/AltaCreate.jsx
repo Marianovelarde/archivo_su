@@ -34,25 +34,26 @@ const [altaCreadaId, setAltaCreadaId] = useState(null)
 const [errorOpen, setErrorOpen] = useState(false)
 const [missingFields, setMissingFields] = useState([])
 
-  const [form, setForm] = useState({
-    fecha_de_aprob: '',
-    num_de_exp: '',
-    num_de_ficha: '',
-    calle: '',
-    barrio: '',
-    distrito: '',
-    zona: '',
-    manzana: '',
-    parcela: '',
-    superficie_cubierta: '',
-    final_de_obra: '',
-    direccion_tecnica: '',
-    matricula_profesional: '',
-    fecha_archivo: '',
-    observaciones: '',
-    permiso_de_obra: ''
-  })
-
+const [form, setForm] = useState({
+  ficha_numero: '',
+  ficha_letra: '',
+  exp_numero: '',
+  exp_final: '',
+  fecha_de_aprob: '',
+  calle: '',
+  barrio: '',
+  distrito: '',
+  zona: '',
+  manzana: '',
+  parcela: '',
+  superficie_cubierta: '',
+  final_de_obra: '',
+  direccion_tecnica: '',
+  matricula_profesional: '',
+  fecha_archivo: '',
+  observaciones: '',
+  permiso_de_obra: ''
+})
   const [propietario, setPropietario] = useState(null)
   const [destino, setDestino] = useState(null)
   const [plano, setPlano] = useState(null)
@@ -64,11 +65,15 @@ const [missingFields, setMissingFields] = useState([])
 const handleSubmit = async () => {
   const faltantes = []
 
+  if(!form.ficha_numero) faltantes.push('Número de ficha')
   if (!propietario?.nombre) faltantes.push('Nombre del propietario')
   if (!propietario?.apellido) faltantes.push('Apellido del propietario')
   if (!form.calle) faltantes.push('Calle')
   if (!form.barrio) faltantes.push('Barrio')
   if (!form.matricula_profesional) faltantes.push('Matrícula profesional')
+  if (!form.superficie_cubierta) faltantes.push('Superficie cubierta')
+  if(!form.fecha_de_aprob) faltantes.push('Fecha de aprobación')
+
 
   if (faltantes.length > 0) {
     setMissingFields(faltantes)
@@ -78,15 +83,27 @@ const handleSubmit = async () => {
 
   if (!propietario || !destino || !plano) return
 
-  const payload = {
-    ...form,
-    fecha_de_aprob: form.fecha_de_aprob || null,
-    final_de_obra: form.final_de_obra || null,
-    fecha_archivo: form.fecha_archivo || null,
-    id_propietario: propietario.id_propietario,
-    id_destino: destino.id_destino,
-    id_tipo_plano: plano.id_tipo_plano,
-  }
+const expediente =
+  form.exp_num && form.exp_year
+    ? `${form.exp_num}-31-${form.exp_year}`
+    : null
+
+const ficha =
+  form.ficha_numero && form.ficha_letra
+    ? `${form.ficha_numero}-${form.ficha_letra}`
+    : null
+
+const payload = {
+  ...form,
+  num_de_ficha: ficha,
+  num_de_exp: expediente,
+  fecha_de_aprob: form.fecha_de_aprob || null,
+  final_de_obra: form.final_de_obra || null,
+  fecha_archivo: form.fecha_archivo || null,
+  id_propietario: propietario.id_propietario,
+  id_destino: destino.id_destino,
+  id_tipo_plano: plano.id_tipo_plano,
+}
 
   try {
     const result = await createAlta(payload).unwrap()
@@ -115,28 +132,65 @@ const handleSubmit = async () => {
               </Box>
       <Divider sx={{ mb: 3 }} />
 
-      <Grid container spacing={2}>
+     <Grid container spacing={1}>
+  <Grid item xs={2}>
+    <TextField
+      label="Ficha Nº"
+      name="ficha_numero"
+      value={form.ficha_numero}
+      onChange={handleChange}
+      fullWidth
+    />
+  </Grid>
 
-        {/* EXPEDIENTE */}
-        <Grid item xs={12} sm={3}>
-          <TextField
-            label="N° de ficha"
-            name="num_de_ficha"
-            value={form.num_de_ficha}
-            onChange={handleChange}
-            fullWidth
-          />
-        </Grid>
+  <Grid item xs={1}>
+    <TextField value="-" disabled fullWidth />
+  </Grid>
 
-        <Grid item xs={12} sm={3}>
-          <TextField
-            label="N° de expediente"
-            name="num_de_exp"
-            value={form.num_de_exp}
-            onChange={handleChange}
-            fullWidth
-          />
-        </Grid>
+  <Grid item xs={2} sx={{marginRight: 15, marginBottom: 2}}>
+    <TextField
+      label="Letra"
+      name="ficha_letra"
+      value={form.ficha_letra}
+      onChange={handleChange}
+      fullWidth
+    />
+  </Grid>
+
+
+
+  <Grid item xs={1}>
+    <TextField
+      label="N° Expediente"
+      name="exp_numero"
+      value={form.exp_numero}
+      onChange={handleChange}
+      fullWidth
+    />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField value="-" disabled fullWidth />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField value="31" disabled fullWidth />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField value="-" disabled fullWidth />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField
+      label="Año"
+      name="exp_final"
+      value={form.exp_final}
+      onChange={handleChange}
+      fullWidth
+    />
+  </Grid>
+
 
         <Grid item xs={12} sm={3}>
           <TextField
@@ -202,7 +256,7 @@ const handleSubmit = async () => {
         </Grid>
 
         {/* TÉCNICOS */}
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} sx={{marginBottom: 2}}>
           <TextField
             label="Dirección técnica"
             name="direccion_tecnica"
@@ -230,7 +284,7 @@ const handleSubmit = async () => {
     fullWidth
   />
 </Grid>
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={3} sx={{marginBottom: 2}}>
           <TextField
             label="Superficie cubierta (m²)"
             name="superficie_cubierta"

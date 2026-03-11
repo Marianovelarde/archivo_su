@@ -6,7 +6,11 @@ import { Box,
     Divider, 
     CircularProgress, 
     Paper, 
-    Stack } 
+    Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions } 
 from '@mui/material'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -27,21 +31,47 @@ const AltaEdit = () => {
  const [propietario, setPropietario] = useState(null) 
  const [destino, setDestino] = useState(null) 
  const [plano, setPlano] = useState(null)
+ const [openModal, setOpenModal] = useState(false)
 
-  useEffect(() => {
-    if (data) {
-      setForm({
-        ...data,
-        fecha_de_aprob: data.fecha_de_aprob?.split('T')[0] || '',
-        final_de_obra: data.final_de_obra?.split('T')[0] || '',
-        fecha_archivo: data.fecha_archivo?.split('T')[0] || '',
-      })
+useEffect(() => {
+  if (data) {
 
-      setPropietario(data.propietario)
-      setDestino(data.entityDestino)
-      setPlano(data.entityPlano)
+    let exp_num = ''
+    let exp_year = ''
+    let ficha_num = ''
+    let ficha_letra = ''
+
+    if (data.num_de_exp) {
+      const [num, , year] = data.num_de_exp.split('-')
+      exp_num = num
+      exp_year = year
     }
-  }, [data])
+
+    if (data.num_de_ficha) {
+      const [num, letra] = data.num_de_ficha.split('-')
+      ficha_num = num
+      ficha_letra = letra
+    }
+
+    setForm({
+      ...data,
+
+      exp_num,
+      exp_year,
+
+      ficha_num,
+      ficha_letra,
+
+      fecha_de_aprob: data.fecha_de_aprob?.split('T')[0] || '',
+      final_de_obra: data.final_de_obra?.split('T')[0] || '',
+      fecha_archivo: data.fecha_archivo?.split('T')[0] || '',
+    })
+
+    setPropietario(data.propietario)
+    setDestino(data.entityDestino)
+    setPlano(data.entityPlano)
+  }
+}, [data])
 const formatToISODate = (date) => {
   if (!date) return null
 
@@ -55,24 +85,35 @@ const formatToISODate = (date) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async () => {
-    const payload = {
-      ...form,
-   fecha_de_aprob: formatToISODate(form.fecha_de_aprob),
-  final_de_obra: formatToISODate(form.final_de_obra),
-  fecha_archivo: formatToISODate(form.fecha_archivo),
-  id_propietario: propietario?.id_propietario,
-  id_destino: destino?.id_destino,
-  id_tipo_plano: plano?.id_tipo_plano
-    }
+const handleSubmit = async () => {
 
-    try {
-      await updateAlta({ id, body: payload }).unwrap()
-      navigate(`/altas/${id}`)
-    } catch (error) {
-      console.error('Error al actualizar', error)
-    }
+  const expediente = `${form.exp_num}-31-${form.exp_year}`
+  const ficha = `${form.ficha_num}-${form.ficha_letra}`
+
+  const payload = {
+    ...form,
+
+    num_de_exp: expediente,
+    num_de_ficha: ficha,
+
+    fecha_de_aprob: formatToISODate(form.fecha_de_aprob),
+    final_de_obra: formatToISODate(form.final_de_obra),
+    fecha_archivo: formatToISODate(form.fecha_archivo),
+
+    id_propietario: propietario?.id_propietario,
+    id_destino: destino?.id_destino,
+    id_tipo_plano: plano?.id_tipo_plano
   }
+
+  try {
+    await updateAlta({ id, body: payload }).unwrap()
+
+    setOpenModal(true) // 👈 abre modal
+
+  } catch (error) {
+    console.error('Error al actualizar', error)
+  }
+}
 
   if (isLoading) return <CircularProgress />
 
@@ -89,34 +130,73 @@ const formatToISODate = (date) => {
     <Divider sx={{ mb: 4 }} /> 
     <Grid container spacing={3}> 
         {/* =================== EXPEDIENTE =================== */} 
-        <Grid item xs={12}> 
-            <Typography variant="h6" fontWeight={600}> 
-                Datos de expediente 
+        <Grid item xs={11}> 
+            <Typography variant="h6" fontWeight={600} sx={{marginLeft: -3, marginBottom: 1}}>Datos de expediente 
             </Typography> 
         </Grid> 
-            <Grid item xs={12} md={3}>
-                <TextField 
-                label="N° de ficha" 
-                name="num_de_ficha" 
-                value={form.num_de_ficha || ''} 
-                onChange={handleChange} fullWidth /> 
-            </Grid> 
-            <Grid item xs={12} md={3}> 
-                <TextField 
-                label="N° de expediente" 
-                name="num_de_exp" 
-                value={form.num_de_exp || ''} 
-                onChange={handleChange} fullWidth /> 
-                </Grid> 
-                <Grid item xs={12} md={3}> 
-                 <TextField 
-                 label="Fecha aprobación" 
-                 type="date" 
-                 name="fecha_de_aprob" 
-                 InputLabelProps={{ shrink: true }} 
-                 value={form.fecha_de_aprob || ''} 
-                 onChange={handleChange} fullWidth /> 
-                 </Grid> 
+<Grid container spacing={1}>
+  <Grid item xs={2}>
+    <TextField
+      label="Ficha Nº"
+      name="ficha_num"
+      value={form.ficha_num}
+      onChange={handleChange}
+      fullWidth
+    />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField value="-" disabled fullWidth />
+  </Grid>
+
+  <Grid item xs={2} sx={{marginRight: 5, marginBottom: 2}}>
+    <TextField
+      label="Letra"
+      name="ficha_letra"
+      value={form.ficha_letra}
+      onChange={handleChange}
+      fullWidth
+    />
+  </Grid>
+
+
+
+  <Grid item xs={2}>
+    <TextField
+      label="N° Expediente"
+      name="exp_num"
+      value={form.exp_num}
+      onChange={handleChange}
+      fullWidth
+    />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField value="-" disabled fullWidth />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField value="31" disabled fullWidth />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField value="-" disabled fullWidth />
+  </Grid>
+
+  <Grid item xs={1}>
+    <TextField
+      label="Año"
+      name="exp_year"
+      value={form.exp_year}
+      onChange={handleChange}
+      fullWidth
+    />
+  </Grid>
+
+
+
+
+               
                  {/* =================== UBICACIÓN =================== */} 
                 <Grid 
                 item xs={12} mt={2}> 
@@ -179,7 +259,7 @@ const formatToISODate = (date) => {
                     <Typography 
                     variant="h6" 
                     fontWeight={600}> 
-                    Relaciones 
+                    Propietario - Destino - Plano 
                     </Typography> 
                 </Grid> 
                 <Grid item xs={12} md={6}> 
@@ -249,6 +329,15 @@ const formatToISODate = (date) => {
                         Fechas administrativas 
                         </Typography> 
                     </Grid> 
+                     <Grid item xs={12} md={3}> 
+                 <TextField 
+                 label="Fecha aprobación" 
+                 type="date" 
+                 name="fecha_de_aprob" 
+                 InputLabelProps={{ shrink: true }} 
+                 value={form.fecha_de_aprob || ''} 
+                 onChange={handleChange} fullWidth /> 
+                 </Grid> 
                     <Grid item xs={12} md={4}> 
                         <TextField 
                         type="date" 
@@ -296,12 +385,40 @@ const formatToISODate = (date) => {
                         direction="row" 
                         spacing={2} 
                         justifyContent="flex-end"> 
-                        <Button variant="outlined" onClick={() => navigate(-1)} > Cancelar </Button> <Button variant="contained" size="large" onClick={handleSubmit} disabled={isUpdating} > Actualizar Alta 
+                        <Button variant="outlined" onClick={() => navigate('/')} > Cancelar </Button> <Button variant="contained" size="large" onClick={handleSubmit} disabled={isUpdating} > Actualizar Alta 
                             </Button> 
 </Stack> 
 </Grid> 
 </Grid> 
+</Grid>
      </Paper> 
+     <Dialog open={openModal}>
+  <DialogTitle>Alta modificada</DialogTitle>
+
+  <DialogContent>
+    <Typography>
+      Los cambios se guardaron correctamente.
+    </Typography>
+  </DialogContent>
+
+  <DialogActions>
+
+    <Button
+      variant="contained"
+      onClick={() => navigate(`/altas/${id}`)}
+    >
+      Ver Alta
+    </Button>
+
+    <Button
+      variant="outlined"
+      onClick={() => navigate("/altas")}
+    >
+      Volver a la lista
+    </Button>
+
+  </DialogActions>
+</Dialog>
             </Box> 
 )
 }

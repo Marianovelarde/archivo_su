@@ -57,10 +57,13 @@ const handleSearch = async () => {
 
   if (searchType === 'expediente') {
     if (!filters.exp_num || !filters.exp_letra) {
-      setModalMessage('Debe completar número y letra del expediente.')
+      setModalMessage('Debe completar número y año del expediente.')
       setOpenModal(true)
       return
     }
+
+    // 👇 construir expediente correcto
+    filters.exp_letra = `31-${filters.exp_letra}`
   }
 
   try {
@@ -128,11 +131,17 @@ const handleClear = () => {
             <Grid item xs={4}>
               <TextField label="Número" name="exp_num" fullWidth value={filters.exp_num || ''} onChange={handleChange}/>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={1}>
+              <TextField value="-" disabled fullWidth />
+            </Grid>
+             <Grid item xs={1}>
+              <TextField value="31" disabled fullWidth />
+            </Grid>
+             <Grid item xs={1}>
               <TextField value="-" disabled fullWidth />
             </Grid>
             <Grid item xs={4}>
-              <TextField label="Letra" name="exp_letra" fullWidth value={filters.exp_letra || ''} onChange={handleChange}/>
+              <TextField label="Número" name="exp_letra" fullWidth value={filters.exp_letra || ''} onChange={handleChange}/>
             </Grid>
           </Grid>
         )}

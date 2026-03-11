@@ -87,7 +87,6 @@ const showSnackbar = (message, severity = 'success') => {
 
 if (isLoading) return <div>Cargando...</div>
 
-console.log('USERS DATA:', data)
   const rows = data ?? []
 
 

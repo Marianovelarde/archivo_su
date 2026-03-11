@@ -45,11 +45,11 @@ const AltaDetail = () => {
 
   const { data, isLoading, isError } = useGetAltaByIdQuery(id)
 const [openPropietario, setOpenPropietario] = useState(false)
-console.log(data);
 
   if (isLoading) return <Typography>Cargando...</Typography>
   if (isError) return <Typography>Error al cargar detalle</Typography>
 
+  
   return (
     <Box sx={{ p: 3, backgroundColor: '#f4f5f7', minHeight: '100vh' }}>
       <Paper sx={{ p: 2 }}>

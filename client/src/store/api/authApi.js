@@ -11,9 +11,9 @@ prepareHeaders: (headers, { getState }) => {
 
   if (token) {
     headers.set('authorization', `Bearer ${token}`)
-    console.log('[API] Token aplicado al header')
+    console.log('')
   } else {
-    console.log('[API] No hay token (esto es normal en el login)')
+    console.log('')
   }
 
   return headers
@@ -50,7 +50,7 @@ prepareHeaders: (headers, { getState }) => {
     // CAMBIAR ROL
     updateUserRole: builder.mutation({
       query: ({ id_user, isAdmin }) => ({
-        url: `/${id_user}`,
+        url: `/edit/${id_user}`,
         method: 'PUT',
         body: { isAdmin },
       }),
@@ -69,7 +69,7 @@ prepareHeaders: (headers, { getState }) => {
     // Cambiar de contraseña
     updatePassword: builder.mutation({
       query: ({ id_user, contraseña }) => ({
-        url: `/${id_user}`,
+        url: `/edit/${id_user}`,
         method: 'PUT',
         body: { contraseña },
       }),

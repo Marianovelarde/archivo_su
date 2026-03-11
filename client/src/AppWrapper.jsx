@@ -12,7 +12,6 @@ const AppWrapper = ({ children }) => {
 
 useEffect(() => {
   const stored = localStorage.getItem('auth')
-  console.log('[APP WRAPPER] stored auth:', stored)
 
   if (!stored) return
 

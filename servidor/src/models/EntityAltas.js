@@ -21,7 +21,7 @@ allowNull: true
     },
     num_de_exp: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
     },
     num_de_ficha: {
         type: DataTypes.STRING,

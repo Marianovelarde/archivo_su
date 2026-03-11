@@ -23,7 +23,6 @@ setCredentials: (state, action) => {
   state.isAuthenticated = true
   state.lastActivity = Date.now()
   state.sessionExpired = false
-console.log('[AUTH] setCredentials', user, token)
   localStorage.setItem(
     'auth',
     JSON.stringify({
