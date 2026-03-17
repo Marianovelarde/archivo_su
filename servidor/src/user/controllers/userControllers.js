@@ -38,19 +38,20 @@ const deactivateUserController = async (req, res) => {
 
 const changeUserRoleController = async (req, res) => {
   try {
-    const adminId = req.user.id
+
+    const adminId = req.user.id_user
     const { id } = req.params
     const { role } = req.body
 
     const user = await changeUserRoleService(id, role)
 
-    await createAuditLogService({
-      action: 'ROLE_CHANGE',
-      entity: 'USER',
-      performedBy: adminId,
-      targetUser: id,
-      description: `Rol cambiado a ${role}`,
-    })
+    // await createAuditLogService({
+    //   action: 'ROLE_CHANGE',
+    //   entity: 'USER',
+    //   performedBy: adminId,
+    //   targetUser: id,
+    //   description: `Rol cambiado a ${role}`,
+    // })
 
     res.json(user)
 
@@ -61,8 +62,8 @@ const changeUserRoleController = async (req, res) => {
 }
 const createUserControllers = async (req, res) => {
   try {
-    const { usuario, contraseña } = req.body
-    console.log('usuario:', usuario, 'contraseña:', contraseña)
+
+    const { usuario, contraseña, role, isAdmin } = req.body
 
     if (!usuario || !contraseña) {
       return res.status(400).json({
@@ -70,7 +71,12 @@ const createUserControllers = async (req, res) => {
       })
     }
 
-    const createUser = await createUserServices(usuario, contraseña)
+    const createUser = await createUserServices(
+      usuario,
+      contraseña,
+      isAdmin,
+      role
+    )
 
     return res.status(201).json({
       message: 'Usuario creado correctamente',
@@ -78,7 +84,7 @@ const createUserControllers = async (req, res) => {
     })
 
   } catch (error) {
-    // 👇 AHORA SÍ lo atrapás
+
     if (error.name === 'SequelizeUniqueConstraintError') {
       return res.status(400).json({
         message: 'El usuario ya existe',
@@ -134,16 +140,17 @@ const loginControllers = async (req, res) => {
     )
 
     // 4️⃣ Respuesta
-    res.status(200).json({
-      message: 'Login exitoso',
-      token,
-      user: {
-        id_user: user.id_user,
-        usuario: user.usuario,
-        isAdmin: user.isAdmin,
-        isActived: user.isActived,
-      },
-    })
+res.status(200).json({
+  message: 'Login exitoso',
+  token,
+  user: {
+    id_user: user.id_user,
+    usuario: user.usuario,
+    role: user.role,
+    isAdmin: user.isAdmin,
+    isActived: user.isActived,
+  },
+})
   } catch (error) {
     console.error('[LOGIN ERROR]', error)
     res.status(500).json({

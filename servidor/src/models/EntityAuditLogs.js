@@ -9,15 +9,15 @@ module.exports = (sequelize) => {
     },
     entity: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     entity_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     action: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     performed_by: {
       type: DataTypes.STRING,

@@ -52,7 +52,11 @@ const deletePlanosControllers = async (req,res) => {
         const {id} = req.params
 
         const delete_planos = await deletePlanosService(id)
-      
+      if (error.parent?.code === '23503') {
+  return res.status(400).json({
+    error: 'No se puede eliminar porque está en uso'
+  })
+}
         return res.status(200).json({message: 'Tipo de plano eliminado con éxito', delete_planos})
     } catch (error) {
         console.error('Error en controllers: ', error)

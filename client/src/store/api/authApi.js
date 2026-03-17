@@ -48,14 +48,14 @@ prepareHeaders: (headers, { getState }) => {
     }),
 
     // CAMBIAR ROL
-    updateUserRole: builder.mutation({
-      query: ({ id_user, isAdmin }) => ({
-        url: `/edit/${id_user}`,
-        method: 'PUT',
-        body: { isAdmin },
-      }),
-      invalidatesTags: ['Users'],
-    }),
+   updateUserRole: builder.mutation({
+  query: ({ id_user, role }) => ({
+    url: `/role/${id_user}`,
+    method: 'PUT',
+    body: { role },
+  }),
+  invalidatesTags: ['Users'],
+}),
 
     // ACTIVAR / DESACTIVAR
     toggleUserActive: builder.mutation({

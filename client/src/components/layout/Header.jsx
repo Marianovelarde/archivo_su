@@ -10,6 +10,7 @@ import {
   Avatar,
 } from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import { canAccessPanel } from '../../utils/permissions'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../store/api/authSlice'
 import { useNavigate } from 'react-router-dom'
@@ -102,7 +103,7 @@ const Header = () => {
             >
               {/* INFO USUARIO */}
               <Box sx={{ px: 2, py: 1 }}>
-                <Typography variant="h6" color="text.secondary">
+                <Typography variant="h6" color="text.secondary" >
                   Usuario activo
                 </Typography>
                 <Typography
@@ -112,12 +113,13 @@ const Header = () => {
                   {user.usuario}
                 </Typography>
 
-                {user.isAdmin && (
-                  <Typography
+                {user.role && (
+                  <Typography 
                     variant="caption"
-                    color="primary"
+                    color="primary.main"
+                    sx={{fontSize: '14px', fontWeight: 500}}
                   >
-                    Administrador
+                    {user.role}
                   </Typography>
                 )}
               </Box>
@@ -125,16 +127,16 @@ const Header = () => {
               <Divider />
 
               {/* SOLO ADMIN */}
-              {user.isAdmin && (
-                <MenuItem
-                  onClick={() => {
-                    handleMenuClose()
-                    navigate('/admin/panel')
-                  }}
-                >
-                  Panel de admin
-                </MenuItem>
-              )}
+         {canAccessPanel(user) && (
+  <MenuItem
+    onClick={() => {
+      handleMenuClose()
+      navigate('/admin/panel')
+    }}
+  >
+    Panel de admin
+  </MenuItem>
+)}
 
               {/* TODOS */}
               <MenuItem

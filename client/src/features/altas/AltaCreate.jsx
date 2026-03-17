@@ -21,6 +21,8 @@ import { useCreateAltaMutation } from '../../store/api/AltasApi'
 
 import AltaErrorModal from './AltaErrorModal'
 import AltaSuccessModal from './AltasSuccessModal'
+import AltaFichaDuplicadaModal from './AltaFichaDuplicadaModal'
+
 import SelectPropietario from '../propietarios/SelectPropietario'
 import SelectDestino from '../destino/SelectDestino'
 import SelectPlano from '../planos/SelectPlano'
@@ -33,6 +35,7 @@ const [successOpen, setSuccessOpen] = useState(false)
 const [altaCreadaId, setAltaCreadaId] = useState(null)
 const [errorOpen, setErrorOpen] = useState(false)
 const [missingFields, setMissingFields] = useState([])
+const [duplicateOpen, setDuplicateOpen] = useState(false)
 
 const [form, setForm] = useState({
   ficha_numero: '',
@@ -69,10 +72,15 @@ const handleSubmit = async () => {
   if (!propietario?.nombre) faltantes.push('Nombre del propietario')
   if (!propietario?.apellido) faltantes.push('Apellido del propietario')
   if (!form.calle) faltantes.push('Calle')
-  if (!form.barrio) faltantes.push('Barrio')
+    if (!form.barrio) faltantes.push('Barrio')
+      if(!form.distrito) faltantes.push('Distrito')
+      if(!form.zona) faltantes.push('Zona')
+      if(!form.manzana) faltantes.push('Manzana')
+      if(!form.parcela) faltantes.push('Parcela - Si no hay debe ser 0')
   if (!form.matricula_profesional) faltantes.push('Matrícula profesional')
-  if (!form.superficie_cubierta) faltantes.push('Superficie cubierta')
+  if (!form.superficie_cubierta) faltantes.push('Superficie cubierta. Solo Numeros')
   if(!form.fecha_de_aprob) faltantes.push('Fecha de aprobación')
+
 
 
   if (faltantes.length > 0) {
@@ -90,7 +98,7 @@ const expediente =
 
 const ficha =
   form.ficha_numero && form.ficha_letra
-    ? `${form.ficha_numero}-${form.ficha_letra}`
+    ? `${form.ficha_numero}-${form.ficha_letra.toUpperCase()}`
     : null
 
 const payload = {
@@ -103,18 +111,38 @@ const payload = {
   id_propietario: propietario.id_propietario,
   id_destino: destino.id_destino,
   id_tipo_plano: plano.id_tipo_plano,
+  distrito: form.distrito,
+  zona: form.zona,
+  manzana: form.manzana,
+  parcela: form.parcela
 }
 
-  try {
-    const result = await createAlta(payload).unwrap()
-    setAltaCreadaId(result.id_Altas)
-    setSuccessOpen(true)
-  } catch (error) {
-    console.error('Error al crear alta', error)
+ try {
+  const result = await createAlta(payload).unwrap()
+  setAltaCreadaId(result.id_Altas)
+  setSuccessOpen(true)
+
+} catch (error) {
+  console.error('Error al crear alta', error)
+
+  // 🔥 RTK Query suele traer el error acá
+  const msg =
+    error?.data?.error ||   // backend express
+    error?.error ||         // fallback RTK
+    error?.message          // fallback JS
+
+  if (msg === 'La ficha ya existe') {
+    setDuplicateOpen(true)
+
+    // 👇 opcional UX
+    setTimeout(() => {
+      document.querySelector('[name="ficha_numero"]')?.focus()
+    }, 100)
+
+    return
   }
 }
-
-
+}
 
   return (
     <Box>
@@ -349,6 +377,10 @@ const payload = {
   open={errorOpen}
   onClose={() => setErrorOpen(false)}
   missingFields={missingFields}
+/>
+<AltaFichaDuplicadaModal
+  open={duplicateOpen}
+  onClose={() => setDuplicateOpen(false)}
 />
     </Box>
   )

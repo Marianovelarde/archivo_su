@@ -53,11 +53,29 @@ const createAltaControllers = async (req,res) => {
         })
         return res.status(201).json(new_alta)
     } catch (error) {
-        console.error('Error en controllers: ', error)
-        return res.status(500).json({ error: 'Error al crear alta' });
-    }
-};
+  console.error('Error en controllers:', error)
 
+  // 🔥 Sequelize clásico
+  if (error.name === 'SequelizeUniqueConstraintError') {
+    return res.status(400).json({
+      error: 'La ficha ya existe'
+    })
+  }
+
+  // 🔥 PostgreSQL directo (MUY IMPORTANTE)
+  if (error.parent?.code === '23505') {
+    return res.status(400).json({
+      error: 'La ficha ya existe'
+    })
+  }
+if (error.status === 400) {
+  return res.status(400).json({ error: error.message })
+}
+  return res.status(500).json({
+    error: 'Error al crear alta'
+  })
+}
+}
 const updateAltaControllers = async (req,res) => {
     try {
             const {id} = req.params;

@@ -54,6 +54,11 @@ const deletePropietariosControllers = async (req,res) => {
     try {
         const {id} = req.params
         const delete_propietarios = await deletePropietariosService(id)
+        if (error.parent?.code === '23503') {
+  return res.status(400).json({
+    error: 'No se puede eliminar porque está en uso'
+  })
+}
         return res.status(200).json({message: 'El propietario fue eliminado con éxito', delete_propietarios})
     } catch (error) {
         res.status(500).json({error: 'Error al intentar eliminar un propietario'})

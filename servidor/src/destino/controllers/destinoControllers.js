@@ -49,7 +49,11 @@ const deleteDestinoControllers = async (req, res) => {
         const {id} = req.params
 
         const delete_destino = await deleteDestinoService(id)
-   
+   if (error.parent?.code === '23503') {
+  return res.status(400).json({
+    error: 'No se puede eliminar porque está en uso'
+  })
+}
         return res.status(200).json({message: 'El tipo de destino fue eliminado ', delete_destino})
     } catch (error) {
         res.status(500).json({message: 'No se pudo eliminar el tipo de destino'})

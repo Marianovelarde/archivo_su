@@ -27,6 +27,12 @@ export const propietariosApi = createApi({
   }),
   invalidatesTags: ['Propietarios'],
 }),
+deletePropietario: builder.mutation({
+  query: (id) => ({
+    url: `/propietarios/${id}`,
+    method: 'DELETE'
+  })
+})
   }),
   
 })

@@ -17,21 +17,21 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
-
+import  {canCreateAlta } from '../utils/permissions'
 const Home = () => {
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
 
   const [openModal, setOpenModal] = useState(false)
 
-const handleNuevaAlta = () => {
-  if (!user || !user.isAdmin) {
-    setOpenModal(true)
-    return
-  }
+// const handleNuevaAlta = () => {
+//   if (!user || !user.isAdmin) {
+//     setOpenModal(true)
+//     return
+//   }
 
-  navigate('/altas/nueva')
-}
+//   navigate('/altas/nueva')
+// }
 
   return (
     <Box>
@@ -71,7 +71,7 @@ const handleNuevaAlta = () => {
         {/* NUEVA ALTA (PROTEGIDA) */}
         <Grid item xs={12} md={4}>
           <Card elevation={2}>
-            <CardActionArea onClick={handleNuevaAlta}>
+            <CardActionArea onClick={canCreateAlta(user) ? () => navigate('/altas/nueva') : () => setOpenModal(true)}>
               <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <AddCircleOutlineIcon sx={{ fontSize: 40 }} color="primary" />
                 <Box>
@@ -113,7 +113,7 @@ const handleNuevaAlta = () => {
         <DialogTitle>Acceso denegado</DialogTitle>
         <DialogContent>
           <Typography>
-            El usuario <strong>{user?.usuario}</strong> no puede acceder a esta función.
+           <strong>{user?.usuario}</strong> no tienes permisos para acceder a esta función.
           </Typography>
         </DialogContent>
         <DialogActions>

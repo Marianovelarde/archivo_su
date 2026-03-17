@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import {useState} from 'react'
 import { useGetAltaByIdQuery } from '../../store/api/altasApi'
+import { canViewExpediente } from '../../utils/permissions'
 import {
   Box,
   Typography,
@@ -16,6 +17,9 @@ import {
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useSelector } from 'react-redux'
+import { canEditAlta } from '../../utils/permissions'
+
+
 const Field = ({ label, value, highlight = false }) => (
   <Box>
     <Typography
@@ -56,7 +60,7 @@ const [openPropietario, setOpenPropietario] = useState(false)
         {/* HEADER */}
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
-          {user?.isAdmin && (
+       {canViewExpediente(user) && (
   <>
     <Typography variant="h4">
       Ficha Nº {data.num_de_ficha}
@@ -253,12 +257,12 @@ const [openPropietario, setOpenPropietario] = useState(false)
           >
             Volver
           </Button>
-        {user && user.isAdmin && (
-          <Button
-          variant="contained"
-          sx={{ ml: 2 }}
-          onClick={() => navigate(`/altas/editar/${id}`)}
-          >
+    {canEditAlta(user) && (
+  <Button
+    variant="contained"
+    sx={{ ml: 2 }}
+    onClick={() => navigate(`/altas/editar/${id}`)}
+  >
     Editar
   </Button>
 )}

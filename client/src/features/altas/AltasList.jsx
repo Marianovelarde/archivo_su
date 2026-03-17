@@ -1,13 +1,21 @@
-import { useGetAltasQuery } from '../../store/api/AltasApi'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { DataGrid } from '@mui/x-data-grid'
 import { Box, Typography, Button } from '@mui/material'
+
 import {useNavigate} from 'react-router-dom'
+import { useSelector } from 'react-redux'
+
+import { useGetAltasQuery } from '../../store/api/AltasApi'
+import { canViewExpediente } from '../../utils/permissions'
+
+
 const AltasList = () => {
   const { data, isLoading, isError } = useGetAltasQuery()
+  const { user } = useSelector((state) => state.auth)
   const navigate = useNavigate()
   if (isLoading) return <div>Cargando...</div>
   if (isError) return <div>Error al cargar datos</div>
+
 
   const rows = data?.new_alta ?? []
 
@@ -47,7 +55,15 @@ const AltasList = () => {
     fontSize: '20px',
   }}
     columns={[
-  { field: 'num_de_ficha', headerName: 'Ficha', width: 90 },
+ {
+  field: 'num_de_ficha',
+  headerName: 'Ficha',
+  width: 120,
+  valueGetter: (_, row) =>
+    canViewExpediente(user)
+      ? row.num_de_ficha
+      : '—',
+},
   
 {
   field: 'propietario',

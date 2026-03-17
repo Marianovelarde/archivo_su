@@ -10,6 +10,6 @@ router.get('/', authMiddleware, requireAdmin, getUSerControllers)
 router.post('/login', loginControllers)
 router.post('/signup', authMiddleware, requireAdmin, createUserControllers)
 router.put('/edit/:id', authMiddleware, requireSelfOrAdmin, updateUserControllers)
-router.put('/:id/deactivate', deactivateUserController)
-router.put('/:id/role', changeUserRoleController)
+router.put('/:id/deactivate', authMiddleware, requireAdmin, deactivateUserController)
+router.put('/role/:id',authMiddleware, requireAdmin, changeUserRoleController)
 module.exports = router

@@ -40,6 +40,7 @@ const [confirmOpen, setConfirmOpen] = useState(false)
 const [userToToggle, setUserToToggle] = useState(null)
 const currentUser = useSelector(state => state.auth.user)
 
+ console.log(data);
  
 
   const [snackbar, setSnackbar] = useState({
@@ -56,6 +57,7 @@ const [form, setForm] = useState({
   contraseña: '',
   isAdmin: false,
   isActived: true,
+  role: 'consulta'
 })
 
 
@@ -71,6 +73,7 @@ const handleCreateUser = async () => {
       contraseña: '',
       isAdmin: false,
       isActived: true,
+      role: 'consulta'
     })
   } catch (error) {
     showSnackbar(
@@ -163,37 +166,39 @@ columns={[
     flex: 1,
   },
 
-  {
-    field: 'isAdmin',
-    headerName: 'Rol',
-    width: 180,
-    renderCell: (params) => (
+{
+  field: 'role',
+  headerName: 'Rol',
+  width: 200,
+  renderCell: (params) => (
     <Select
-    size="small"
-    value={params.value ? 'admin' : 'user'}
-    disabled={loadingRoleId === params.row.id_user}
-    onChange={async (e) => {
-      try {
-        setLoadingRoleId(params.row.id_user)
+      size="small"
+      value={params.value}
+      disabled={loadingRoleId === params.row.id_user}
+      onChange={async (e) => {
+        try {
+          setLoadingRoleId(params.row.id_user)
 
-        await updateRole({
-          id_user: params.row.id_user,
-          isAdmin: e.target.value === 'admin',
-        }).unwrap()
+          await updateRole({
+            id_user: params.row.id_user,
+            role: e.target.value,
+          }).unwrap()
 
-        showSnackbar('Rol actualizado correctamente')
-      } catch (err) {
-        showSnackbar('Error al cambiar el rol', 'error')
-      } finally {
-        setLoadingRoleId(null)
-      }
-    }}
-  >
-    <MenuItem value="admin">Admin</MenuItem>
-    <MenuItem value="user">Usuario</MenuItem>
-  </Select>
-    ),
-  },
+          showSnackbar('Rol actualizado correctamente')
+        } catch (err) {
+          showSnackbar('Error al cambiar el rol', 'error')
+        } finally {
+          setLoadingRoleId(null)
+        }
+      }}
+    >
+      <MenuItem value="super_admin">Super Admin</MenuItem>
+      <MenuItem value="editor">Editor</MenuItem>
+      <MenuItem value="visor">Visor</MenuItem>
+      <MenuItem value="consulta">Consulta</MenuItem>
+    </Select>
+  ),
+},
 
 {
   field: 'isActived',
@@ -343,20 +348,22 @@ columns={[
       }
     />
 
-    <Select
-      fullWidth
-      value={form.isAdmin ? 'admin' : 'user'}
-      onChange={(e) =>
-        setForm({
-          ...form,
-          isAdmin: e.target.value === 'admin',
-        })
-      }
-      sx={{ mb: 2 }}
-    >
-      <MenuItem value="admin">Admin</MenuItem>
-      <MenuItem value="user">Usuario</MenuItem>
-    </Select>
+ <Select
+  fullWidth
+  value={form.role}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      role: e.target.value,
+    })
+  }
+  sx={{ mb: 2 }}
+>
+  <MenuItem value="super_admin">Super Admin</MenuItem>
+  <MenuItem value="editor">Editor</MenuItem>
+  <MenuItem value="visor">Visor</MenuItem>
+  <MenuItem value="consulta">Consulta</MenuItem>
+</Select>
 
     <Box display="flex" alignItems="center" gap={1}>
       <Typography>Activo</Typography>
