@@ -354,28 +354,8 @@ const handleSubmit = async () => {
     ))}
   </Grid>
 )}
-<Grid item xs={12} md={6}>
-  <Button
-    variant={planos.length ? 'contained' : 'outlined'}
-    component="label"
-    fullWidth
-  >
-    {planos.length
-      ? `${planos.length} nuevos planos ✔`
-      : 'Agregar planos (PDF)'}
 
-    <input
-      type="file"
-      accept="application/pdf"
-      multiple
-      hidden
-      onChange={(e) => {
-        const nuevos = Array.from(e.target.files)
-        setPlanos(prev => [...prev, ...nuevos])
-      }}
-    />
-  </Button>
-</Grid>
+
                 {/* =================== DATOS TÉCNICOS =================== */} 
                 <Grid item xs={12} mt={2}> 
                     <Divider /> 
