@@ -59,14 +59,14 @@ function App() {
         </ProtectedRoute>
       }
     />
-  </Route>
-  <Route path='altas/editar/:id'
+      <Route path='altas/editar/:id'
   element={ <ProtectedRoute>
     <AltaEdit/>
   </ProtectedRoute>}>
 
-  </Route>
-  <Route path="/admin/panel" element={<ProtectedRoute adminOnly>
+    </Route>
+
+     <Route path="/admin/panel" element={<ProtectedRoute adminOnly>
     <AdminPanel />
   </ProtectedRoute>} />
 <Route path="/cambiar-contraseña"  element={
@@ -79,7 +79,10 @@ function App() {
     <AuditLogList />
   </ProtectedRoute>} />
   <Route path="/metrics/" element={<MetricsDetail />} />
-<Route path="/metrics" element={<MetricsDetail />} />
+  <Route path="/metrics" element={<MetricsDetail />} />
+</Route>
+
+ 
 </Routes>
 
   )

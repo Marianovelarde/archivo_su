@@ -19,6 +19,7 @@ import { useGetAltaByIdQuery, useUpdateAltaMutation } from '../../store/api/alta
 import SelectPropietario from '../propietarios/SelectPropietario'
 import SelectDestino from '../destino/SelectDestino'
 import SelectPlano from '../planos/SelectPlano'
+import { logger } from 'sequelize/lib/utils/logger'
 
 const AltaEdit = () => {
   const { id } = useParams()
@@ -27,12 +28,14 @@ const AltaEdit = () => {
   const { data, isLoading } = useGetAltaByIdQuery(id)
   const [updateAlta, { isLoading: isUpdating }] = useUpdateAltaMutation()
 
+  const [planos, setPlanos] = useState([])
  const [form, setForm] = useState({}) 
  const [propietario, setPropietario] = useState(null) 
  const [destino, setDestino] = useState(null) 
  const [plano, setPlano] = useState(null)
  const [openModal, setOpenModal] = useState(false)
 
+ console.log('Datos del alta:', data)
 useEffect(() => {
   if (data) {
 
@@ -72,6 +75,9 @@ useEffect(() => {
     setPlano(data.entityPlano)
   }
 }, [data])
+
+const tienePlano = !!plano
+
 const formatToISODate = (date) => {
   if (!date) return null
 
@@ -84,31 +90,46 @@ const formatToISODate = (date) => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
-
 const handleSubmit = async () => {
-
   const expediente = `${form.exp_num}-31-${form.exp_year}`
   const ficha = `${form.ficha_num}-${form.ficha_letra}`
 
   const payload = {
     ...form,
-
     num_de_exp: expediente,
     num_de_ficha: ficha,
-
     fecha_de_aprob: formatToISODate(form.fecha_de_aprob),
     final_de_obra: formatToISODate(form.final_de_obra),
     fecha_archivo: formatToISODate(form.fecha_archivo),
-
     id_propietario: propietario?.id_propietario,
     id_destino: destino?.id_destino,
     id_tipo_plano: plano?.id_tipo_plano
   }
 
   try {
-    await updateAlta({ id, body: payload }).unwrap()
+    // 🔥 SI HAY ARCHIVOS → usar FormData
+    if (planos.length > 0) {
+      const formData = new FormData()
 
-    setOpenModal(true) // 👈 abre modal
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(key, value)
+        }
+      })
+
+      // 👇 CLAVE
+      planos.forEach(file => {
+        formData.append('planos', file)
+      })
+
+      await updateAlta({ id, body: formData }).unwrap()
+
+    } else {
+      // 👇 sin archivos
+      await updateAlta({ id, body: payload }).unwrap()
+    }
+
+    setOpenModal(true)
 
   } catch (error) {
     console.error('Error al actualizar', error)
@@ -273,10 +294,72 @@ const handleSubmit = async () => {
                     onChange={setDestino} /> 
                 </Grid> 
                     <Grid item xs={12} md={3}>
-                         <SelectPlano 
-                         value={plano} 
-                         onChange={setPlano} /> 
-                </Grid> 
+  <SelectPlano 
+    value={plano} 
+    onChange={setPlano} 
+  /> 
+</Grid>
+
+{/* 👇 SOLO SI NO HAY PLANO */}
+{(!data?.planos || data.planos.length === 0) && (
+<Grid item xs={12} md={6}>
+  <Button
+    variant={planos.length ? 'contained' : 'outlined'}
+    component="label"
+    fullWidth
+  >
+    {planos.length
+      ? `${planos.length} nuevos planos ✔`
+      : 'Agregar planos (PDF)'}
+
+    <input
+      type="file"
+      accept="application/pdf"
+      multiple
+      hidden
+      onChange={(e) => {
+        const nuevos = Array.from(e.target.files)
+        setPlanos(prev => [...prev, ...nuevos])
+      }}
+    />
+  </Button>
+</Grid>
+)}
+{data?.planos?.length > 0 && (
+  <Grid item xs={12}>
+    <Typography variant="h6" fontWeight={600}>
+      Planos existentes:
+    </Typography>
+
+    {data.planos.map((p, i) => (
+      <Typography key={i} variant="body2">
+        📄  {i + 1} {data.planos[i]?.nombre || '—'}
+      </Typography>
+    ))}
+  </Grid>
+)}
+<Grid item xs={12} md={6}>
+  <Button
+    variant={planos.length ? 'contained' : 'outlined'}
+    component="label"
+    fullWidth
+  >
+    {planos.length
+      ? `${planos.length} nuevos planos ✔`
+      : 'Agregar planos (PDF)'}
+
+    <input
+      type="file"
+      accept="application/pdf"
+      multiple
+      hidden
+      onChange={(e) => {
+        const nuevos = Array.from(e.target.files)
+        setPlanos(prev => [...prev, ...nuevos])
+      }}
+    />
+  </Button>
+</Grid>
                 {/* =================== DATOS TÉCNICOS =================== */} 
                 <Grid item xs={12} mt={2}> 
                     <Divider /> 

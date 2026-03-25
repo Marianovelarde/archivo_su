@@ -78,7 +78,11 @@ allowNull: true
     },
     fecha_archivo: {
         type: DataTypes.DATE
-    }    
+    },
+    plano_pdf: {
+  type: DataTypes.TEXT,
+  allowNull: true
+}    
     },
     {
         paranoid: true,

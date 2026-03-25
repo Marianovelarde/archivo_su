@@ -2,6 +2,14 @@
 import { MAX_IDLE_TIME } from './authConfig'
 import { createSlice } from '@reduxjs/toolkit'
 
+// Cargamos el estado inicial desde localStorage para mantener la sesión entre recargas
+// Si no hay datos en localStorage, usamos valores por defecto
+// Esto asegura que el estado de autenticación se restaure correctamente al iniciar la aplicación
+// El estado inicial se construye a partir de los datos almacenados en localStorage, si existen
+// Si no hay datos en localStorage, se inicializa con valores por defecto (null para user y token, false para isAuthenticated)
+
+
+
 
 const persistedAuth = JSON.parse(localStorage.getItem('auth'))
 const initialState = {

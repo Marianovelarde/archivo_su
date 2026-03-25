@@ -13,7 +13,9 @@ export const canEditAlta = (user) => {
 export const canViewExpediente = (user) => {
   return ['super_admin', 'editor', 'visor'].includes(user?.role)
 }
-
+export const canViewPlanos = (user) => {
+  return ['super_admin', 'editor', 'visor'].includes(user?.role)
+}
 export const canOnlyFilter = (user) => {
   return user?.role === 'consulta'
 }

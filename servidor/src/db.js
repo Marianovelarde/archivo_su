@@ -13,6 +13,7 @@ const entityDocument = require('./models/EntityDocument')
 const entityLoan = require('./models/EntityLoan')
 const entityUser = require('./models/EntityUser')
 const entityAuditLogs = require('./models/EntityAuditLogs')
+const entityPlanoArchivo = require('./models/EntityPlanoArchivo')
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/archivo_su`, {
     logging: false,
     native: false
@@ -47,7 +48,8 @@ const {
     EntityDocument,
     EntityLoan,
     EntityUser,
-    EntityAuditLogs
+    EntityAuditLogs,
+    EntityPlanoArchivo
 } = sequelize.models
 
 
@@ -63,6 +65,15 @@ EntityPropietarios.hasMany(EntityAltas, {
 EntityAltas.belongsTo(EntityPropietarios, {
   foreignKey: 'id_propietario',
   as: 'propietario'
+})
+// altas - plano archivo  
+EntityAltas.hasMany(EntityPlanoArchivo, {
+  foreignKey: 'id_alta',
+  as: 'planos'
+})
+
+EntityPlanoArchivo.belongsTo(EntityAltas, {
+  foreignKey: 'id_alta'
 })
 //altas - destino
 EntityAltas.belongsTo(EntityDestino, {

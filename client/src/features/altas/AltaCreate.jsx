@@ -31,11 +31,15 @@ import { useNavigate } from 'react-router-dom'
 const AltaCreate = () => {
   const navigate = useNavigate()
   const [createAlta, { isLoading }] = useCreateAltaMutation()
+
+  //estados para el formulario
+const [files, setFiles] = useState([])
 const [successOpen, setSuccessOpen] = useState(false)
 const [altaCreadaId, setAltaCreadaId] = useState(null)
 const [errorOpen, setErrorOpen] = useState(false)
 const [missingFields, setMissingFields] = useState([])
 const [duplicateOpen, setDuplicateOpen] = useState(false)
+
 
 const [form, setForm] = useState({
   ficha_numero: '',
@@ -92,8 +96,8 @@ const handleSubmit = async () => {
   if (!propietario || !destino || !plano) return
 
 const expediente =
-  form.exp_num && form.exp_year
-    ? `${form.exp_num}-31-${form.exp_year}`
+  form.exp_numero && form.exp_final
+    ? `${form.exp_numero}-31-${form.exp_final}`
     : null
 
 const ficha =
@@ -118,23 +122,36 @@ const payload = {
 }
 
  try {
-  const result = await createAlta(payload).unwrap()
+
+  const formData = new FormData()
+
+  Object.entries(payload).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
+      formData.append(key, value)
+    }
+  })
+
+  // 🔥 archivo PDF
+ files.forEach(file => {
+  formData.append('planos', file)
+})
+
+  const result = await createAlta(formData).unwrap()
+
   setAltaCreadaId(result.id_Altas)
   setSuccessOpen(true)
 
 } catch (error) {
   console.error('Error al crear alta', error)
 
-  // 🔥 RTK Query suele traer el error acá
   const msg =
-    error?.data?.error ||   // backend express
-    error?.error ||         // fallback RTK
-    error?.message          // fallback JS
+    error?.data?.error ||
+    error?.error ||
+    error?.message
 
   if (msg === 'La ficha ya existe') {
     setDuplicateOpen(true)
 
-    // 👇 opcional UX
     setTimeout(() => {
       document.querySelector('[name="ficha_numero"]')?.focus()
     }, 100)
@@ -282,7 +299,34 @@ const payload = {
         <Grid item xs={12} sm={3}>
           <SelectPlano value={plano} onChange={setPlano} />
         </Grid>
+<Grid item xs={12} sm={6}>
+<Button
+  variant={files.length ? 'contained' : 'outlined'}
+  color={files.length ? 'success' : 'primary'}
+  component="label"
+  fullWidth
+>
+  {files.length
+    ? `${files.length} planos cargados ✔`
+    : 'Subir planos (PDF)'}
 
+  <input
+    type="file"
+    accept="application/pdf"
+    multiple
+    hidden
+    onChange={(e) => {
+  const nuevos = Array.from(e.target.files)
+  setFiles(prev => [...prev, ...nuevos])
+}}
+  />
+</Button>
+{files.map((f, i) => (
+  <Typography key={i} variant="body2">
+    {f.name}
+  </Typography>
+))}
+</Grid>
         {/* TÉCNICOS */}
         <Grid item xs={12} sm={6} sx={{marginBottom: 2}}>
           <TextField

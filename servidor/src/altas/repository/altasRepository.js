@@ -1,4 +1,4 @@
-const {EntityAltas, EntityPlano, EntityPropietarios, EntityDestino} = require('../../db')
+const {EntityAltas, EntityPlano, EntityPropietarios, EntityDestino, EntityPlanoArchivo} = require('../../db')
 
 const createAltaRepository = async (data) => {
 
@@ -52,6 +52,11 @@ const getAltasRepository = async () => {
             {
                 model: EntityPlano,
                 attributes: ['tipo_plano']
+            },
+            {
+                model: EntityPlanoArchivo,
+                as: 'planos',
+                attributes: ['id', 'path', 'nombre']
             }
         ]
     }) 
@@ -70,10 +75,16 @@ const getAltaByIdRepository = async (id_Altas) => {
           model: EntityDestino,
           attributes: ['tipo_de_destino']
         },
+           {
+          model: EntityPlanoArchivo,
+          as: 'planos',
+          attributes: ['id', 'path', 'nombre']
+        },
         {
           model: EntityPlano,
           attributes: ['tipo_plano']
         }
+     
       ]
     })
   

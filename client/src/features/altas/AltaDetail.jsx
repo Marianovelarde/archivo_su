@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import { useGetAltaByIdQuery } from '../../store/api/altasApi'
-import { canViewExpediente } from '../../utils/permissions'
+import { canViewExpediente, canViewPlanos } from '../../utils/permissions'
 import {
   Box,
   Typography,
@@ -13,10 +13,14 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  List,
+  ListItem,
+  ListItemText
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useSelector } from 'react-redux'
+
 import { canEditAlta } from '../../utils/permissions'
 
 
@@ -47,13 +51,16 @@ const AltaDetail = () => {
   const navigate = useNavigate()
    const { user } = useSelector((state) => state.auth)
 
-  const { data, isLoading, isError } = useGetAltaByIdQuery(id)
+   const { data, isLoading, isError } = useGetAltaByIdQuery(id, {
+})
+
+
 const [openPropietario, setOpenPropietario] = useState(false)
+const [openPlanos, setOpenPlanos] = useState(false)
 
   if (isLoading) return <Typography>Cargando...</Typography>
   if (isError) return <Typography>Error al cargar detalle</Typography>
-
-  
+const tienePlanos = Array.isArray(data?.planos) && data.planos.length > 0
   return (
     <Box sx={{ p: 3, backgroundColor: '#f4f5f7', minHeight: '100vh' }}>
       <Paper sx={{ p: 2 }}>
@@ -98,10 +105,15 @@ const [openPropietario, setOpenPropietario] = useState(false)
              
             />
           </Grid>
+          
         </Grid>
 
         <Divider sx={{ my: 1 }} />
-
+{canViewPlanos(user) && tienePlanos && (
+  <Button onClick={() => setOpenPlanos(true)}>
+    Ver planos ({data.planos.length})
+  </Button>
+)}
         {/* IDENTIFICACIÓN */}
 <Grid container spacing={2}>
 <Grid item xs={12} md={6}>
@@ -313,9 +325,39 @@ const [openPropietario, setOpenPropietario] = useState(false)
     </Button>
 
   </DialogActions>
+</Dialog>
+<Dialog
+  open={openPlanos}
+  onClose={() => setOpenPlanos(false)}
+  maxWidth="sm"
+  fullWidth
+>
+  <DialogTitle>Planos asociados</DialogTitle>
 
+  <DialogContent>
+    <List>
+      {data.planos?.map((p) => (
+        <ListItem
+          key={p.id}
+          button
+          component="a"
+          href={`http://localhost:3001/${p.path}`}
+          target="_blank"
+        >
+          <ListItemText primary={p.nombre} />
+        </ListItem>
+      ))}
+    </List>
+  </DialogContent>
+
+  <DialogActions>
+    <Button onClick={() => setOpenPlanos(false)}>
+      Cerrar
+    </Button>
+  </DialogActions>
 </Dialog>
       </Paper>
+      
     </Box>
   )
 }

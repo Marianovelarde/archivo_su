@@ -14,11 +14,17 @@ import {
 import FolderIcon from '@mui/icons-material/Folder'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import SearchIcon from '@mui/icons-material/Search'
+//useNavigate para redireccionar a otras páginas, useSelector para acceder al estado de autenticación y permisos del usuario, useState para manejar el estado del modal de acceso denegado, y canCreateAlta para verificar si el usuario tiene permisos para crear una nueva alta.
+
 import { useNavigate } from 'react-router-dom'
+
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
 import  {canCreateAlta } from '../utils/permissions'
+
+
 const Home = () => {
+  
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
 

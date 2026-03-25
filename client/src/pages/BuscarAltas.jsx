@@ -23,6 +23,7 @@ import {
   useGetPlanosQuery } from '../store/api/altasApi'
 import { useNavigate } from 'react-router-dom'
 
+
 const BuscarAltas = () => {
 
   const navigate = useNavigate()
