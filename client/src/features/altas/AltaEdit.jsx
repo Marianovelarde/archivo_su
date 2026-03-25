@@ -19,7 +19,6 @@ import { useGetAltaByIdQuery, useUpdateAltaMutation } from '../../store/api/alta
 import SelectPropietario from '../propietarios/SelectPropietario'
 import SelectDestino from '../destino/SelectDestino'
 import SelectPlano from '../planos/SelectPlano'
-import { logger } from 'sequelize/lib/utils/logger'
 
 const AltaEdit = () => {
   const { id } = useParams()
@@ -344,20 +343,7 @@ const handleSubmit = async () => {
     component="label"
     fullWidth
   >
-    {planos.length
-      ? `${planos.length} nuevos planos ✔`
-      : 'Agregar planos (PDF)'}
 
-    <input
-      type="file"
-      accept="application/pdf"
-      multiple
-      hidden
-      onChange={(e) => {
-        const nuevos = Array.from(e.target.files)
-        setPlanos(prev => [...prev, ...nuevos])
-      }}
-    />
   </Button>
 </Grid>
                 {/* =================== DATOS TÉCNICOS =================== */} 

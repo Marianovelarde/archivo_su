@@ -341,7 +341,7 @@ const tienePlanos = Array.isArray(data?.planos) && data.planos.length > 0
           key={p.id}
           button
           component="a"
-          href={`http://localhost:3001/${p.path}`}
+          href={`http://192.168.1.7:3001/${p.path}`}
           target="_blank"
         >
           <ListItemText primary={p.nombre} />
