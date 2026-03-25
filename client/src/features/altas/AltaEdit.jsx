@@ -299,8 +299,26 @@ const handleSubmit = async () => {
   /> 
 </Grid>
 
-{/* 👇 SOLO SI NO HAY PLANO */}
-{(!data?.planos || data.planos.length === 0) && (
+{/* =================== PLANOS =================== */}
+
+<Grid item xs={12}>
+  <Typography variant="h6" fontWeight={600}>
+    Planos
+  </Typography>
+</Grid>
+
+{/* 📄 Planos existentes */}
+{data?.planos?.length > 0 && (
+  <Grid item xs={12}>
+    {data.planos.map((p, i) => (
+      <Typography key={i} variant="body2">
+        📄 {i + 1} - {p?.nombre || '—'}
+      </Typography>
+    ))}
+  </Grid>
+)}
+
+{/* 📤 Subir nuevos planos */}
 <Grid item xs={12} md={6}>
   <Button
     variant={planos.length ? 'contained' : 'outlined'}
@@ -323,7 +341,6 @@ const handleSubmit = async () => {
     />
   </Button>
 </Grid>
-)}
 {data?.planos?.length > 0 && (
   <Grid item xs={12}>
     <Typography variant="h6" fontWeight={600}>
