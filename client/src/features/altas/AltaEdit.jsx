@@ -343,7 +343,20 @@ const handleSubmit = async () => {
     component="label"
     fullWidth
   >
+    {planos.length
+      ? `${planos.length} nuevos planos ✔`
+      : 'Agregar planos (PDF)'}
 
+    <input
+      type="file"
+      accept="application/pdf"
+      multiple
+      hidden
+      onChange={(e) => {
+        const nuevos = Array.from(e.target.files)
+        setPlanos(prev => [...prev, ...nuevos])
+      }}
+    />
   </Button>
 </Grid>
                 {/* =================== DATOS TÉCNICOS =================== */} 
