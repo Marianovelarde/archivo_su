@@ -36,9 +36,12 @@ const updateUserRepository = async (id_user, data) => {
 const deactivateUserRepository = async (id) => {
   const user = await EntityUser.findByPk(id)
 
-  if (!user) throw new Error('Usuario no encontrado')
+  if (!user) {
+    throw new Error('Usuario no encontrado')
+  }
 
-  user.isActived = false
+  user.isActived = !user.isActived
+
   await user.save()
 
   return user

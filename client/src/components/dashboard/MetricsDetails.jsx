@@ -33,7 +33,6 @@ const isBarrio = type === 'barrio'
 
   
 
-console.log(isBarrio);
   const detailData = isBarrio
     ? data?.altasPorBarrio
     : data?.altasPorApellido

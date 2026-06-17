@@ -77,7 +77,7 @@ prepareHeaders: (headers, { getState }) => {
     // ACTIVAR / DESACTIVAR
     toggleUserActive: builder.mutation({
       query: ({ id_user, isActived }) => ({
-        url: `/${id_user}`,
+        url: `/${id_user}/deactivate`,
         method: 'PUT',
         body: { isActived },
       }),

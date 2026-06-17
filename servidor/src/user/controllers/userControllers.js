@@ -11,7 +11,7 @@ const {createUserServices,
 
 
 
-    const { createAuditLogService } = require('../../auditLog/services/auditLogService')
+    // const { createAuditLogService } = require('../../auditLog/services/auditLogService')
 
 const deactivateUserController = async (req, res) => {
   try {
@@ -20,13 +20,13 @@ const deactivateUserController = async (req, res) => {
 
     const user = await deactivateUserService(id)
 
-    await createAuditLogService({
-      action: 'DEACTIVATE',
-      entity: 'USER',
-      performedBy: adminId,
-      targetUser: id,
-      description: 'Usuario desactivado',
-    })
+    // await createAuditLogService({
+    //   action: 'DEACTIVATE',
+    //   entity: 'USER',
+    //   performedBy: adminId,
+    //   targetUser: id,s
+    //   description: 'Usuario desactivado',
+    // })
 
     res.json(user)
 
@@ -154,7 +154,7 @@ res.status(200).json({
   } catch (error) {
     console.error('[LOGIN ERROR]', error)
     res.status(500).json({
-      message: 'Error interno del servidor',
+      message: 'Usuario o contraseña incorrectos',
     })
   }
 }

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import { useGetAltaByIdQuery } from '../../store/api/altasApi'
+import { useLazyGetPlanoQuery } from '../../store/api/createArchivoApi'
 import { canViewExpediente, canViewPlanos } from '../../utils/permissions'
 import {
   Box,
@@ -55,12 +56,42 @@ const AltaDetail = () => {
 })
 
 
+const token = useSelector(state => state.auth.token)
 const [openPropietario, setOpenPropietario] = useState(false)
 const [openPlanos, setOpenPlanos] = useState(false)
-
+const [getPlano] = useLazyGetPlanoQuery()
   if (isLoading) return <Typography>Cargando...</Typography>
   if (isError) return <Typography>Error al cargar detalle</Typography>
 const tienePlanos = Array.isArray(data?.planos) && data.planos.length > 0
+
+
+
+const handleVerPlano = async (id) => {
+  try {
+
+    const response = await fetch(
+      `http://localhost:3001/api/planoArchivo/ver/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error('Error al obtener el plano')
+    }
+
+    const blob = await response.blob()
+
+    const url = URL.createObjectURL(blob)
+
+    window.open(url, '_blank')
+
+  } catch (error) {
+    console.error(error)
+  }
+}
   return (
     <Box sx={{ p: 3, backgroundColor: '#f4f5f7', minHeight: '100vh' }}>
       <Paper sx={{ p: 2 }}>
@@ -224,12 +255,16 @@ const tienePlanos = Array.isArray(data?.planos) && data.planos.length > 0
             />
           </Grid>
 
-          <Grid item xs={4}>
-            <Field
-              label="Final de obra"
-              value={new Date(data.final_de_obra).toLocaleDateString()}
-            />
-          </Grid>
+        <Grid item xs={4}>
+  <Field
+    label="Final de obra"
+    value={
+      data.final_de_obra
+        ? new Date(data.final_de_obra).toLocaleDateString()
+        : '—'
+    }
+  />
+</Grid>
 
           <Grid item xs={4}>
             <Field
@@ -337,15 +372,11 @@ const tienePlanos = Array.isArray(data?.planos) && data.planos.length > 0
   <DialogContent>
     <List>
       {data.planos?.map((p) => (
-        <ListItem
-          key={p.id}
-          button
-          component="a"
-          href={`http://192.168.1.7:3001/${p.path}`}
-          target="_blank"
-        >
-          <ListItemText primary={p.nombre} />
-        </ListItem>
+   <ListItem key={p.id} disablePadding>
+<Button onClick={() => handleVerPlano(p.id)}>
+  {p.nombre}
+</Button>
+</ListItem>
       ))}
     </List>
   </DialogContent>

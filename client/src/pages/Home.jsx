@@ -45,10 +45,10 @@ const Home = () => {
       {/* TÍTULO */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h5" gutterBottom>
-          Sistema de Archivo Técnico
+           Archivo dígital - D.S.U
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Gestión de documentación de obras privadas – Dirección de Suelo Urbano
+          Sistema de Gestión y Consulta de Documentación Técnica
         </Typography>
       </Box>
 

@@ -34,7 +34,6 @@ const AltaEdit = () => {
  const [plano, setPlano] = useState(null)
  const [openModal, setOpenModal] = useState(false)
 
- console.log('Datos del alta:', data)
 useEffect(() => {
   if (data) {
 

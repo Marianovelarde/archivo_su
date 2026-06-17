@@ -14,6 +14,7 @@ const entityLoan = require('./models/EntityLoan')
 const entityUser = require('./models/EntityUser')
 const entityAuditLogs = require('./models/EntityAuditLogs')
 const entityPlanoArchivo = require('./models/EntityPlanoArchivo')
+const entityAuditoriaPlanos = require('./models/EntityAuditoriaPlanos')
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/archivo_su`, {
     logging: false,
     native: false
@@ -49,6 +50,7 @@ const {
     EntityLoan,
     EntityUser,
     EntityAuditLogs,
+    EntityAuditoriaPlanos,
     EntityPlanoArchivo
 } = sequelize.models
 
@@ -120,6 +122,32 @@ EntityLoan.belongsTo(EntityUser, {
 
 EntityUser.hasMany(EntityAuditLogs, { foreignKey: 'id_user' })
 EntityAuditLogs.belongsTo(EntityUser, { foreignKey: 'id_user' })
+
+EntityPlanoArchivo.hasMany(EntityAuditoriaPlanos, {
+  foreignKey: 'id_plano',
+  as: 'auditorias'
+})
+
+EntityAuditoriaPlanos.belongsTo(EntityPlanoArchivo, {
+  foreignKey: 'id_plano'
+})
+
+EntityUser.hasMany(EntityAuditoriaPlanos, {
+  foreignKey: 'id_user'
+})
+
+EntityAltas.hasMany(EntityAuditoriaPlanos, {
+  foreignKey: 'id_alta'
+})
+
+EntityAuditoriaPlanos.belongsTo(EntityAltas, {
+  foreignKey: 'id_alta'
+})
+
+EntityAuditoriaPlanos.belongsTo(EntityUser, {
+  foreignKey: 'id_user'
+})
+
 
 module.exports = {
     ...sequelize.models,

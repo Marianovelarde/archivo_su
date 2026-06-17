@@ -7,6 +7,7 @@ import UserList from './UsersList'
 import AdminMetrics from './adminMetrics'
 import DestinoAdmin from './DestinoAdmin'
 import PropietariosAdmin from './PropietariosAdmin'
+import AuditPlanosAdmin from './AuditPlanosAdmin'
 
 const AdminPanel = () => {
 
@@ -49,13 +50,13 @@ const AdminPanel = () => {
           Gestionar usuarios
         </Button>
 
-        <Button
-          fullWidth
-          variant={section === 'audit' ? 'contained' : 'text'}
-          onClick={() => setSection('audit')}
-        >
-          Auditoría
-        </Button>
+      <Button 
+  fullWidth
+  variant={section === 'audit' ? 'contained' : 'text' }
+  onClick={() => setSection('audit')}
+>
+  Auditoría
+</Button>
 
         <Button
           fullWidth
@@ -88,7 +89,7 @@ const AdminPanel = () => {
         {section === 'users' && <UserList />}
 
         {section === 'audit' && (
-          <Typography>
+          <Typography variant="h6">
             Auditoría
           </Typography>
         )}
@@ -96,6 +97,7 @@ const AdminPanel = () => {
         {section === 'metrics' && <AdminMetrics />}
 
         {section === 'destinos' && <DestinoAdmin />}
+        {section === 'audit' && <AuditPlanosAdmin />}
 
       </Box>
 

@@ -6,6 +6,10 @@ import {
   Paper,
   Divider,
   Avatar,
+    Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material'
 
 import { useState } from 'react'
@@ -20,6 +24,10 @@ const Login = () => {
   const [login, { isLoading }] = useLoginMutation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [errorModal, setErrorModal] = useState({
+  open: false,
+  message: ''
+})
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -40,8 +48,15 @@ const Login = () => {
 
     navigate('/')
   } catch (error) {
-    alert(error?.data?.message || 'Error al iniciar sesión')
-  }
+
+  setErrorModal({
+    open: true,
+    message:
+      error?.data?.message ||
+      'Error al iniciar sesión'
+  })
+
+}
 }
 
 
@@ -138,7 +153,40 @@ const Login = () => {
             Ingresar
           </Button>
         </form>
+        <Dialog
+  open={errorModal.open}
+  onClose={() =>
+    setErrorModal({
+      open: false,
+      message: ''
+    })
+  }
+>
+  <DialogTitle>
+    Error de autenticación
+  </DialogTitle>
+
+  <DialogContent>
+    <Typography>
+      {errorModal.message}
+    </Typography>
+  </DialogContent>
+
+  <DialogActions>
+    <Button
+      onClick={() =>
+        setErrorModal({
+          open: false,
+          message: ''
+        })
+      }
+    >
+      Aceptar
+    </Button>
+  </DialogActions>
+</Dialog>
       </Paper>
+      
     </Box>
   )
 }

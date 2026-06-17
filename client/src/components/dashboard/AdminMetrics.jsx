@@ -12,7 +12,7 @@ const AdminMetrics = () => {
   return (
     <Box>
       <Typography variant="h5" mb={3}>
-        Dashboard de Métricas
+        Información General de Altas
       </Typography>
 
       <Grid container spacing={3}>

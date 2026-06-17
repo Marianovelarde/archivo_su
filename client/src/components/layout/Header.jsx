@@ -47,7 +47,7 @@ const Header = () => {
             Municipalidad de Santiago del Estero
           </Typography>
           <Typography variant="caption">
-            Dirección de Suelo Urbano – Archivo Técnico
+            Dirección de Suelo Urbano – Archivo de Obras Privadas
           </Typography>
         </Box>
 

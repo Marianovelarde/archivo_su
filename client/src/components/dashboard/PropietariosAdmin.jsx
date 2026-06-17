@@ -47,7 +47,6 @@ const PropietariosAdmin = () => {
   if (isLoading) return <div>Cargando...</div>
 
 const rows = data?.get_propietarios ?? []
-console.log(rows);
 
 
 const handleOpenEdit = (prop) => {

@@ -40,7 +40,6 @@ const [confirmOpen, setConfirmOpen] = useState(false)
 const [userToToggle, setUserToToggle] = useState(null)
 const currentUser = useSelector(state => state.auth.user)
 
- console.log(data);
  
 
   const [snackbar, setSnackbar] = useState({

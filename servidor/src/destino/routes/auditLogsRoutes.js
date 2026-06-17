@@ -1,9 +1,9 @@
-const express = require('express')
+// const express = require('express')
 
-const {
-getAllAuditLogsControllers} = require('../../auditLog/controllers/auditLogsControllers')
+// const {
+// getAllAuditLogsControllers} = require('../../auditLog/controllers/auditLogsControllers')
 
-const router = express.Router()
+// const router = express.Router()
 
-router.get('/', getAllAuditLogsControllers)
-module.exports = router
+// router.get('/', getAllAuditLogsControllers)
+// module.exports = router

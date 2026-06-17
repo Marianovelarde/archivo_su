@@ -7,6 +7,9 @@ import { planoApi } from './api/planoApi'
 import { authApi } from './api/authApi'
 import { auditApi } from './api/auditApi'
 import { adminApi } from './api/adminApi'
+import { planoArchivoApi } from './api/createArchivoApi'
+import { auditoriaPlanoApi } from './api/auditoriaPlanoApi'
+import {auditPlanosApi} from './api/auditPlanosApi'
 import authReducer from './api/authSlice'
 
 export const store = configureStore({
@@ -18,8 +21,12 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [auditApi.reducerPath]: auditApi.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
+  [planoArchivoApi.reducerPath]: planoArchivoApi.reducer,
+  [auditoriaPlanoApi.reducerPath]:auditoriaPlanoApi.reducer,
+  [auditPlanosApi.reducerPath]: auditPlanosApi.reducer,
+    
     auth: authReducer,
-  },
+  },  
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       altasApi.middleware,
@@ -28,6 +35,9 @@ export const store = configureStore({
       planoApi.middleware,
       authApi.middleware,
       auditApi.middleware,
-      adminApi.middleware
+      adminApi.middleware,
+       planoArchivoApi.middleware,
+       auditoriaPlanoApi.middleware,
+       auditPlanosApi.middleware
     ),
 })

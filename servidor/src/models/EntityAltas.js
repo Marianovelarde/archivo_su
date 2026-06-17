@@ -51,7 +51,7 @@ allowNull: true
         allowNull: false
     },
     parcela: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     },
     superficie_cubierta: {

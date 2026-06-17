@@ -15,7 +15,6 @@ const SignUp = () => {
 const handleSubmit =  (e) => {
   e.preventDefault()
    createUser(usuario, contraseña)
-   console.log(createUser);
    
 
   alert('Usuario creado con éxito')
